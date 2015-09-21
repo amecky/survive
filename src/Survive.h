@@ -12,7 +12,7 @@
 #include "Worms.h"
 #include "utils\SettingsConverter.h"
 
-class Cubee : public ds::BaseApp {
+class Survive : public ds::BaseApp {
 
 enum GameMode {
 	GM_START,
@@ -21,13 +21,13 @@ enum GameMode {
 };
 
 public:	
-	Cubee();
-	virtual ~Cubee() {
+	Survive();
+	virtual ~Survive() {
 		delete m_Game;
 	}	
 	bool loadContent();
 	const char* getTitle() {
-		return "Cubee";
+		return "Survive";
 	}
 	void update(float dt);
 	void draw();

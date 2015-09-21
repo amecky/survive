@@ -1,12 +1,12 @@
-#include "Cubee.h"
+#include "Survive.h"
 #include "utils\Log.h"
 #include <renderer\shader.h>
 #include <renderer\BitmapFont.h>
 
 
-ds::BaseApp *app = new Cubee(); 
+ds::BaseApp *app = new Survive(); 
 
-Cubee::Cubee() : ds::BaseApp() {
+Survive::Survive() : ds::BaseApp() {
 	//_CrtSetBreakAlloc(6297);
 	m_Width = 1024;
 	m_Height = 768;
@@ -19,7 +19,7 @@ Cubee::Cubee() : ds::BaseApp() {
 // -------------------------------------------------------
 // Load content and prepare game
 // -------------------------------------------------------
-bool Cubee::loadContent() {	
+bool Survive::loadContent() {	
 	int texture = ds::renderer::loadTexture("TextureArray");
 	assert( texture != -1 );
 	ds::BitmapFont* font = ds::renderer::createBitmapFont("xscale");
@@ -40,26 +40,26 @@ bool Cubee::loadContent() {
 // -------------------------------------------------------
 // Restart game
 // -------------------------------------------------------
-void Cubee::restart() {
+void Survive::restart() {
 }
 // -------------------------------------------------------
 // Update
 // -------------------------------------------------------
-void Cubee::update(float dt) {
+void Survive::update(float dt) {
 	m_Game->tick(dt);
 }
 
 // -------------------------------------------------------
 // Draw
 // -------------------------------------------------------
-void Cubee::draw() {	
+void Survive::draw() {	
 	m_Game->render();
 }
 
 // -------------------------------------------------------
 // OnChar
 // -------------------------------------------------------
-void Cubee::OnChar( char ascii,unsigned int keyState ) {
+void Survive::OnChar( char ascii,unsigned int keyState ) {
 	m_Game->OnChar(ascii, keyState);
 	if ( ascii == 'r' ) {
 		restart();
@@ -73,7 +73,7 @@ void Cubee::OnChar( char ascii,unsigned int keyState ) {
 // -------------------------------------------------------
 // Stop game
 // -------------------------------------------------------
-void Cubee::stopGame() {
+void Survive::stopGame() {
 	m_Mode = GM_OVER;
 	gui.activate("GameOver");
 }
@@ -81,11 +81,11 @@ void Cubee::stopGame() {
 // -------------------------------------------------------
 // OnButtonUp
 // -------------------------------------------------------
-void Cubee::OnButtonUp( int button,int x,int y ) {
+void Survive::OnButtonUp( int button,int x,int y ) {
 	m_Game->stopShooting();
 }
 
-void Cubee::onGUIButton( ds::DialogID dlgID,int button ) {
+void Survive::onGUIButton( ds::DialogID dlgID,int button ) {
 	LOG << "dialog " << dlgID << " button " << button;
 	if ( dlgID == 0 && button == 0 ) {
 		gui.deactivate("GameOver");
@@ -120,6 +120,6 @@ void Cubee::onGUIButton( ds::DialogID dlgID,int button ) {
 	}
 }
 
-void Cubee::OnButtonDown( int button,int x,int y ) {
+void Survive::OnButtonDown( int button,int x,int y ) {
 	m_Game->startShooting();
 }

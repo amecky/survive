@@ -4,7 +4,6 @@
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\TestMe.cpp" />
     <ClCompile Include="src\Worms.cpp" />
-    <ClCompile Include="src\Cubee.cpp" />
     <ClCompile Include="src\Snake.cpp" />
     <ClCompile Include="src\Trail.cpp" />
     <ClCompile Include="src\utils\BorderLines.cpp">
@@ -25,6 +24,7 @@
     <ClCompile Include="src\enemies\Dodgers.cpp">
       <Filter>enemies</Filter>
     </ClCompile>
+    <ClCompile Include="src\Survive.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -32,7 +32,6 @@
     <ClInclude Include="src\TestMe.h" />
     <ClInclude Include="src\Worms.h" />
     <ClInclude Include="src\Constants.h" />
-    <ClInclude Include="src\Cubee.h" />
     <ClInclude Include="src\Snake.h" />
     <ClInclude Include="src\Trail.h" />
     <ClInclude Include="src\utils\BorderLines.h">
@@ -56,6 +55,7 @@
     <ClInclude Include="src\enemies\Dodgers.h">
       <Filter>enemies</Filter>
     </ClInclude>
+    <ClInclude Include="src\Survive.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Survive.rc" />
