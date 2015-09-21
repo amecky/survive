@@ -1,0 +1,54 @@
+"particlesystem" {
+	"max" : "2048" ,
+	"id" : "1" ,
+	"texture_rect" : "475, 290, 20, 20" ,
+	"texture_id" : "0" ,
+	"emitter" {
+		"count" : "256" ,	
+		"ejection_period" : "0",
+		"ejection_variance" : "0",
+		"ejection_counter" : "0",
+		"duration" : "0.0"
+		"ring_position_generator" {
+			"radius" : "20" ,
+			"variance" : "5" ,
+			"angle_variance" : "10" ,
+			"step" : "12"
+		}
+		"random_generator" {
+			"min_random" : "0.2" ,
+			"max_random" : "1.0"
+		}		
+		"lifecycle_generator" {
+			"ttl" : "0.6" ,
+			"variance" : "0.2"
+		}
+		"size_generator" {
+			"size" : "0.3,0.3" ,
+			"variance" : "0.1,0.1"
+		}
+		"color_generator" {
+			"color" : "0,255,128,255"
+		}
+		"radial_velocity_generator" {
+			"velocity" : "120" ,
+			"variance" : "60"
+		}
+	}	
+
+	"modifiers" {
+		"lifecycle_modifier" {
+		}	
+		"position_modifier" {
+		}	
+		"color_path_modifier" {
+			"0.0" : "255,128,0,64" ,			
+			"1.0" : "255,32,0,192"
+		}		
+		"linear_size_modifier" {
+			"min_scale" : "0.4,0.4" ,
+			"max_scale" : "0.2,0.2"
+		}
+	}
+}
+

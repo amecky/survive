@@ -1,0 +1,110 @@
+"sprite" {
+	"name" : "background" ,
+	"texture_id" : "0" ,
+	"position" : "512,384" ,
+	"rect" : "0,512,512,384" ,
+	"scale" : "2,2" ,
+	"rotation" : "0" ,
+	"color" : "32,32,32,255" ,
+	"type" : "-1"
+}
+"sprite" {	
+	"name" : "player" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "540,184,68,68" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "237,195,154,255" ,
+	"type" : "3"
+}
+"sprite" {
+	"name" : "bullet" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "475, 0, 20, 20" ,
+	"scale" : "1.2,0.6" ,
+	"rotation" : "0" ,
+	"color" : "255,0,90,255" ,
+	"type" : "1"
+}
+"sprite" {
+	"name" : "enemy" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "50,0,40,40" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "255,255, 255, 255" ,
+	"type" : "2"
+}
+"sprite" {
+	"name" : "snake_head" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "50,280,48,48" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "255,255, 255, 255" ,
+	"type" : "8"
+}
+"sprite" {
+	"name" : "snake_shield" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "50,328,65,65" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "255,255, 255, 255" ,
+	"type" : "10"
+}
+"sprite" {
+	"name" : "snake_tail" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "50,200,32,32" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "255,255, 255, 255" ,
+	"type" : "9"
+}
+"sprite" {
+	"name" : "dodger" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "515,80,64,64" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "255,255, 255, 255" ,
+	"type" : "9"
+}
+"sprite" {
+	"name" : "lightning" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "870,0,140,140" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "0,255, 0, 255" ,
+	"type" : "20"
+}
+"sprite" {
+	"name" : "get_ready" ,
+	"texture_id" : "0" ,
+	"position" : "512,384" ,
+	"rect" : "542,512,398,60" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "255,255,255,255" ,
+	"type" : "200"
+}
+"sprite" {
+	"name" : "get_ready_light" ,
+	"texture_id" : "0" ,
+	"position" : "512,384" ,
+	"rect" : "600,512,420,82" ,
+	"scale" : "1,1" ,
+	"rotation" : "0" ,
+	"color" : "255,255,255,255" ,
+	"type" : "200"
+}

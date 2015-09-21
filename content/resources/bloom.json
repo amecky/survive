@@ -1,0 +1,10 @@
+"bloom" {
+	"initial_texture" : "1" ,
+	"first_target" : "2" ,
+	"threshold" : "0.15" ,
+	"intensity" : "1.0" ,
+	"original_intensity" : "0.7" ,
+	"saturation" : "1.0" ,
+	"original_saturation" : "1.0" ,
+	"blur_amount" : "6"
+}

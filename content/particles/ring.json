@@ -1,0 +1,32 @@
+"particlesystem" {
+	"max" : "2048" ,
+	"id" : "1" ,
+	"texture_rect" : "515, 0, 60, 60" ,
+	"texture_id" : "0" ,
+	"emitter" {
+		"count" : "1" ,	
+		"ejection_period" : "0",
+		"ejection_variance" : "0",
+		"ejection_counter" : "0",
+		"point_generator" {
+			"angle" : "0" ,
+			"angle_variance" : "00"
+		}
+		"lifecycle_generator" {
+			"ttl" : "0.6" ,
+			"variance" : "0"
+		}
+	}	
+	"modifiers" {
+		"lifecycle_modifier" {
+		}		
+		"linear_color_modifier" {
+			"start_color" : "249,246,194,255" ,			
+			"end_color" : "255,141,50,0" ,
+		}
+		"linear_size_modifier" {
+			"min_scale" : "1.5,1.5" ,
+			"max_scale" : "0.4,0.4"
+		}		
+	}
+}

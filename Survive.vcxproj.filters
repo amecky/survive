@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\TestMe.cpp" />
+    <ClCompile Include="src\Worms.cpp" />
+    <ClCompile Include="src\Cubee.cpp" />
+    <ClCompile Include="src\Snake.cpp" />
+    <ClCompile Include="src\Trail.cpp" />
+    <ClCompile Include="src\utils\BorderLines.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\IntroText.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\SettingsConverter.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\tween.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\util.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemies\Dodgers.cpp">
+      <Filter>enemies</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\TestMe.h" />
+    <ClInclude Include="src\Worms.h" />
+    <ClInclude Include="src\Constants.h" />
+    <ClInclude Include="src\Cubee.h" />
+    <ClInclude Include="src\Snake.h" />
+    <ClInclude Include="src\Trail.h" />
+    <ClInclude Include="src\utils\BorderLines.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\GameContext.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\IntroText.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\SettingsConverter.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\tween.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\util.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemies\Dodgers.h">
+      <Filter>enemies</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Survive.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TODO.txt" />
+    <None Include="Survive.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="utils">
+      <UniqueIdentifier>{53983712-8534-4fb4-88fd-0c8961dcf536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="enemies">
+      <UniqueIdentifier>{fba17c75-634e-44ed-b08e-719c01dd8882}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

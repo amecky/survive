@@ -1,0 +1,14 @@
+"counter" {
+	"id" : "0" ,
+	"length" : "6" ,
+	"position" : "80,720" ,
+	"color" : "180,70,0,255"
+}
+"counter" {
+	"id" : "1" ,
+	"length" : "3" ,
+	"position" : "900,720" ,
+	"color" : "180,70,0,255"
+}
+
+

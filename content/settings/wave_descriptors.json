@@ -1,0 +1,123 @@
+"wave_descriptor" {
+	"type" : "5" ,
+	"delay" : "0.4" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "8" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "2" ,
+	"burst_mode" : "false"
+}
+"wave_descriptor" {
+	"type" : "7" ,
+	"delay" : "0.4" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "8" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "2" ,
+	"burst_mode" : "false"
+}
+"wave_descriptor" {
+	"type" : "8" ,
+	"delay" : "0.4" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "8" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "2" ,
+	"burst_mode" : "false"
+}
+"wave_descriptor" {
+	"type" : "6" ,
+	"delay" : "0.0" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "7" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "5" ,
+	"burst_mode" : "true"
+}
+"wave_descriptor" {
+	"type" : "9" ,
+	"delay" : "0.2" ,
+	"wait" : "0.0" ,
+	"speed" : "12.0" ,
+	"count" : "8" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "5" ,
+	"burst_mode" : "false" ,
+	"fire_delay" : "1.0"
+}
+"wave_descriptor" {
+	"type" : "10" ,
+	"delay" : "0.3" ,
+	"wait" : "0.0" ,
+	"speed" : "2.0" ,
+	"count" : "8" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "2" ,
+	"burst_mode" : "false" ,
+	"fire_delay" : "1.0"
+}
+"wave_descriptor" {
+	"type" : "11" ,
+	"delay" : "0.3" ,
+	"wait" : "0.0" ,
+	"speed" : "2.0" ,
+	"count" : "8" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "2" ,
+	"burst_mode" : "false" ,
+	"fire_delay" : "1.0"
+}
+"wave_descriptor" {
+	"type" : "4" ,
+	"delay" : "0.0" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "7" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "4" ,
+	"burst_mode" : "true"
+}
+"wave_descriptor" {
+	"type" : "12" ,
+	"delay" : "0.0" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "7" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "4" ,
+	"burst_mode" : "true"
+}
+"wave_descriptor" {
+	"type" : "13" ,
+	"delay" : "0.0" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "7" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "4" ,
+	"burst_mode" : "true"
+}
+"wave_descriptor" {
+	"type" : "14" ,
+	"delay" : "0.0" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "7" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "4" ,
+	"burst_mode" : "true"
+}
+"wave_descriptor" {
+	"type" : "15" ,
+	"delay" : "0.0" ,
+	"wait" : "0.0" ,
+	"speed" : "4.0" ,
+	"count" : "8" ,
+	"texture" : "50,0,40,40" ,
+	"collider_type" : "4" ,
+	"burst_mode" : "true"
+}

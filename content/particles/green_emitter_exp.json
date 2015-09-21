@@ -1,0 +1,60 @@
+"particlesystem" {
+	"max" : "512" ,
+	"id" : "1" ,
+	"texture_rect" : "80, 120, 20, 20" ,
+	"texture_id" : "0" ,
+	"emitter" {
+		"count" : "256" ,	
+		"ejection_period" : "0",
+		"ejection_variance" : "0",
+		"ejection_counter" : "0",
+
+		"ring_position_generator" {
+			"radius" : "15" ,
+			"variance" : "4" ,
+			"angle_variance" : "10"
+		}
+		"random_generator" {
+			"min_random" : "0.2" ,
+			"max_random" : "1.0"
+		}
+		"radial_velocity_generator" {
+			"velocity" : "100" ,
+			"variance" : "80"
+		}
+		"lifecycle_generator" {
+			"ttl" : "2.0" ,
+			"variance" : "0.5"
+		}
+		"size_generator" {
+			"size" : "0.4,0.4" ,
+			"variance" : "0.1,0.1"
+		}
+		"color_generator" {
+			"color" : "255,0,0,255" ,
+			"hue_variance" : "10"
+		}
+	}	
+
+	"modifiers" {
+		"lifecycle_modifier" {
+		}
+		"position_modifier" {
+		}
+		"perpendicular_position_modifier" {
+			"radius" : "20" ,
+			"amplitude" : "10"
+		}
+		"color_path_modifier" {
+			"0.0" : "153,85,255,255" ,			
+			"0.8" : "27,15,45,255" ,
+			"1.0" : "16,16,16,0"
+		}
+		"damping_velocity_modifier" {
+			"damping" : "40"
+		}
+		"velocity_rotation_modifier" {
+
+		}
+	}
+}
