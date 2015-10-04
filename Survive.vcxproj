@@ -221,6 +221,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\enemies\Dodgers.cpp" />
+    <ClCompile Include="src\GUITest.cpp" />
+    <ClCompile Include="src\gui\GUI.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\TestMe.cpp" />
     <ClCompile Include="src\utils\BorderLines.cpp" />
@@ -236,6 +238,8 @@
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\enemies\Dodgers.h" />
+    <ClInclude Include="src\GUITest.h" />
+    <ClInclude Include="src\gui\GUI.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\TestMe.h" />
     <ClInclude Include="src\utils\BorderLines.h" />
@@ -251,6 +255,22 @@
     <ClInclude Include="src\Trail.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="content\resources\bloom.json" />
+    <None Include="content\resources\bottom_path.json" />
+    <None Include="content\resources\bs_path.json" />
+    <None Include="content\resources\center_path.json" />
+    <None Include="content\resources\gui.json" />
+    <None Include="content\resources\hud.json" />
+    <None Include="content\resources\levels.json" />
+    <None Include="content\resources\sprites.json" />
+    <None Include="content\resources\straight_test.json" />
+    <None Include="content\resources\straight_top_down_path.json" />
+    <None Include="content\resources\tahoma_12.json" />
+    <None Include="content\resources\test_path.json" />
+    <None Include="content\resources\top_path.json" />
+    <None Include="content\resources\ts_path.json" />
+    <None Include="content\resources\worm_path.json" />
+    <None Include="content\resources\xscale.json" />
     <None Include="Survive.manifest" />
     <None Include="TODO.txt" />
   </ItemGroup>

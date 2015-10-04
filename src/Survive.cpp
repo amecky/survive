@@ -4,14 +4,13 @@
 #include <renderer\BitmapFont.h>
 
 
-ds::BaseApp *app = new Survive(); 
+//ds::BaseApp *app = new Survive(); 
 
 Survive::Survive() : ds::BaseApp() {
 	//_CrtSetBreakAlloc(6297);
-	m_Width = 1024;
-	m_Height = 768;
-	m_ClearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
-	//m_ClearColor = ds::Color(27,72,141,255);
+	_settings.screenWidth = 1024;
+	_settings.screenHeight = 768;
+	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
 	m_Timer = 0.0f;
 	m_Mode = GM_START;
 }

@@ -43,7 +43,7 @@ void Worms::init(GameSettings* settings, ds::BitmapFont* font,ds::DialogManager*
 	m_Context.font = font;
 	m_Context.dialogs = dialogs;
 
-	m_World.create(Vector2f(512, 384), "background", BG_LAYER);
+	ds::SID backID = m_World.create(Vector2f(512, 384), "background", BG_LAYER);
 
 	_player = new Player(&m_Context);
 	m_AddBS = ds::renderer::createBlendState("alpha_blend_state",ds::BL_ONE, ds::BL_ONE, true);	

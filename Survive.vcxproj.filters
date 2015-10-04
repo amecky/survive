@@ -25,6 +25,8 @@
       <Filter>enemies</Filter>
     </ClCompile>
     <ClCompile Include="src\Survive.cpp" />
+    <ClCompile Include="src\gui\GUI.cpp" />
+    <ClCompile Include="src\GUITest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -56,6 +58,8 @@
       <Filter>enemies</Filter>
     </ClInclude>
     <ClInclude Include="src\Survive.h" />
+    <ClInclude Include="src\gui\GUI.h" />
+    <ClInclude Include="src\GUITest.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Survive.rc" />
@@ -63,6 +67,54 @@
   <ItemGroup>
     <None Include="TODO.txt" />
     <None Include="Survive.manifest" />
+    <None Include="content\resources\bloom.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\bottom_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\bs_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\center_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\gui.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\hud.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\levels.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\sprites.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\straight_test.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\straight_top_down_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\tahoma_12.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\test_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\top_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\ts_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\worm_path.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\xscale.json">
+      <Filter>content\resources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="utils">
@@ -70,6 +122,12 @@
     </Filter>
     <Filter Include="enemies">
       <UniqueIdentifier>{fba17c75-634e-44ed-b08e-719c01dd8882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content">
+      <UniqueIdentifier>{c620ff34-8c13-4630-b841-314d2d7baa2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\resources">
+      <UniqueIdentifier>{ceab129e-9025-47b0-8dc4-9ab8ebd971a3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
