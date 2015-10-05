@@ -37,13 +37,15 @@ void GUITest::update(float dt) {
 void GUITest::draw() {
 	gui::begin("Test");
 	gui::Label("Hello World: 100,200");
-	gui::InputFloat("FloatValue", &_test);
-	if (gui::Button("OK")) {
+	gui::InputFloat(3,"FloatValue", &_test);
+	gui::beginGroup();
+	if (gui::Button(1,"OK")) {
 		LOG << "OK pressed";
 	}
-	if (gui::Button("Cancel")) {
+	if (gui::Button(2,"Cancel")) {
 		LOG << "Cancel clicked";
 	}
+	gui::endGroup();
 	gui::end();
 }
 

@@ -16,9 +16,13 @@ namespace gui {
 
 	void Label(const char* text);
 
-	bool Button(const char* label);
+	void beginGroup();
 
-	void InputFloat(const char* label, float* v);
+	void endGroup();
+
+	bool Button(int id,const char* label);
+
+	void InputFloat(int id,const char* label, float* v);
 
 	void end();
 }
