@@ -48,10 +48,6 @@ bool TestMe::loadContent() {
 
 	_borderLines = new BorderLines(0);
 
-	_gui.intialize();
-
-	_gui.addPanel(v2(512, 384), v2(200, 200));
-
 	return true;
 }
 
@@ -193,7 +189,6 @@ v2 TestMe::separate(int index) {
 // Draw
 // -------------------------------------------------------
 void TestMe::draw() {
-	_gui.render();
 	_borderLines->draw();
 	//drawCircle(v2(512, 384), 12, 100.0f, 15.0f,ds::math::buildTexture(100.0f, 0.0f, 40.0f, 15.0f),m_GameTime.totalTime);
 	//for (size_t i = 0; i < _dodgers.size(); ++i) {

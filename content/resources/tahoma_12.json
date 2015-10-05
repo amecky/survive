@@ -1,12 +1,12 @@
 "font" {
 	"start_char" : "32" ,
 	"end_char" : "128" ,
-	"char_height" : "26" ,
-	"grid_height" : "28" ,
+	"char_height" : "16" ,
+	"grid_height" : "18" ,
 	"start_x" : "0" ,
-	"start_y" : "258" ,
-	"width" : "332" ,
-	"height" : "220" ,
-	"padding" : "8" ,
+	"start_y" : "0" ,
+	"width" : "262" ,
+	"height" : "176" ,
+	"padding" : "1" ,
 	"texture_size" : "512"
 }

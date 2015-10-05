@@ -62,5 +62,4 @@ private:
 	float _timer;
 	Asteroid _asteroid;
 
-	GUI _gui;
 };

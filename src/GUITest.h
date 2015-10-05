@@ -22,10 +22,10 @@ public:
 		return "GUITest";
 	}
 	void update(float dt);
-	void draw();
+	virtual void draw();
 	virtual void OnChar(char ascii, unsigned int keyState);
 	virtual void OnButtonUp(int button, int x, int y);
 	virtual void OnButtonDown(int button, int x, int y);
 private:
-	GUI _gui;
+	float _test;
 };

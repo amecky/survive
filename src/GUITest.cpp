@@ -20,10 +20,8 @@ bool GUITest::loadContent() {
 	int texture = ds::renderer::loadTexture("TextureArray");
 	assert(texture != -1);
 
-	_gui.intialize();
-
-	PanelWidget* panel = _gui.addPanel(v2(512, 384), v2(200, 200));
-	_gui.addLabel(v2(10, 10), "Label1: 100,200",panel);
+	gui::initialize();
+	_test = 18.3f;
 	return true;
 }
 
@@ -37,7 +35,16 @@ void GUITest::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void GUITest::draw() {
-	_gui.render();
+	gui::begin("Test");
+	gui::Label("Hello World: 100,200");
+	gui::InputFloat("FloatValue", &_test);
+	if (gui::Button("OK")) {
+		LOG << "OK pressed";
+	}
+	if (gui::Button("Cancel")) {
+		LOG << "Cancel clicked";
+	}
+	gui::end();
 }
 
 // -------------------------------------------------------
