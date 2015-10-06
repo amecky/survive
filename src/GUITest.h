@@ -26,6 +26,15 @@ public:
 	virtual void OnChar(char ascii, unsigned int keyState);
 	virtual void OnButtonUp(int button, int x, int y);
 	virtual void OnButtonDown(int button, int x, int y);
+	virtual void OnKeyUp(WPARAM wParam);
 private:
 	float _test;
+	int _iTest;
+	v2 _v2Test;
+	v3 _v3Test;
+	ds::Rect _rectTest;
+	int _state;
+	std::vector<std::string> _items;
+	int _selected;
+	int _dpState;
 };
