@@ -49,6 +49,7 @@ void GUITest::update(float dt) {
 void GUITest::draw() {
 	if (gui::begin("Test", &_state, v2(100, 600))) {
 		gui::Label("Hello World: 100,200");
+		gui::InputFloat(8, "Float", &_test);
 		gui::InputInt(3, "IntValue", &_iTest);
 		gui::InputVec2(4, "Vector", &_v2Test);
 		gui::InputVec3(5, "V3", &_v3Test);

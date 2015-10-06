@@ -5,6 +5,14 @@
 
 namespace gui {
 
+	const float BUTTON_HEIGHT = 24.0f;
+	const float TEXTFIELD_HEIGHT = 24.0f;
+	const float TEXT_PADDING = 2.0f;
+	const float LINE_HEIGHT = 26.0f;
+	const float TEXT_OFFSET = 8.0f;
+	const int CHAR_PADDING = 0;
+	const float BOX_HEIGHT = 18.0f;
+
 	struct GUID {
 		int id;
 		int index;
@@ -28,6 +36,7 @@ namespace gui {
 		v2 dim;
 		v2 position;
 		v2 startPosition;
+		const char* header;
 
 		void reset() {
 			num = 0;
@@ -74,13 +83,14 @@ namespace gui {
 			call.size = size;
 			sprintf_s(call.text,32,text);
 			call.position = position;
+			call.position.y -= TEXT_OFFSET;
 			calculateDimension(position, size);
-			call.padding = 2;
+			call.padding = CHAR_PADDING;
 		}
 
 		void nextPosition(bool grouped) {
 			if (!grouped) {
-				position.y -= 35.0f;
+				position.y -= LINE_HEIGHT;
 			}
 			else {
 				if (num > 0) {
@@ -100,6 +110,7 @@ namespace gui {
 		ds::BitmapFont* font;
 		int textureID;
 		GUIWindow window;
+		GUIWindow popup;
 		v2 cursorPosition;
 		bool buttonPressed;
 		bool clicked;
@@ -203,11 +214,12 @@ namespace gui {
 		guiContext->window.position = startPos;
 		guiContext->window.startPosition = startPos;
 		guiContext->window.reset();
+		guiContext->window.header = header;
 		guiContext->cursorPosition = ds::renderer::getMousePosition();
 		guiContext->clicked = false;
 		guiContext->grouped = false;
 		guiContext->visible = false;
-		guiContext->inputText[0] = '\0';
+		//guiContext->inputText[0] = '\0';
 		if ((GetKeyState(VK_LBUTTON) & 0x80) != 0) {
 			guiContext->buttonPressed = true;
 		}
@@ -218,15 +230,10 @@ namespace gui {
 			guiContext->buttonPressed = false;
 		}
 		// build panel header
-		v2 textDim = ds::font::calculateSize(*guiContext->font, header);
 		float width = 200.0f;
 		v2 p = guiContext->window.position;
 		p.x += width / 2.0f;
-		guiContext->window.addBox(p, v2(200.0f, 30.0f), ds::Color(192, 0, 0, 255));
-		p.y -= 7.0f;
-		p.x = guiContext->window.position.x + (width - textDim.x) / 2.0f;
-		guiContext->window.addText(p,header, textDim);		
-		bool active = handleMouse(0, p, v2(width, 24.0f));
+		bool active = handleMouse(0, p, v2(width, BOX_HEIGHT));
 		if (active) {
 			if (*state == 0) {
 				*state = 1;
@@ -242,69 +249,107 @@ namespace gui {
 		return *state == 1;
 	}
 
+	v2 getTextSize(const char* text) {
+		return ds::font::calculateSize(*guiContext->font, text,CHAR_PADDING);
+	}
 	// -------------------------------------------------------
 	// Label
 	// -------------------------------------------------------
 	void Label(const char* text) {
-		v2 textDim = ds::font::calculateSize(*guiContext->font, text);
+		v2 textDim = getTextSize(text);
 		v2 p = guiContext->window.position;
-		p.y -= 7.0f;
 		guiContext->window.addText(p, text, textDim);
 		guiContext->nextPosition();
 	}
 
-	
-	
+	void handleTextInput() {
+		int len = strlen(guiContext->inputText);
+		if (guiContext->keyInput.num > 0) {
+			for (int i = 0; i < guiContext->keyInput.num; ++i) {
+				if (guiContext->keyInput.keys[i] == 128) {
+					if (guiContext->caretPos > 0) {
+						if (guiContext->caretPos < len) {
+							memmove(guiContext->inputText + guiContext->caretPos - 1, guiContext->inputText + guiContext->caretPos, len - guiContext->caretPos);
+						}
+						--guiContext->caretPos;
+						--len;
+						guiContext->inputText[len] = '\0';
+						
+					}
+				}
+				else if (guiContext->keyInput.keys[i] == 133) {
+					guiContext->caretPos = 0;
+				}
+				else if (guiContext->keyInput.keys[i] == 129) {
+					if (guiContext->caretPos > 0) {
+						--guiContext->caretPos;
+					}
+				}
+				else if (guiContext->keyInput.keys[i] == 130) {
+					if (guiContext->caretPos < strlen(guiContext->inputText)) {
+						++guiContext->caretPos;
+					}
+				}
+				else if (guiContext->keyInput.keys[i] == 132) {
+					guiContext->caretPos = strlen(guiContext->inputText);
+				}
+				else if (guiContext->keyInput.keys[i] == 131) {
+					guiContext->active = -1;
+				}
+				else if (guiContext->keyInput.keys[i] > 10 && guiContext->keyInput.keys[i] < 128) {
+					if (len < 32) {
+						if (guiContext->caretPos < len) {
+							memmove(guiContext->inputText + guiContext->caretPos + 1, guiContext->inputText + guiContext->caretPos, len - guiContext->caretPos);
+						}
+						guiContext->inputText[guiContext->caretPos] = guiContext->keyInput.keys[i];
+						++len;
+						++guiContext->caretPos;
+					}
+				}
+			}
+			++len;
+			guiContext->inputText[len] = '\0';
+			guiContext->keyInput.num = 0;
+		}
+	}
+
 	// -------------------------------------------------------
 	// input float
 	// -------------------------------------------------------
 	void InputFloat(int id,const char* label, float* v) {
-		v2 textDim = ds::font::calculateSize(*guiContext->font, label);
+		v2 textDim = getTextSize(label);
 		float width = 100.0f;
 		v2 p = guiContext->window.position;
 		p.x += width / 2.0f;
-		char buffer[32];
-		sprintf_s(buffer, 32, "%.2f", *v);
-		bool active = handleMouse(id, p, v2(width, 24.0f));
-		if (active) {
+		int prev = guiContext->active;
+		bool active = handleMouse(id, p, v2(width, BOX_HEIGHT));
+		if (prev != guiContext->active) {
 			sprintf_s(guiContext->inputText, 32, "%.2f", *v);
+			guiContext->caretPos = strlen(guiContext->inputText);
 		}
 		if (guiContext->active == id) {
-			guiContext->window.addBox(p, v2(width, 24.0f), ds::Color(64, 64, 64, 255));
-			
-			int len = strlen(guiContext->inputText);			
-			// https://code.google.com/p/nvidia-widgets/source/browse/trunk/src/nvwidgets/nvWidgets.cpp
-			if (guiContext->keyInput.num > 0) {
-				LOG << "length: " << len;
-				for (int i = 0; i < guiContext->keyInput.num; ++i) {
-					LOG << "processing key: " << guiContext->keyInput.keys[i];
-					if (len < 32) {
-						guiContext->inputText[len] = guiContext->keyInput.keys[i];
-						++len;
-					}					
-				}
-				++len;
-				LOG << "final length: " << len;
-				guiContext->inputText[len] = '\0';
-				guiContext->keyInput.num = 0;
-			}			
-			p.y -= 8.0f;
+			guiContext->window.addBox(p, v2(width, BOX_HEIGHT), ds::Color(64, 64, 64, 255));
+			handleTextInput();
 			p.x = guiContext->window.position.x + 8.0f;
-			textDim = ds::font::calculateSize(*guiContext->font, guiContext->inputText);
+			textDim = getTextSize(guiContext->inputText);
 			guiContext->window.addText(p, guiContext->inputText, textDim);
+			*v = atof(guiContext->inputText);
+			v2 cp = p;
+			v2 cursorPos = ds::font::calculateLimitedSize(*guiContext->font, guiContext->inputText, guiContext->caretPos, CHAR_PADDING);
+			cp.x = guiContext->window.position.x + 4.0f + cursorPos.x;
+			cp.y -= 2.0f;
+			guiContext->window.addBox(cp, v2(2, 18.0f), ds::Color(192, 0, 0, 255));
 		}
 		else {
-			guiContext->window.addBox(p, v2(width, 24.0f), ds::Color(128, 128, 128, 255));
-			p.y -= 8.0f;
+			char buffer[32];
+			sprintf_s(buffer, 32, "%.2f", *v);
+			guiContext->window.addBox(p, v2(width, BOX_HEIGHT), ds::Color(128, 128, 128, 255));
 			p.x = guiContext->window.position.x + 8.0f;
-			textDim = ds::font::calculateSize(*guiContext->font, buffer);
+			textDim = getTextSize(buffer);
 			guiContext->window.addText(p, buffer, textDim);
-		}
-		
-
-
+		}		
 		p.x += 110.0f;
-		textDim = ds::font::calculateSize(*guiContext->font, label);
+		textDim = getTextSize(label);
 		guiContext->window.addText(p, label, textDim);
 		guiContext->nextPosition();
 	}
@@ -317,74 +362,34 @@ namespace gui {
 		float width = 100.0f;
 		v2 p = guiContext->window.position;
 		p.x += width / 2.0f + 110.0f * index;
-		sprintf_s(guiContext->inputText, 32, "%d", *v);
+		//sprintf_s(guiContext->inputText, 32, "%d", *v);
 		int prev = guiContext->active;
-		bool active = handleMouse(new_id, p, v2(width, 24.0f));
+		bool active = handleMouse(new_id, p, v2(width, BOX_HEIGHT));
 		if (prev != guiContext->active) {
-			LOG << "activated: " << id;
+			sprintf_s(guiContext->inputText, 32, "%d", *v);
 			guiContext->caretPos = strlen(guiContext->inputText);
 		}
 		if (guiContext->active == new_id) {
-			guiContext->window.addBox(p, v2(width, 24.0f), ds::Color(64, 64, 64, 255));
-			int len = strlen(guiContext->inputText);
-			if (guiContext->keyInput.num > 0) {
-				for (int i = 0; i < guiContext->keyInput.num; ++i) {
-					if (guiContext->keyInput.keys[i] == 128) {
-						if (len > 0) {
-							--len;
-							guiContext->inputText[len] = '\0';
-							guiContext->caretPos = strlen(guiContext->inputText);
-						}
-					}
-					else if (guiContext->keyInput.keys[i] == 133) {
-						guiContext->caretPos = 0;
-					}
-					else if (guiContext->keyInput.keys[i] == 129) {
-						if (guiContext->caretPos > 0) {
-							--guiContext->caretPos;
-						}
-					}
-					else if (guiContext->keyInput.keys[i] == 130) {
-						if (guiContext->caretPos < strlen(guiContext->inputText)) {
-							++guiContext->caretPos;
-						}
-					}
-					else if (guiContext->keyInput.keys[i] == 132) {
-						guiContext->caretPos = strlen(guiContext->inputText);
-					}
-					else if (guiContext->keyInput.keys[i] == 131) {
-						guiContext->active = -1;
-					}
-					else if (guiContext->keyInput.keys[i] < 128) {
-						if (len < 32) {
-							if (guiContext->caretPos < len) {
-								memmove(guiContext->inputText + guiContext->caretPos + 1, guiContext->inputText + guiContext->caretPos, len - guiContext->caretPos);
-							}
-							guiContext->inputText[guiContext->caretPos] = guiContext->keyInput.keys[i];
-							++len;
-							++guiContext->caretPos;
-						}
-					}
-				}
-				++len;
-				guiContext->inputText[len] = '\0';
-				*v = atoi(guiContext->inputText);
-				guiContext->keyInput.num = 0;
-				LOG << "caret:" << guiContext->caretPos;
-			}
+			guiContext->window.addBox(p, v2(width, BOX_HEIGHT), ds::Color(64, 64, 64, 255));
+			handleTextInput();
+			*v = atoi(guiContext->inputText);
 			v2 cp = p;
-			v2 cursorPos = ds::font::calculateLimitedSize(*guiContext->font, guiContext->inputText,guiContext->caretPos,2);
-			cp.x = guiContext->window.position.x + 4.0f + 120.0f * index + cursorPos.x;
+			v2 cursorPos = ds::font::calculateLimitedSize(*guiContext->font, guiContext->inputText,guiContext->caretPos,CHAR_PADDING);
+			cp.x = guiContext->window.position.x + 4.0f + 110.0f * index + cursorPos.x;
 			cp.y -= 2.0f;
 			guiContext->window.addBox(cp, v2(2, 18.0f), ds::Color(192, 0, 0, 255));
+			p.x = guiContext->window.position.x + 8.0f + 110.0f * index;
+			v2 textDim = getTextSize(guiContext->inputText);
+			guiContext->window.addText(p, guiContext->inputText, textDim);
 		}
 		else {
-			guiContext->window.addBox(p, v2(width, 24.0f), ds::Color(128, 128, 128, 255));
+			char buffer[32];
+			sprintf_s(buffer, 32, "%d", *v);
+			guiContext->window.addBox(p, v2(width, BOX_HEIGHT), ds::Color(128, 128, 128, 255));
+			p.x = guiContext->window.position.x + 8.0f + 110.0f * index;
+			v2 textDim = getTextSize(buffer);
+			guiContext->window.addText(p, buffer, textDim);
 		}		
-		p.y -= 8.0f;
-		p.x = guiContext->window.position.x + 8.0f + 120.0f * index;
-		v2 textDim = ds::font::calculateSize(*guiContext->font, guiContext->inputText);
-		guiContext->window.addText(p, guiContext->inputText, textDim);
 	}
 
 	// -------------------------------------------------------
@@ -394,8 +399,7 @@ namespace gui {
 		InputScalar(id, 0, v);
 		v2 p = guiContext->window.position;
 		p.x += 110.0f;
-		p.y -= 8.0f;
-		v2 textDim = ds::font::calculateSize(*guiContext->font, label);
+		v2 textDim = getTextSize(label);
 		guiContext->window.addText(p, label, textDim);
 		guiContext->nextPosition();
 	}
@@ -412,7 +416,6 @@ namespace gui {
 		v->y = y;
 		v2 p = guiContext->window.position;
 		p.x += 220.0f;
-		p.y -= 8.0f;
 		v2 textDim = ds::font::calculateSize(*guiContext->font, label);
 		guiContext->window.addText(p, label, textDim);
 		guiContext->nextPosition();
@@ -433,8 +436,7 @@ namespace gui {
 		v->z = z;
 		v2 p = guiContext->window.position;
 		p.x += 330.0f;
-		p.y -= 8.0f;
-		v2 textDim = ds::font::calculateSize(*guiContext->font, label);
+		v2 textDim = getTextSize(label);
 		guiContext->window.addText(p, label, textDim);
 		guiContext->nextPosition();
 	}
@@ -454,19 +456,21 @@ namespace gui {
 		*v = ds::Rect(top, left, width, height);
 		v2 p = guiContext->window.position;
 		p.x += 440.0f;
-		p.y -= 8.0f;
-		v2 textDim = ds::font::calculateSize(*guiContext->font, label);
+		v2 textDim = getTextSize(label);
 		guiContext->window.addText(p, label, textDim);
 		guiContext->nextPosition();
 	}
 
+	// -------------------------------------------------------
+	// combo box
+	// -------------------------------------------------------	
 	void ComboBox(int id, const std::vector<std::string>& entries, int* selected) {
 		int max = entries.size();
 		float width = 300.0f + 40.0f;
 		v2 p = guiContext->window.position;
 		p.x += width / 2.0f;		
-		float height = max * 24.0f;
-		p.y -= height / 2.0f - 12.0f;
+		float height = max * BOX_HEIGHT;
+		p.y -= height / 2.0f - BOX_HEIGHT / 2.0f;
 		bool hot = isHot(id, p, v2(width, height));
 		if (hot) {
 			guiContext->window.addBox(p, v2(width, height), ds::Color(64, 64, 0, 255));
@@ -476,26 +480,26 @@ namespace gui {
 		}
 		bool inside = isCursorInside(p, v2(width, height));
 		p = guiContext->window.position;
-		p.y -= 6.0f;
 		for (size_t i = 0; i < max; ++i) {
 			p.x = guiContext->window.position.x + 10.0f;
 			if (*selected == i) {
 				v2 selp = p;
 				selp.x += width / 2.0f;
 				selp.x -= 10.0f;
-				selp.y += 6.0f;
-				guiContext->window.addBox(selp, v2(width, 24.0f), ds::Color(128, 128, 128, 255));
+				guiContext->window.addBox(selp, v2(width, BOX_HEIGHT), ds::Color(128, 128, 128, 255));
 			}				
 			v2 textDim = ds::font::calculateSize(*guiContext->font, entries[i].c_str());
 			guiContext->window.addText(p, entries[i].c_str(), textDim);
 			if (guiContext->clicked && isCursorInside(p, v2(width, 24.0f))) {
 				*selected = i;
 			}
-			p.y -= 24.0f;				
+			p.y -= BOX_HEIGHT;
 		}
-		for (int i = 0; i < max - 1; ++i) {
-			guiContext->nextPosition();
-		}
+		guiContext->window.position.y -= height;
+		guiContext->window.position.y -= 8.0f;
+		//for (int i = 0; i < max ; ++i) {
+			//guiContext->nextPosition();
+		//}
 	}
 	
 	// -------------------------------------------------------
@@ -503,23 +507,22 @@ namespace gui {
 	// -------------------------------------------------------	
 	bool Button(int id,const char* label) {
 		// get text size
-		v2 textDim = ds::font::calculateSize(*guiContext->font, label);
+		v2 textDim = getTextSize(label);
 		float width = textDim.x + 40.0f;
 		v2 p = guiContext->window.position;
 		p.x += width / 2.0f;
-		bool hot = isHot(id,p, v2(width, 24.0f));
+		bool hot = isHot(id, p, v2(width, BUTTON_HEIGHT));
 		if (hot) {
-			guiContext->window.addBox(p, v2(width, 30.0f), ds::Color(0, 64, 64, 255));
+			guiContext->window.addBox(p, v2(width, BUTTON_HEIGHT), ds::Color(0, 64, 64, 255));
 		}
 		else {
-			guiContext->window.addBox(p, v2(width, 30.0f), ds::Color(0, 64, 0, 255));
+			guiContext->window.addBox(p, v2(width, BUTTON_HEIGHT), ds::Color(0, 64, 0, 255));
 		}
-		bool inside = isCursorInside(p, v2(width, 30.0f));
-		p.y -= 7.0f;
+		bool inside = isCursorInside(p, v2(width, BUTTON_HEIGHT));
 		p.x = guiContext->window.position.x + (width - textDim.x) / 2.0f;
 		guiContext->window.addText(p,label, textDim);
 		guiContext->nextPosition();
-		return handleMouse(id, p, v2(width, 24.0f));
+		return handleMouse(id, p, v2(width, BUTTON_HEIGHT));
 	}
 
 	// -------------------------------------------------------
@@ -543,12 +546,28 @@ namespace gui {
 	// end panel
 	// -------------------------------------------------------	
 	void end() {
-		if (guiContext->window.num > 0) {
+		// get dimension of entire panel
+		v2 dim = guiContext->window.dim;
+		if (dim.x == 0.0f) {
+			dim.x = 200.0f;
+		}
+		dim += v2(20, 20);
+		// draw header
+		v2 p = guiContext->window.startPosition;
+		float sx = 1.0f;
+		if (dim.x > 200.0f) {
+			sx = dim.x / 200.0f;
+		}
+		p.x = guiContext->window.startPosition.x + dim.x / 2.0f * sx - 10.0f;
+		ds::sprites::draw(p, ds::math::buildTexture(200.0f, 0.0f, dim.x, 30.0f, 512.0f, 512.0f), 0.0f, sx, 1.0f, ds::Color(192, 0, 0, 255));
+		p.y -= 7.0f;
+		p.x = guiContext->window.startPosition.x + 10.0f;
+		ds::sprites::drawText(guiContext->font, p.x, p.y, guiContext->window.header, 2);
+
+		if (guiContext->window.num > 0) {			
 			if (guiContext->visible) {
-				v2 p = guiContext->window.startPosition;
-				v2 dim = guiContext->window.dim;
-				dim += v2(20, 20);
-				float sx = 1.0f;
+				v2 p = guiContext->window.startPosition;								
+				sx = 1.0f;
 				if (dim.x > 200.0f) {
 					sx = dim.x / 200.0f;
 				}
