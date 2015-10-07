@@ -9,7 +9,6 @@
 #include <dxstdafx.h>
 #include <renderer\render_types.h>
 #include "utils\BorderLines.h"
-#include "gui\GUI.h"
 
 enum {ASTEROID_MAX_SEGMENTS = 36};
 

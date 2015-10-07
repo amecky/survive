@@ -21,6 +21,7 @@ bool GUITest::loadContent() {
 	assert(texture != -1);
 
 	gui::initialize();
+
 	_test = 18.3f;
 	_iTest = 1234;
 	_v2Test = v2(100, 200);
@@ -33,7 +34,7 @@ bool GUITest::loadContent() {
 	_items.push_back("Entry 4");
 	_items.push_back("Entry 5");
 	_selected = 1;
-	_dpState = 1;
+	_dpState = 0;
 	return true;
 }
 
@@ -54,7 +55,8 @@ void GUITest::draw() {
 		gui::InputVec2(4, "Vector", &_v2Test);
 		gui::InputVec3(5, "V3", &_v3Test);
 		gui::InputRect(6, "Rect", &_rectTest);
-		gui::ComboBox(7, _items, &_selected);
+		gui::ComboBox(8, _items, &_selected);
+		gui::DropDownBox(7, _items, &_selected,&_dpState);
 		gui::beginGroup();
 		if (gui::Button(1, "OK")) {
 			LOG << "Int Test: " << _iTest;
