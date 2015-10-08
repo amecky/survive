@@ -57,6 +57,7 @@ void GUITest::draw() {
 		gui::InputRect(6, "Rect", &_rectTest);
 		gui::ComboBox(8, _items, &_selected);
 		gui::DropDownBox(7, _items, &_selected,&_dpState);
+		gui::InputColor(9, "Color",&_clr);
 		gui::beginGroup();
 		if (gui::Button(1, "OK")) {
 			LOG << "Int Test: " << _iTest;

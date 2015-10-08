@@ -37,4 +37,5 @@ private:
 	std::vector<std::string> _items;
 	int _selected;
 	int _dpState;
+	ds::Color _clr;
 };
