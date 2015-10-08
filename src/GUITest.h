@@ -38,4 +38,5 @@ private:
 	int _selected;
 	int _dpState;
 	ds::Color _clr;
+	bool _checkBox;
 };

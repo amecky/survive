@@ -35,6 +35,7 @@ bool GUITest::loadContent() {
 	_items.push_back("Entry 5");
 	_selected = 1;
 	_dpState = 0;
+	_checkBox = true;
 	return true;
 }
 
@@ -50,7 +51,7 @@ void GUITest::update(float dt) {
 void GUITest::draw() {
 	if (gui::begin("Test", &_state, v2(100, 600))) {
 		gui::Label("Hello World: 100,200");
-		gui::InputFloat(8, "Float", &_test);
+		gui::InputFloat(8, "Float", &_test,0.0f,20.0f,0.1f);
 		gui::InputInt(3, "IntValue", &_iTest);
 		gui::InputVec2(4, "Vector", &_v2Test);
 		gui::InputVec3(5, "V3", &_v3Test);
@@ -58,6 +59,8 @@ void GUITest::draw() {
 		gui::ComboBox(8, _items, &_selected);
 		gui::DropDownBox(7, _items, &_selected,&_dpState);
 		gui::InputColor(9, "Color",&_clr);
+		gui::CheckBox(10, "Checkbox", &_checkBox);
+		gui::InputInt(11, "IntStepValue", &_iTest,0,1000,10);
 		gui::beginGroup();
 		if (gui::Button(1, "OK")) {
 			LOG << "Int Test: " << _iTest;
@@ -91,24 +94,7 @@ void GUITest::OnButtonDown(int button, int x, int y) {
 }
 
 void GUITest::OnKeyUp(WPARAM wParam) {
-	if (wParam == VK_BACK) {
-		gui::sendKey(128);
-	}
-	if (wParam == VK_LEFT) {
-		gui::sendKey(129);
-	}
-	if (wParam == VK_RIGHT) {
-		gui::sendKey(130);
-	}
-	if (wParam == VK_HOME) {
-		gui::sendKey(131);
-	}
-	if (wParam == VK_END) {
-		gui::sendKey(132);
-	}
-	if (wParam == VK_RETURN) {
-		gui::sendKey(133);
-	}
+	gui::sendSpecialKey(wParam);
 }
 
 
