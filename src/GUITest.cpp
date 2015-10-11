@@ -28,6 +28,7 @@ bool GUITest::loadContent() {
 	_v3Test = v3(123, 456, 789);
 	_rectTest = ds::Rect(10, 20, 30, 40);
 	_state = 1;
+	_state2 = 1;
 	_items.push_back("Entry 1");
 	_items.push_back("Entry 2");
 	_items.push_back("Entry 3");
@@ -49,7 +50,8 @@ void GUITest::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void GUITest::draw() {
-	if (gui::begin("Test", &_state, v2(100, 600))) {
+	gui::start(v2(100, 600));
+	if (gui::begin("Test", &_state)) {
 		gui::Label(12,"Hello World: 100,200");
 		gui::InputFloat(8, "Float", &_test,0.0f,20.0f,0.1f);
 		gui::InputInt(3, "IntValue", &_iTest);
@@ -58,9 +60,6 @@ void GUITest::draw() {
 		gui::InputRect(6, "Rect", &_rectTest);
 		gui::ComboBox(8, _items, &_selected);
 		gui::DropDownBox(7, _items, &_selected,&_dpState);
-		gui::InputColor(9, "Color",&_clr);
-		gui::CheckBox(10, "Checkbox", &_checkBox);
-		gui::InputInt(11, "IntStepValue", &_iTest,0,1000,10);
 		gui::beginGroup();
 		if (gui::Button(1, "OK")) {
 			LOG << "Int Test: " << _iTest;
@@ -73,6 +72,23 @@ void GUITest::draw() {
 		gui::endGroup();		
 	}
 	//gui::debugWindow();
+	gui::end();
+
+	if (gui::begin("Test2", &_state2)) {
+		gui::InputColor(12, "Color", &_clr);
+		gui::CheckBox(13, "Checkbox", &_checkBox);
+		gui::InputInt(14, "IntStepValue", &_iTest, 0, 1000, 10);
+		gui::beginGroup();
+		if (gui::Button(15, "OK2")) {
+			LOG << "Int Test: " << _iTest;
+			LOG << "OK2 pressed";
+		}
+		if (gui::Button(16, "Cancel2")) {
+			LOG << "Cancel2 clicked";
+			LOG << "v2Test: " << DBG_V2(_v2Test);
+		}
+		gui::endGroup();
+	}
 	gui::end();
 }
 

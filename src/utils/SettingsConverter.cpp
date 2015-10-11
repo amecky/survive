@@ -1,7 +1,7 @@
 #include "SettingsConverter.h"
 #include <io\BinaryWriter.h>
 #include <utils\PlainTextReader.h>
-
+/*
 void SettingsLoader::convert(JSONReader& reader, BinaryWriter& writer) {
 	Category* root = reader.getCategory("settings");
 	if (root != 0) {
@@ -19,4 +19,5 @@ void SettingsLoader::load(BinaryLoader* loader) {
 		loader->closeChunk();
 	}
 }
+*/
 

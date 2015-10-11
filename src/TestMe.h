@@ -60,5 +60,6 @@ private:
 	BorderLines* _borderLines;
 	float _timer;
 	Asteroid _asteroid;
-
+	GameContext _context;
+	GameSettings _gameSettings;
 };

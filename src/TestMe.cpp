@@ -45,8 +45,10 @@ bool TestMe::loadContent() {
 	}
 	_asteroid.numSegments = 12;
 	_asteroid.rotation = 0.0f;
-
-	_borderLines = new BorderLines(0);
+	gui::initialize();
+	_gameSettings.load();
+	_context.settings = &_gameSettings;
+	_borderLines = new BorderLines(&_context);
 
 	return true;
 }
@@ -195,6 +197,7 @@ void TestMe::draw() {
 		//ds::sprites::draw(_dodgers[i].position, _texture, _dodgers[i].angle);
 	//}
 	renderAsteroid(_asteroid);
+	_gameSettings.showDialog();
 }
 
 // -------------------------------------------------------

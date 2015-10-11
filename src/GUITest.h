@@ -34,6 +34,7 @@ private:
 	v3 _v3Test;
 	ds::Rect _rectTest;
 	int _state;
+	int _state2;
 	std::vector<std::string> _items;
 	int _selected;
 	int _dpState;

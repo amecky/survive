@@ -37,6 +37,8 @@ struct GameSettings {
 		}
 		borderAmplitude = 4.0f;
 		borderShakeRadius = 10.0f;
+		bulletTrailDistance = 20.0f;
+		bulletVelocity = 800.0f;
 	}
 
 	void save() {
@@ -48,28 +50,29 @@ struct GameSettings {
 	}
 
 	void showDialog() {
-		gui::begin("Bullet", &states[0], v2(100, 600));
-		gui::InputFloat(3, "Trail distance", &bulletTrailDistance);
-		gui::InputFloat(4, "Velocity", &bulletVelocity);
+		gui::start(v2(100, 600));
+		if (gui::begin("Bullet", &states[0])) {
+			gui::InputFloat(3, "Trail distance", &bulletTrailDistance);
+			gui::InputFloat(4, "Velocity", &bulletVelocity);
+		}
 		gui::end();
 
-		gui::begin("Border", &states[1], v2(100, 600));
-		gui::InputFloat(5, "Amplitude", &borderAmplitude);
-		gui::InputFloat(6, "Shake radius", &borderShakeRadius);
-
-		gui::beginGroup();
-		if (gui::Button(1, "Save")) {
-			LOG << "Save pressed";
+		if (gui::begin("Border", &states[1])) {
+			gui::InputFloat(5, "Amplitude", &borderAmplitude);
+			gui::InputFloat(6, "Shake radius", &borderShakeRadius);
+			gui::beginGroup();
+			if (gui::Button(1, "Save")) {
+				LOG << "Save pressed";
+			}
+			if (gui::Button(2, "Load")) {
+				LOG << "Load clicked";
+			}
+			gui::endGroup();
 		}
-		if (gui::Button(2, "Load")) {
-			LOG << "Load clicked";
-		}
-		gui::endGroup();
-
 		gui::end();
 	}
 };
-
+/*
 class SettingsLoader : public ds::Serializer, public ds::Converter {
 
 public:
@@ -107,3 +110,4 @@ private:
 	GameSettings m_Settings;
 	ds::DataTranslator<GameSettings> m_SettingsTranslator;
 };
+*/

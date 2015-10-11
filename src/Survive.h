@@ -42,7 +42,7 @@ private:
 	float m_Timer;
 	GameMode m_Mode;
 	Worms* m_Game;
-	SettingsLoader* m_Loader;
+//	SettingsLoader* m_Loader;
 	GameSettings* m_Settings;
 	
 };
