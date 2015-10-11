@@ -2,6 +2,8 @@
 #include <compiler\Converter.h>
 #include <data\DataTranslator.h>
 #include <io\Serializer.h>
+#include <utils\FileUtils.h>
+#include <ui\IMGUI.h>
 
 struct GameSettings {
 
@@ -26,6 +28,46 @@ struct GameSettings {
 	// border line settings
 	float borderAmplitude;
 	float borderShakeRadius;
+
+	int states[16];
+
+	GameSettings() {
+		for (int i = 0; i < 16; ++i) {
+			states[i] = 0;
+		}
+		borderAmplitude = 4.0f;
+		borderShakeRadius = 10.0f;
+	}
+
+	void save() {
+		ds::file::saveBinary("Settings", this);
+	}
+
+	void load() {
+		ds::file::loadBinary("Settings", this);
+	}
+
+	void showDialog() {
+		gui::begin("Bullet", &states[0], v2(100, 600));
+		gui::InputFloat(3, "Trail distance", &bulletTrailDistance);
+		gui::InputFloat(4, "Velocity", &bulletVelocity);
+		gui::end();
+
+		gui::begin("Border", &states[1], v2(100, 600));
+		gui::InputFloat(5, "Amplitude", &borderAmplitude);
+		gui::InputFloat(6, "Shake radius", &borderShakeRadius);
+
+		gui::beginGroup();
+		if (gui::Button(1, "Save")) {
+			LOG << "Save pressed";
+		}
+		if (gui::Button(2, "Load")) {
+			LOG << "Load clicked";
+		}
+		gui::endGroup();
+
+		gui::end();
+	}
 };
 
 class SettingsLoader : public ds::Serializer, public ds::Converter {
