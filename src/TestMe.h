@@ -62,4 +62,5 @@ private:
 	Asteroid _asteroid;
 	GameContext _context;
 	GameSettings _gameSettings;
+	int _states[16];
 };

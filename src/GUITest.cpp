@@ -4,13 +4,13 @@
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
 
-ds::BaseApp *app = new GUITest();
+//ds::BaseApp *app = new GUITest();
 
 GUITest::GUITest() : ds::BaseApp() {
 	//_CrtSetBreakAlloc(6297);
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
-	//m_ClearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
+	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
 }
 
 // -------------------------------------------------------
@@ -37,6 +37,7 @@ bool GUITest::loadContent() {
 	_selected = 1;
 	_dpState = 0;
 	_checkBox = true;
+	sprintf(_name, "Hello world");
 	return true;
 }
 
@@ -78,9 +79,11 @@ void GUITest::draw() {
 		gui::InputColor(12, "Color", &_clr);
 		gui::CheckBox(13, "Checkbox", &_checkBox);
 		gui::InputInt(14, "IntStepValue", &_iTest, 0, 1000, 10);
+		gui::Input(17, "String", _name, 32);
 		gui::beginGroup();
 		if (gui::Button(15, "OK2")) {
 			LOG << "Int Test: " << _iTest;
+			LOG << "Name: '" << _name << "'";
 			LOG << "OK2 pressed";
 		}
 		if (gui::Button(16, "Cancel2")) {
@@ -91,27 +94,4 @@ void GUITest::draw() {
 	}
 	gui::end();
 }
-
-// -------------------------------------------------------
-// OnChar
-// -------------------------------------------------------
-void GUITest::OnChar(char ascii, unsigned int keyState) {
-	gui::sendKey(ascii);
-}
-
-
-// -------------------------------------------------------
-// OnButtonUp
-// -------------------------------------------------------
-void GUITest::OnButtonUp(int button, int x, int y) {
-
-}
-
-void GUITest::OnButtonDown(int button, int x, int y) {
-}
-
-void GUITest::OnKeyUp(WPARAM wParam) {
-	gui::sendSpecialKey(wParam);
-}
-
 

@@ -23,10 +23,6 @@ public:
 	}
 	void update(float dt);
 	virtual void draw();
-	virtual void OnChar(char ascii, unsigned int keyState);
-	virtual void OnButtonUp(int button, int x, int y);
-	virtual void OnButtonDown(int button, int x, int y);
-	virtual void OnKeyUp(WPARAM wParam);
 private:
 	float _test;
 	int _iTest;
@@ -40,4 +36,5 @@ private:
 	int _dpState;
 	ds::Color _clr;
 	bool _checkBox;
+	char _name[32];
 };

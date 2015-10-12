@@ -25,11 +25,7 @@ bool Survive::loadContent() {
 	ds::assets::load("xscale", font, ds::CVT_FONT);
 	ds::renderer::initializeBitmapFont(*font,texture);
 	initializeGUI();
-	//m_Loader = new SettingsLoader;
-	//uint32 convID = ds::assets::registerConverter(m_Loader);
-	//ds::assets::load("worms", m_Loader, convID);
-	//m_Settings = m_Loader->get();
-	m_Settings->load();
+	settings::load(m_Settings);
 	m_Game = new Worms();
 	m_Game->init(m_Settings,font,&gui);
 

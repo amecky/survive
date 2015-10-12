@@ -4,13 +4,15 @@
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
 
-//ds::BaseApp *app = new TestMe();
+ds::BaseApp *app = new TestMe();
 
 TestMe::TestMe() : ds::BaseApp() {
 	//_CrtSetBreakAlloc(6297);
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
-	//m_ClearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
+	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
+	_states[0] = 1;
+	_states[1] = 1;
 }
 
 // -------------------------------------------------------
@@ -45,10 +47,13 @@ bool TestMe::loadContent() {
 	}
 	_asteroid.numSegments = 12;
 	_asteroid.rotation = 0.0f;
+
 	gui::initialize();
-	_gameSettings.load();
+	settings::load(&_gameSettings);
 	_context.settings = &_gameSettings;
 	_borderLines = new BorderLines(&_context);
+
+	ds::assets::loadSpriteTemplates("sprites");
 
 	return true;
 }
@@ -197,7 +202,10 @@ void TestMe::draw() {
 		//ds::sprites::draw(_dodgers[i].position, _texture, _dodgers[i].angle);
 	//}
 	renderAsteroid(_asteroid);
-	_gameSettings.showDialog();
+	//settings::showDialog(&_gameSettings,_states);
+	
+	ds::sprites::drawTemplate(id);
+	ds::renderer::getSpriteTemplates()->showDialog("background");
 }
 
 // -------------------------------------------------------
