@@ -204,7 +204,7 @@ void TestMe::draw() {
 	renderAsteroid(_asteroid);
 	//settings::showDialog(&_gameSettings,_states);
 	
-	ds::sprites::drawTemplate(id);
+	ds::sprites::drawTemplate("background");
 	ds::renderer::getSpriteTemplates()->showDialog("background");
 }
 
