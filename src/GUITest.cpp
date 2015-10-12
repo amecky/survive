@@ -38,6 +38,7 @@ bool GUITest::loadContent() {
 	_dpState = 0;
 	_checkBox = true;
 	sprintf(_name, "Hello world");
+	_startPos = v2(100, 600);
 	return true;
 }
 
@@ -51,7 +52,7 @@ void GUITest::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void GUITest::draw() {
-	gui::start(v2(100, 600));
+	gui::start(&_startPos);
 	if (gui::begin("Test", &_state)) {
 		gui::Label(12,"Hello World: 100,200");
 		gui::InputFloat(8, "Float", &_test,0.0f,20.0f,0.1f);

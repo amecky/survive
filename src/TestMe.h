@@ -63,4 +63,5 @@ private:
 	GameContext _context;
 	GameSettings _gameSettings;
 	int _states[16];
+	v2 _templateBoxPos;
 };

@@ -37,4 +37,5 @@ private:
 	ds::Color _clr;
 	bool _checkBox;
 	char _name[32];
+	v2 _startPos;
 };
