@@ -5,24 +5,19 @@
 #pragma warning(disable : 4995)
 
 #pragma once
-#include <base\BaseApp.h>
-#include <dxstdafx.h>
+#include <base\GameState.h>
 #include <renderer\render_types.h>
 #include "utils\BorderLines.h"
 #include <ui\IMGUI.h>
 
-class GUITest : public ds::BaseApp {
+class GUITest : public ds::GameState {
 
 public:
 	GUITest();
-	virtual ~GUITest() {
-	}
-	bool loadContent();
-	const char* getTitle() {
-		return "GUITest";
-	}
-	void update(float dt);
-	virtual void draw();
+	virtual ~GUITest() {}	
+	void init();
+	int update(float dt);
+	void render();
 private:
 	float _test;
 	int _iTest;

@@ -4,7 +4,7 @@
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
 
-ds::BaseApp *app = new TestMe();
+//ds::BaseApp *app = new TestMe();
 
 TestMe::TestMe() : ds::BaseApp() {
 	//_CrtSetBreakAlloc(6297);

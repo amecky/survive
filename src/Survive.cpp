@@ -2,9 +2,10 @@
 #include "utils\Log.h"
 #include <renderer\shader.h>
 #include <renderer\BitmapFont.h>
+#include <base\GameStateMachine.h>
+#include "GUITest.h"
 
-
-//ds::BaseApp *app = new Survive(); 
+ds::BaseApp *app = new Survive(); 
 
 Survive::Survive() : ds::BaseApp() {
 	//_CrtSetBreakAlloc(6297);
@@ -13,6 +14,7 @@ Survive::Survive() : ds::BaseApp() {
 	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
 	m_Timer = 0.0f;
 	m_Mode = GM_START;
+	m_Settings = new GameSettings;
 }
 
 // -------------------------------------------------------
@@ -20,15 +22,16 @@ Survive::Survive() : ds::BaseApp() {
 // -------------------------------------------------------
 bool Survive::loadContent() {	
 	int texture = ds::renderer::loadTexture("TextureArray");
-	assert( texture != -1 );
+	assert( texture != -1 );	
 	ds::BitmapFont* font = ds::renderer::createBitmapFont("xscale");
 	ds::assets::load("xscale", font, ds::CVT_FONT);
 	ds::renderer::initializeBitmapFont(*font,texture);
+	gui::initialize();
 	initializeGUI();
 	settings::load(m_Settings);
 	m_Game = new Worms();
 	m_Game->init(m_Settings,font,&gui);
-
+	stateMachine->add(new GUITest());
 	//gui.activate("GameOver");
 	return true;
 }
@@ -49,7 +52,8 @@ void Survive::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void Survive::draw() {	
-	m_Game->render();
+	//m_Game->render();
+	stateMachine->showDialog();
 }
 
 // -------------------------------------------------------

@@ -4,24 +4,15 @@
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
 
-//ds::BaseApp *app = new GUITest();
 
-GUITest::GUITest() : ds::BaseApp() {
-	//_CrtSetBreakAlloc(6297);
-	_settings.screenWidth = 1024;
-	_settings.screenHeight = 768;
-	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
-}
+GUITest::GUITest() : ds::GameState("GUITest") {}
 
 // -------------------------------------------------------
 // Load content and prepare game
 // -------------------------------------------------------
-bool GUITest::loadContent() {
-	int texture = ds::renderer::loadTexture("TextureArray");
-	assert(texture != -1);
-
-	gui::initialize();
-
+void GUITest::init() {
+	//int texture = ds::renderer::loadTexture("TextureArray");
+	//assert(texture != -1);
 	_test = 18.3f;
 	_iTest = 1234;
 	_v2Test = v2(100, 200);
@@ -40,19 +31,19 @@ bool GUITest::loadContent() {
 	sprintf(_name, "Hello world");
 	_startPos = v2(100, 600);
 	_comboOffset = 0;
-	return true;
 }
 
 // -------------------------------------------------------
 // Update
 // -------------------------------------------------------
-void GUITest::update(float dt) {
+int GUITest::update(float dt) {
+	return 0;
 }
 
 // -------------------------------------------------------
 // Draw
 // -------------------------------------------------------
-void GUITest::draw() {
+void GUITest::render() {
 	gui::start(&_startPos);
 	if (gui::begin("Test", &_state)) {
 		gui::Label(12,"Hello World: 100,200");
