@@ -207,7 +207,7 @@ void TestMe::draw() {
 	//settings::showDialog(&_gameSettings,_states);
 	
 	ds::sprites::drawTemplate("background");
-	ds::renderer::getSpriteTemplates()->showDialog(&_templateBoxPos,"background");
+	ds::renderer::getSpriteTemplates()->showDialog(&_templateBoxPos);
 }
 
 // -------------------------------------------------------

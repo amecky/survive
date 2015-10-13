@@ -38,4 +38,5 @@ private:
 	bool _checkBox;
 	char _name[32];
 	v2 _startPos;
+	int _comboOffset;
 };

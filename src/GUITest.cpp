@@ -39,6 +39,7 @@ bool GUITest::loadContent() {
 	_checkBox = true;
 	sprintf(_name, "Hello world");
 	_startPos = v2(100, 600);
+	_comboOffset = 0;
 	return true;
 }
 
@@ -60,7 +61,7 @@ void GUITest::draw() {
 		gui::InputVec2(4, "Vector", &_v2Test);
 		gui::InputVec3(5, "V3", &_v3Test);
 		gui::InputRect(6, "Rect", &_rectTest);
-		gui::ComboBox(8, _items, &_selected);
+		gui::ComboBox(8, _items, &_selected, &_comboOffset);
 		gui::DropDownBox(7, _items, &_selected,&_dpState);
 		gui::beginGroup();
 		if (gui::Button(1, "OK")) {
