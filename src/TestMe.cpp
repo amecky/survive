@@ -6,11 +6,7 @@
 
 //ds::BaseApp *app = new TestMe();
 
-TestMe::TestMe() : ds::BaseApp() {
-	//_CrtSetBreakAlloc(6297);
-	_settings.screenWidth = 1024;
-	_settings.screenHeight = 768;
-	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
+TestMe::TestMe() : ds::GameState("TestState") {
 	_states[0] = 1;
 	_states[1] = 1;
 }
@@ -18,7 +14,7 @@ TestMe::TestMe() : ds::BaseApp() {
 // -------------------------------------------------------
 // Load content and prepare game
 // -------------------------------------------------------
-bool TestMe::loadContent() {
+void TestMe::init() {
 	int texture = ds::renderer::loadTexture("TextureArray");
 	assert(texture != -1);
 	_texture = ds::math::buildTexture(515, 80, 64, 64);
@@ -48,7 +44,6 @@ bool TestMe::loadContent() {
 	_asteroid.numSegments = 12;
 	_asteroid.rotation = 0.0f;
 
-	gui::initialize();
 	settings::load(&_gameSettings);
 	_context.settings = &_gameSettings;
 	_borderLines = new BorderLines(&_context);
@@ -57,7 +52,6 @@ bool TestMe::loadContent() {
 
 	_templateBoxPos = v2(100, 600);
 
-	return true;
 }
 
 void TestMe::renderAsteroid(const Asteroid& asteroid) {
@@ -96,7 +90,7 @@ void TestMe::drawSegment(const v2& pos,float alpha, float ra, float beta, float 
 // Update
 // -------------------------------------------------------
 // https://processing.org/examples/flocking.html
-void TestMe::update(float dt) {
+int TestMe::update(float dt) {
 	_timer += dt;
 
 	_borderLines->update(dt);
@@ -113,6 +107,7 @@ void TestMe::update(float dt) {
 		d.position += d.velocity * dt;
 		d.angle = ds::math::getTargetAngle(d.velocity, V2_RIGHT);
 	}
+	return 0;
 }
 
 v2 TestMe::seek(int index, const v2& target) {
@@ -197,7 +192,7 @@ v2 TestMe::separate(int index) {
 // -------------------------------------------------------
 // Draw
 // -------------------------------------------------------
-void TestMe::draw() {
+void TestMe::render() {
 	_borderLines->draw();
 	//drawCircle(v2(512, 384), 12, 100.0f, 15.0f,ds::math::buildTexture(100.0f, 0.0f, 40.0f, 15.0f),m_GameTime.totalTime);
 	//for (size_t i = 0; i < _dodgers.size(); ++i) {

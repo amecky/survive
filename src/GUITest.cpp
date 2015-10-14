@@ -11,6 +11,7 @@ GUITest::GUITest() : ds::GameState("GUITest") {}
 // Load content and prepare game
 // -------------------------------------------------------
 void GUITest::init() {
+	
 	//int texture = ds::renderer::loadTexture("TextureArray");
 	//assert(texture != -1);
 	_test = 18.3f;
@@ -25,6 +26,9 @@ void GUITest::init() {
 	_items.push_back("Entry 3");
 	_items.push_back("Entry 4");
 	_items.push_back("Entry 5");
+	_items.push_back("Entry 6");
+	_items.push_back("Entry 7");
+	_items.push_back("Entry 8");
 	_selected = 1;
 	_dpState = 0;
 	_checkBox = true;
@@ -44,7 +48,8 @@ int GUITest::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void GUITest::render() {
-	gui::start(&_startPos);
+	PR_START("GUITest::render")
+	gui::start(1,&_startPos);
 	if (gui::begin("Test", &_state)) {
 		gui::Label(12,"Hello World: 100,200");
 		gui::InputFloat(8, "Float", &_test,0.0f,20.0f,0.1f);
@@ -86,5 +91,6 @@ void GUITest::render() {
 		gui::endGroup();
 	}
 	gui::end();
+	PR_END("GUITest::render")
 }
 

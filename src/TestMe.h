@@ -1,18 +1,11 @@
-#pragma comment(lib, "Diesel2D.lib")
-#pragma comment(lib, "dinput8.lib")
-#pragma comment(lib, "dsound.lib")
-#pragma comment(lib, "dxerr.lib")
-#pragma warning(disable : 4995)
-
 #pragma once
-#include <base\BaseApp.h>
-#include <dxstdafx.h>
+#include <base\GameState.h>
 #include <renderer\render_types.h>
 #include "utils\BorderLines.h"
 
 enum {ASTEROID_MAX_SEGMENTS = 36};
 
-class TestMe : public ds::BaseApp {
+class TestMe : public ds::GameState {
 
 struct Asteroid {
 	v2 position;
@@ -37,13 +30,14 @@ typedef std::vector<Dodger> Dodgers;
 public:
 	TestMe();
 	virtual ~TestMe() {
+		delete _borderLines;
 	}
-	bool loadContent();
+	void init();
 	const char* getTitle() {
 		return "TestMe";
 	}
-	void update(float dt);
-	void draw();
+	int update(float dt);
+	void render();
 	virtual void OnChar(char ascii, unsigned int keyState);
 	virtual void OnButtonUp(int button, int x, int y);
 	virtual void OnButtonDown(int button, int x, int y);

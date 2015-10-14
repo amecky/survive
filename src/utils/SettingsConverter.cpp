@@ -16,7 +16,7 @@ namespace settings {
 	}
 
 	void showDialog(GameSettings* settings,v2* pos, int* states) {
-		gui::start(pos);
+		gui::start(2,pos);
 		if (gui::begin("Bullet", &states[0])) {
 			gui::InputFloat(3, "Trail distance", &settings->bulletTrailDistance);
 			gui::InputFloat(4, "Velocity", &settings->bulletVelocity);
