@@ -23,7 +23,7 @@ enum GameMode {
 public:	
 	Survive();
 	virtual ~Survive() {
-		//delete m_Settings;
+		delete _gameSettings;
 	}	
 	bool loadContent();
 	void init();
@@ -42,7 +42,10 @@ private:
 
 	float m_Timer;
 	GameMode m_Mode;
-	GameSettings* m_Settings;
+	GameSettings* _gameSettings;
 	bool _showGameStates;
+	bool _showSettings;
+	v2 _settingsPosition;
+	int _settingsStates[16];
 	
 };

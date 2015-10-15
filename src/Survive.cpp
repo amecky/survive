@@ -15,7 +15,12 @@ Survive::Survive() : ds::BaseApp() {
 	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
 	m_Timer = 0.0f;
 	m_Mode = GM_START;
-	//m_Settings = new GameSettings;
+	_gameSettings = new GameSettings;
+	_showSettings = true;
+	for (int i = 0; i < 16; ++i) {
+		_settingsStates[i] = 1;
+	}
+	_settingsPosition = v2(800, 740);
 }
 
 // -------------------------------------------------------
@@ -30,7 +35,7 @@ bool Survive::loadContent() {
 	ds::renderer::initializeBitmapFont(font,texture);	
 	//initializeGUI();
 	gui::initialize();
-	//settings::load(m_Settings);
+	settings::load(_gameSettings);
 	//m_Game = new Worms();
 	//m_Game->init(m_Settings,font,&gui);
 	stateMachine->add(new GUITest());
@@ -62,6 +67,9 @@ void Survive::draw() {
 	if (_showGameStates) {
 		stateMachine->showDialog();
 	}
+	if (_showSettings) {
+		settings::showDialog(_gameSettings, &_settingsPosition, _settingsStates);
+	}
 }
 
 // -------------------------------------------------------
@@ -71,6 +79,10 @@ void Survive::OnChar( char ascii,unsigned int keyState ) {
 	if (ascii == 'd') {
 		_showGameStates = !_showGameStates;
 	}
+	if (ascii == 's') {
+		_showSettings = !_showSettings;
+	}
+	
 }
 
 // -------------------------------------------------------

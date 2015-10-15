@@ -44,5 +44,5 @@ namespace settings {
 
 	void load(GameSettings* settings);
 
-	void showDialog(GameSettings* settings, int* states);
+	void showDialog(GameSettings* settings,v2* pos, int* states);
 }
