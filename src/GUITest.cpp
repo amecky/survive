@@ -3,7 +3,7 @@
 #include <renderer\shader.h>
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
-
+#include <utils\Profiler.h>
 
 GUITest::GUITest() : ds::GameState("GUITest") {}
 
@@ -33,7 +33,7 @@ void GUITest::init() {
 	_dpState = 0;
 	_checkBox = true;
 	sprintf(_name, "Hello world");
-	_startPos = v2(100, 600);
+	_startPos = v2(100, 700);
 	_comboOffset = 0;
 }
 
@@ -78,6 +78,9 @@ void GUITest::render() {
 		gui::CheckBox(13, "Checkbox", &_checkBox);
 		gui::InputInt(14, "IntStepValue", &_iTest, 0, 1000, 10);
 		gui::Input(17, "String", _name, 32);
+		float val[16];// = { 0.2f, 0.4f, 0.3f, 0.1f, 0.15f, 0.6f, 1.0f, 0.1f, 0.9f, 0.75f };
+		int count = profiler::get_total_times(val, 16);
+		gui::Histogram(17, val, count, 0.4f, 0.8f, 0.1f);
 		gui::beginGroup();
 		if (gui::Button(15, "OK2")) {
 			LOG << "Int Test: " << _iTest;
