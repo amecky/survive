@@ -25,7 +25,7 @@
 	"rect" : "475, 0, 20, 20" ,
 	"scale" : "1.2,0.6" ,
 	"rotation" : "0" ,
-	"color" : "255,0,90,255" ,
+	"color" : "255,253,190,255" ,
 	"type" : "1"
 }
 "sprite" {
@@ -87,6 +87,16 @@
 	"rotation" : "0" ,
 	"color" : "0,255, 0, 255" ,
 	"type" : "20"
+}
+"sprite" {
+	"name" : "bullet_light" ,
+	"texture_id" : "0" ,
+	"position" : "200,384" ,
+	"rect" : "870,0,140,140" ,
+	"scale" : "0.5,0.5" ,
+	"rotation" : "0" ,
+	"color" : "255,253,190,255" ,
+	"type" : "1"
 }
 "sprite" {
 	"name" : "get_ready" ,

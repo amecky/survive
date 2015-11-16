@@ -45,8 +45,7 @@ void TestMe::init() {
 
 	ds::assets::loadSpriteTemplates();
 
-	_player->create();
-
+	//_player->create();
 	
 }
 

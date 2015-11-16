@@ -119,11 +119,18 @@ void Player::fireBullet() {
 // fire bullet at specific position and direction
 // --------------------------------------------------------------------------
 void Player::fireBullet(const Vector2f& pos, const Vector2f& direction) {
-	Vector2f v = ds::vector::getRadialVelocity(_angle, _context->settings->bulletVelocity);
+	float angle = _angle + ds::math::random(DEGTORAD(-10.0f), DEGTORAD(10.0f));
+	Vector2f v = ds::vector::getRadialVelocity(angle, _context->settings->bulletVelocity);
 	ds::SID sid = _context->world->create(pos, "bullet", OBJECT_LAYER);
 	//m_World.scaleTo(sid, Vector2f(0.1f, 1.0f), Vector2f(1.0f, 1.0f), 0.4f);
 	_context->world->moveBy(sid, v);
-	_context->world->setRotation(sid, _angle);
+	_context->world->setRotation(sid, angle);
+
+	ds::SID lid = _context->world->create(pos, "bullet_light", LIGHT_LAYER);// _context->lights->add_permanent(_position, ds::Color(0, 255, 0, 255));
+	//_context->world->setColor(lid, ds::Color(255, 253, 190, 255));
+	_context->world->moveBy(lid, v);
+	_context->world->scale(lid, 0.5f, 0.5f);
+
 	_context->world->attachCollider(sid, Vector2f(10.0f, 10.0f), BULLET_TYPE,OBJECT_LAYER);
-	_context->trails->addFrameBased(sid, _angle, 1, 4);
+	_context->trails->addFrameBased(sid, angle, 1, 4);
 }

@@ -15,12 +15,13 @@ Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) 
 	_pindex = 0;
 
 	// HERE !!!!!
-	_no_enemies = true;
+	_no_enemies = false;
 }
 
 
 Worms::~Worms(void) {
 	//delete m_Context.lights;
+	delete _borderLines;
 	delete _dodgers;
 	delete _player;
 }
@@ -49,8 +50,8 @@ void Worms::init() {
 	desc.shader = ds::shader::createParticleShader();
 	assert(desc.shader != 0);
 	desc.texture = 0;
-	desc.blendState = m_AddBS;
-	//desc.blendState = ds::renderer::getDefaultBlendState();
+	//desc.blendState = m_AddBS;
+	desc.blendState = ds::renderer::getDefaultBlendState();
 	_context->particles->init(desc);
 	ds::assets::loadParticleSystem("particlesystems", _context->particles);
 
@@ -231,10 +232,12 @@ int Worms::update(float dt) {
 				m_Shaking = false;
 			}
 		}
+		*/
 		if (!_no_enemies) {
 			_dodgers->tick(dt);
 			_dodgers->move(dt);
 		}
+		/*
 	}
 	if (_game_state == GS_DYING) {
 		_warm_up_timer += dt;
