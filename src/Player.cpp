@@ -65,8 +65,8 @@ void Player::setShooting(ShootingMode mode) {
 }
 
 void Player::kill() {
-	_context->particles.start(6, _position);
-	_context->particles.start(8, _position);
+	_context->particles->start(6, _position);
+	_context->particles->start(8, _position);
 	_context->world->remove(_id);
 	_context->world->remove(_lightIndex);
 	_shootingMode = SM_IDLE;

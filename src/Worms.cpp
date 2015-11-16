@@ -9,7 +9,7 @@
 #include <physics\ColliderArray.h>
 
 
-Worms::Worms(void) {
+Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) {
 	m_DebugFlag = false;
 	_pbits.clear();
 	_pindex = 0;
@@ -20,8 +20,6 @@ Worms::Worms(void) {
 
 
 Worms::~Worms(void) {
-	delete _borderLines;
-	delete m_Context.trails;
 	//delete m_Context.lights;
 	delete _dodgers;
 	delete _player;
@@ -30,75 +28,70 @@ Worms::~Worms(void) {
 // --------------------------------------------------------------------------
 // init
 // --------------------------------------------------------------------------
-void Worms::init(GameSettings* settings, ds::BitmapFont* font,ds::DialogManager* dialogs) {
+void Worms::init() {
 
-	m_Context.world = &m_World;
-	m_HUD.init(0, "xscale");
-	ds::assets::load("hud", &m_HUD, ds::CVT_HUD);
 	resetHUD();
 	
 
-	ds::assets::loadSpriteTemplates("sprites");
-	m_Context.settings = settings;
-	m_Context.font = font;
-	m_Context.dialogs = dialogs;
+	//ds::assets::loadSpriteTemplates("sprites");
 
-	ds::SID backID = m_World.create(Vector2f(512, 384), "background", BG_LAYER);
+	ds::SID backID = _context->world->create(Vector2f(512, 384), "background", BG_LAYER);
 
-	_player = new Player(&m_Context);
+	_player = new Player(_context);
+	_player->create();
+
 	m_AddBS = ds::renderer::createBlendState("alpha_blend_state",ds::BL_ONE, ds::BL_ONE, true);	
 	m_ColliderText = ds::math::buildTexture(0,160,40,40);
 
 	// prepare particle system
 	ds::Descriptor desc;
 	//desc.shader = ds::renderer::loadShader("particle_shader", "ParticleTech");
-	desc.shader = ds::assets::loadShader("particles");// "particle_shader", "ParticleTech");
+	desc.shader = ds::shader::createParticleShader();
 	assert(desc.shader != 0);
 	desc.texture = 0;
 	desc.blendState = m_AddBS;
 	//desc.blendState = ds::renderer::getDefaultBlendState();
-	m_Context.particles.init(desc);
-	ds::assets::loadParticleSystem("particlesystems", &m_Context.particles);
+	_context->particles->init(desc);
+	ds::assets::loadParticleSystem("particlesystems", _context->particles);
 
-	m_Context.trails = new Trail(&m_Context);
 	
-	m_RT1Tex = ds::renderer::createRenderTarget(0, ds::Color(0,0,0,0));
-	m_RT2Tex = ds::renderer::createRenderTarget(1, ds::Color(0, 0, 0, 0));
+	_rt1 = ds::renderer::createRenderTarget(ds::Color(0,0,0,0));
+	_rt2 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));
 	//snakes = new Snake(&m_Context);
 
 	m_Level = 0;
 	
-	_shakeShader = ds::assets::loadShader("shake");
+	//_shakeShader = ds::assets::loadShader("shake");
 	m_ShakeTimer = 0.0f;
 	m_Shaking = false;
 
-	m_World.setBoundingRect(ds::Rect(0, 0, 1024, 768));
+	_context->world->setBoundingRect(ds::Rect(0, 0, 1024, 768));
 	// define ignored collisions
-	m_World.ignoreCollisions(BULLET_TYPE, PLAYER_TYPE);
-	m_World.ignoreCollisions(SNAKE_HEAD, SNAKE_TAIL);
-	m_World.ignoreCollisions(SNAKE_TAIL, SNAKE_TAIL);
-	m_World.ignoreCollisions(SNAKE_HEAD, SNAKE_SHIELD);
-	m_World.ignoreCollisions(SNAKE_TAIL, SNAKE_SHIELD);
-	m_World.ignoreLayer(BG_LAYER);
-	m_World.ignoreLayer(LIGHT_LAYER);
+	_context->world->ignoreCollisions(BULLET_TYPE, PLAYER_TYPE);
+	_context->world->ignoreCollisions(SNAKE_HEAD, SNAKE_TAIL);
+	_context->world->ignoreCollisions(SNAKE_TAIL, SNAKE_TAIL);
+	_context->world->ignoreCollisions(SNAKE_HEAD, SNAKE_SHIELD);
+	_context->world->ignoreCollisions(SNAKE_TAIL, SNAKE_SHIELD);
+	_context->world->ignoreLayer(BG_LAYER);
+	_context->world->ignoreLayer(LIGHT_LAYER);
 
 	ds::Descriptor light_desc;
-	light_desc.shader = ds::assets::loadShader("lightning");// ds::renderer::loadShader("lightning", "LTTech");
+	light_desc.shader = ds::renderer::loadShader("lightning", "LTTech");
 	assert(light_desc.shader != 0);
 	light_desc.texture = 0;
 	_light_desc = ds::renderer::addDescriptor(light_desc);
 
-	_dodgers = new Dodgers(&m_Context);
-	_borderLines = new BorderLines(&m_Context);
+	_dodgers = new Dodgers(_context);
+	_borderLines = new BorderLines(_context);
 
 	restart();
 }
 
 void Worms::incrementKills(int points) {
-	m_HudData.points += points;
-	++m_HudData.kills;
-	m_HUD.setCounterValue(0, m_HudData.points);
-	m_HUD.setCounterValue(1, m_HudData.kills);
+	//m_HudData.points += points;
+	//++m_HudData.kills;
+	//m_HUD.setCounterValue(0, m_HudData.points);
+	//m_HUD.setCounterValue(1, m_HudData.kills);
 	startShaking();
 }
 
@@ -106,6 +99,7 @@ void Worms::incrementKills(int points) {
 // kill enemy and bullet
 // --------------------------------------------------------------------------
 void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemyID, const Vector2f& enemyPos, int enemyType) {
+	/*
 	if (enemyType == SNAKE_TAIL) {
 		for (size_t i = 0; i < snakes.size(); ++i) {
 			if (snakes[i]->containsTail(enemyID)) {
@@ -127,11 +121,11 @@ void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemy
 					m_Context.particles.start(0, enemyPos);
 					m_Context.particles.start(6, enemyPos);
 					m_HudData.points += 1000;
-					m_HUD.setCounterValue(0, m_HudData.points);
+					//m_HUD.setCounterValue(0, m_HudData.points);
 				}
 				else {
 					m_HudData.points += 1000;
-					m_HUD.setCounterValue(0, m_HudData.points);
+					//m_HUD.setCounterValue(0, m_HudData.points);
 					startShaking();
 				}
 			}
@@ -141,18 +135,21 @@ void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemy
 		m_Context.particles.start(1, bulletPos);
 		m_World.remove(bulletID);
 	}	
+	*/
 }
 
 void Worms::commonTick(float dt) {
-	m_World.tick(dt);
-	m_Context.particles.update(dt);
-	m_Context.trails->tick(dt);
-	const ds::ActionEventBuffer& buffer = m_World.getEventBuffer();
+	_player->move(dt);
+	_player->shootBullets(dt);
+	_context->world->tick(dt);
+	_context->particles->update(dt);
+	_context->trails->tick(dt);
+	const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 	if (buffer.num > 0) {
 		for (int i = 0; i < buffer.num; ++i) {
 			if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == BULLET_TYPE) {
-				m_Context.particles.start(1, m_World.getPosition(buffer.events[i].sid));
-				m_World.remove(buffer.events[i].sid);
+				_context->particles->start(1, _context->world->getPosition(buffer.events[i].sid));
+				_context->world->remove(buffer.events[i].sid);
 			}
 		}
 	}
@@ -160,11 +157,11 @@ void Worms::commonTick(float dt) {
 // --------------------------------------------------------------------------
 // tick
 // --------------------------------------------------------------------------
-void Worms::tick(float dt) {
+int Worms::update(float dt) {
 	PR_START("CatcheMe:tick")
 
-	_borderLines->update(dt);
-
+	commonTick(dt);
+	/*
 	if (_game_state == GS_WARM_UP) {
 		_player->move(dt);
 		_warm_up_timer += dt;
@@ -252,7 +249,9 @@ void Worms::tick(float dt) {
 			dlg->updateText(8, str);
 		}
 	}
+	*/
 	PR_END("CatcheMe:tick")
+	return 0;
 }
 
 // --------------------------------------------------------------------------
@@ -262,10 +261,10 @@ void Worms::render() {
 	PR_START("CatchMe:render")
 	
 
-	if (_game_state == GS_RUNNING || _game_state == GS_WARM_UP || _game_state == GS_DYING) {
+	//if (_game_state == GS_RUNNING || _game_state == GS_WARM_UP || _game_state == GS_DYING) {
 		
-		_borderLines->draw();
-
+		//_borderLines->draw();
+		/*
 		int sid = ds::renderer::getDefaultShaderID();
 		if (m_Shaking) {
 			ds::Shader* shader = ds::renderer::getShader(_shakeShader);
@@ -276,10 +275,10 @@ void Worms::render() {
 			ds::renderer::setCurrentShader(_shakeShader);
 			sid = _shakeShader;
 		}
+		*/
+		ds::renderer::setRenderTarget(_rt1);
 		
-		ds::renderer::setRenderTarget(0);
-		
-		m_World.renderSingleLayer(BG_LAYER);
+		_context->world->renderSingleLayer(BG_LAYER);
 		
 		
 		//m_Context.lights->render();
@@ -288,26 +287,26 @@ void Worms::render() {
 		int current = ds::sprites::getDescriptorID();
 		ds::sprites::setDescriptorID(_light_desc);
 
-		m_World.renderSingleLayer(LIGHT_LAYER);
+		_context->world->renderSingleLayer(LIGHT_LAYER);
 
 		ds::sprites::flush();
 		ds::sprites::setDescriptorID(current);
 
-		m_World.renderSingleLayer(MESSAGE_LAYER);
+		_context->world->renderSingleLayer(MESSAGE_LAYER);
 
-		m_Context.particles.render();
+		_context->particles->render();
 		
-		m_World.renderSingleLayer(OBJECT_LAYER);
+		_context->world->renderSingleLayer(OBJECT_LAYER);
 		
 		ds::renderer::restoreBackBuffer();
-		ds::renderer::draw_render_target(0, sid);
+		ds::renderer::draw_render_target(_rt1);
 
 		if (m_DebugFlag) {
 			//_snakes[i]->debug();
 		}
 
-		m_HUD.render();
-	}
+		//m_HUD.render();
+	//}
 
 	//m_World.drawColliders(m_ColliderText);
 	//snakes->debug();
@@ -318,6 +317,7 @@ void Worms::render() {
 // restart game
 // --------------------------------------------------------------------------
 void Worms::restart() {
+	/*
 	resetHUD();
 	m_Shaking = false;
 	// warm up
@@ -342,16 +342,17 @@ void Worms::restart() {
 	m_Context.doubleFire = false;
 	m_Context.fireRate = 0.75f;
 	m_Context.tripleShot = false;
+	*/
 }
 
 // --------------------------------------------------------------------------
 // restart HUD
 // --------------------------------------------------------------------------
 void Worms::resetHUD() {
-	m_HudData.points = 0;
-	m_HudData.kills = 0;
-	m_HUD.setCounterValue(0, 0);
-	m_HUD.setCounterValue(1, 0);
+	//m_HudData.points = 0;
+	//m_HudData.kills = 0;
+	//m_HUD.setCounterValue(0, 0);
+	//m_HUD.setCounterValue(1, 0);
 }
 
 // --------------------------------------------------------------------------
@@ -364,10 +365,23 @@ void Worms::startShaking() {
 	m_ShakeTimer = 0.0f;
 }
 
+int Worms::onButtonDown(int button, int x, int y) {
+	_player->setShooting(SM_SHOOTING);
+	return 0;
+}
+
+int Worms::onButtonUp(int button, int x, int y) {
+	_player->setShooting(SM_IDLE);
+	return 0;
+}
 // --------------------------------------------------------------------------
 // OnChar
 // --------------------------------------------------------------------------
-void Worms::OnChar(char ascii, unsigned int keyState) {
+int Worms::onChar(int ascii) {
+	if (ascii == '3') {
+		_context->particles->start(0, Vector3f(512, 384, 0));
+	}
+	/*
 	if (ascii == '1') {
 	}
 	if (ascii == '2') {
@@ -430,5 +444,7 @@ void Worms::OnChar(char ascii, unsigned int keyState) {
 		}
 		LOG << tmp;
 	}
+	*/
+	return 0;
 }
 

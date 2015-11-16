@@ -4,11 +4,8 @@
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
 
-//ds::BaseApp *app = new TestMe();
-
-TestMe::TestMe() : ds::GameState("TestState") {
-	_states[0] = 1;
-	_states[1] = 1;
+TestMe::TestMe(GameContext* ctx) : ds::GameState("TestState") , _context(ctx) {
+	_player = new Player(ctx);
 }
 
 // -------------------------------------------------------
@@ -44,14 +41,13 @@ void TestMe::init() {
 	_asteroid.numSegments = 12;
 	_asteroid.rotation = 0.0f;
 
-	settings::load(&_gameSettings);
-	_context.settings = &_gameSettings;
-	_borderLines = new BorderLines(&_context);
+	_borderLines = new BorderLines(_context);
 
-	ds::assets::loadSpriteTemplates("sprites");
+	ds::assets::loadSpriteTemplates();
 
-	_templateBoxPos = v2(100, 600);
+	_player->create();
 
+	
 }
 
 void TestMe::renderAsteroid(const Asteroid& asteroid) {
@@ -92,7 +88,8 @@ void TestMe::drawSegment(const v2& pos,float alpha, float ra, float beta, float 
 // https://processing.org/examples/flocking.html
 int TestMe::update(float dt) {
 	_timer += dt;
-
+	_player->move(dt);
+	_context->world->tick(dt);
 	_borderLines->update(dt);
 	
 	v2 mp = ds::renderer::getMousePosition();
@@ -193,16 +190,17 @@ v2 TestMe::separate(int index) {
 // Draw
 // -------------------------------------------------------
 void TestMe::render() {
-	_borderLines->draw();
+	//_borderLines->draw();
+	
 	//drawCircle(v2(512, 384), 12, 100.0f, 15.0f,ds::math::buildTexture(100.0f, 0.0f, 40.0f, 15.0f),m_GameTime.totalTime);
 	//for (size_t i = 0; i < _dodgers.size(); ++i) {
 		//ds::sprites::draw(_dodgers[i].position, _texture, _dodgers[i].angle);
 	//}
-	renderAsteroid(_asteroid);
+	//renderAsteroid(_asteroid);
 	//settings::showDialog(&_gameSettings,_states);
 	
-	ds::sprites::drawTemplate("background");
-	ds::renderer::getSpriteTemplates()->showDialog(&_templateBoxPos);
+	ds::sprites::drawTemplate("player");
+	//ds::renderer::getSpriteTemplates()->showDialog();
 }
 
 // -------------------------------------------------------

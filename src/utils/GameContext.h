@@ -14,7 +14,7 @@ struct GameContext {
 	ds::World* world;
 	GameSettings* settings;
 	Vector2f playerPos;
-	ds::ParticleManager particles;
+	ds::ParticleManager* particles;
 	ds::BitmapFont* font;
 	Trail* trails;
 	ds::DialogManager* dialogs;

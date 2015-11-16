@@ -1,11 +1,7 @@
 #pragma once
-#include <compiler\Converter.h>
-#include <data\DataTranslator.h>
-#include <io\Serializer.h>
-#include <utils\FileUtils.h>
-#include <ui\IMGUI.h>
+#include <data\DynamicSettings.h>
 
-struct GameSettings {
+struct GameSettings : public ds::DynamicGameSettings {
 
 	float bulletTrailDistance;
 	float bulletVelocity;
@@ -30,19 +26,11 @@ struct GameSettings {
 	float borderShakeRadius;
 	
 	GameSettings() {
-		borderAmplitude = 4.0f;
-		borderShakeRadius = 10.0f;
-		bulletTrailDistance = 20.0f;
-		bulletVelocity = 800.0f;
+		addFloat("borderAmplitude", &borderAmplitude, 4.0f);
+		addFloat("borderShakeRadius", &borderShakeRadius, 10.0f);
+		addFloat("bulletTrailDistance", &bulletTrailDistance, 20.0f);
+		addFloat("bulletVelocity", &bulletVelocity, 800.0f);
+		addFloat("playerFireRate", &playerFireRate, 0.4f);
 	}
 
 };
-
-namespace settings {
-
-	void save(GameSettings* settings);
-
-	void load(GameSettings* settings);
-
-	void showDialog(GameSettings* settings,v2* pos, int* states);
-}

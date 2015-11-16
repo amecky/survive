@@ -52,8 +52,8 @@ void Dodgers::killAll() {
 			Vector2f enemyPos = _context->world->getPosition(it->sid);
 			_context->world->remove(it->sid);
 			_context->trails->remove(it->sid);			
-			_context->particles.start(0, enemyPos);
-			_context->particles.start(2, enemyPos);
+			_context->particles->start(0, enemyPos);
+			_context->particles->start(2, enemyPos);
 			_context->world->remove(it->lightID);
 		}
 		it = _list.erase(it);
@@ -149,7 +149,7 @@ void Dodgers::tick(float dt) {
 			sp.timer = 0.0f;
 			_startPoints.push_back(sp);
 			//_context->particles.start(9, sp.position);
-			_context->particles.start(10, sp.position);
+			_context->particles->start(10, sp.position);
 		}
 	}
 	StartPoints::iterator it = _startPoints.begin();
@@ -189,8 +189,8 @@ ds::SID Dodgers::findNearest(const Vector2f& pos, float radius,ds::SID self) {
 bool Dodgers::kill(ds::SID sid) {
 	if (contains(sid)) {		
 		Vector2f enemyPos = _context->world->getPosition(sid);
-		_context->particles.start(0, enemyPos);
-		_context->particles.start(2, enemyPos);
+		_context->particles->start(0, enemyPos);
+		_context->particles->start(2, enemyPos);
 		remove(sid);
 		return true;
 	}

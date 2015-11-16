@@ -10,45 +10,32 @@
 #include <tasks\TaskManager.h>
 #include "utils\IntroText.h"
 #include "Snake.h"
-#include <objects\HUD.h>
 #include <objects\BloomComponent.h>
 #include "enemies\Dodgers.h"
 #include <math\Bitset.h>
 #include "Player.h"
 #include <renderer\shader.h>
 #include "utils\BorderLines.h"
+#include <base\GameState.h>
 
 class Trail;
 
-class Worms {
-
-enum GameState {
-	GS_WARM_UP,
-	GS_RUNNING,
-	GS_DYING,
-	GS_GAME_OVER
-};
+class Worms : public ds::GameState {
 
 typedef std::vector<Snake*> Snakes;
 
-struct HUDData {
-
-	int points;
-	int kills;
-
-};
-
-
 public:
-	Worms(void);
+	Worms(GameContext* ctx);
 	~Worms(void);
-	void init(GameSettings* settings, ds::BitmapFont* font,ds::DialogManager* dialogs);
-	void tick(float dt);
+	void init();
+	int update(float dt);
 	void render();
-	
+	int onButtonDown(int button, int x, int y);
+	int onButtonUp(int button, int x, int y);
+
 	void debug() {
-		m_World.debug();
-		m_Context.particles.debug();
+		_context->world->debug();
+		_context->particles->debug();
 	}
 	void startShooting() {
 		_player->setShooting(SM_SHOOTING);
@@ -58,27 +45,27 @@ public:
 		_player->setShooting(SM_IDLE);
 	}
 	ds::SID pick(const Vector2f& p) {
-		return m_World.pick(p);
+		return _context->world->pick(p);
 	}
 	void debug(ds::SID sid) {
-		m_World.debug(sid);
-		m_Context.particles.debug();
+		_context->world->debug(sid);
+		_context->particles->debug();
 	}
 	void setTargetPos(const Vector2f& tp) {
 		m_TargetPos = tp;
 	}
 	void bomb() {
-		m_Context.particles.start(0,Vector3f(512,384, 0));
-		m_Context.particles.start(2, Vector3f(512, 384 , 0));
+		_context->particles->start(0, Vector3f(512, 384, 0));
+		_context->particles->start(2, Vector3f(512, 384, 0));
 	}
 	void startParticles() {
 		//m_Context.particles.start(m_SelectedParticles,Vector2f(640,512));
-		m_Context.particles.start(6, Vector3f(512, 384, 0));
+		_context->particles->start(6, Vector3f(512, 384, 0));
 	}
 	void toggleDebugFlag() {
 		m_DebugFlag = !m_DebugFlag;
 	}
-	void OnChar(char ascii, unsigned int keyState);
+	int onChar(int ascii);
 	void restart();
 private:
 	void incrementKills(int points = 100);
@@ -92,18 +79,15 @@ private:
 
 	Vector2f m_TargetPos;
 	
-	ds::World m_World;
 	ds::Texture m_ColliderText;
 	int m_AddBS;
-	GameContext m_Context;
+	GameContext* _context;
 	bool m_DebugFlag;
 	Snakes snakes;
-	ds::HUD m_HUD;
-	HUDData m_HudData;
 	int m_Level;
-	int m_RT1Tex;
+	ds::RTID _rt1;
 	int _shakeShader;
-	int m_RT2Tex;
+	ds::RTID _rt2;
 
 	bool m_Shaking;
 	float m_ShakeTimer;
@@ -114,7 +98,6 @@ private:
 	ds::SID _get_ready_id;
 	Player* _player;
 	Dodgers* _dodgers;
-	GameState _game_state;
 	float _warm_up_timer;
 	bool _no_enemies;
 	int _light_desc;

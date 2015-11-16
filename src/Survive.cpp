@@ -13,9 +13,17 @@ Survive::Survive() : ds::BaseApp() {
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
 	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
+	_settings.showEditor = true;
 	m_Timer = 0.0f;
-	m_Mode = GM_START;
-	_gameSettings = new GameSettings;
+	_context = new GameContext;
+	_context->settings = new GameSettings;
+	_context->world = new ds::World;
+	_context->trails = new Trail(_context);
+	_context->particles = particles;
+	_context->playerSpeed = 200.0f;
+	_context->doubleFire = false;
+	_context->fireRate = 0.4f;
+	_context->tripleShot = false;
 	_showSettings = true;
 	for (int i = 0; i < 16; ++i) {
 		_settingsStates[i] = 1;
@@ -29,24 +37,20 @@ Survive::Survive() : ds::BaseApp() {
 bool Survive::loadContent() {	
 	int texture = ds::renderer::loadTexture("TextureArray");
 	assert( texture != -1 );	
-	
-	ds::BitmapFont* font = ds::renderer::createBitmapFont("xscale");
-	ds::assets::load("xscale", font, ds::CVT_FONT);
-	ds::renderer::initializeBitmapFont(font,texture);	
-	//initializeGUI();
+	ds::BitmapFont* font = ds::assets::loadFont("xscale", texture);
+	ds::sprites::initializeTextSystem(font);
 	gui::initialize();
-	settings::load(_gameSettings);
-	//m_Game = new Worms();
-	//m_Game->init(m_Settings,font,&gui);
+	initializeGUI(font);
+	_context->settings->load();
 	stateMachine->add(new GUITest());
-	stateMachine->add(new TestMe());
-	//gui.activate("GameOver");
+	stateMachine->add(new TestMe(_context));
+	stateMachine->add(new Worms(_context));
 	_showGameStates = false;
 	return true;
 }
 
 void Survive::init() {
-	stateMachine->activate("GUITest");
+	stateMachine->activate("MainGameState");
 }
 
 // -------------------------------------------------------
@@ -68,7 +72,7 @@ void Survive::draw() {
 		stateMachine->showDialog();
 	}
 	if (_showSettings) {
-		settings::showDialog(_gameSettings, &_settingsPosition, _settingsStates);
+		_context->settings->showDialog();
 	}
 }
 
@@ -76,10 +80,10 @@ void Survive::draw() {
 // OnChar
 // -------------------------------------------------------
 void Survive::OnChar( char ascii,unsigned int keyState ) {
-	if (ascii == 'd') {
+	if (ascii == '1') {
 		_showGameStates = !_showGameStates;
 	}
-	if (ascii == 's') {
+	if (ascii == '2') {
 		_showSettings = !_showSettings;
 	}
 	

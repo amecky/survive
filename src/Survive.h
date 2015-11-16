@@ -8,22 +8,17 @@
 #include "base\BaseApp.h"
 #include "dxstdafx.h"
 #include <renderer\render_types.h>
-#include <objects\HUD.h>
 #include "Worms.h"
 #include "utils\SettingsConverter.h"
 
 class Survive : public ds::BaseApp {
 
-enum GameMode {
-	GM_START,
-	GM_RUNNING,
-	GM_OVER
-};
-
 public:	
 	Survive();
 	virtual ~Survive() {
-		delete _gameSettings;
+		delete _context->trails;
+		delete _context->world;
+		delete _context;
 	}	
 	bool loadContent();
 	void init();
@@ -41,8 +36,7 @@ private:
 	void onGUIButton( ds::DialogID dlgID,int button );
 
 	float m_Timer;
-	GameMode m_Mode;
-	GameSettings* _gameSettings;
+	GameContext* _context;
 	bool _showGameStates;
 	bool _showSettings;
 	v2 _settingsPosition;

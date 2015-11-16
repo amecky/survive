@@ -90,7 +90,7 @@ void Trail::tick(float dt) {
 				if (distance(p, it->second.prevPosition) > it->second.distance) {
 					ds::ParticleGeneratorData data(it->second.prevPosition);
 					data.rotation = it->second.angle;
-					ctx->particles.start(it->second.particleSystem, data);
+					ctx->particles->start(it->second.particleSystem, data);
 					it->second.prevPosition = p;
 				}
 			}
@@ -100,7 +100,7 @@ void Trail::tick(float dt) {
 					it->second.frameCounter = 0;
 					ds::ParticleGeneratorData data(it->second.prevPosition);
 					data.rotation = it->second.angle;
-					ctx->particles.start(it->second.particleSystem, data);
+					ctx->particles->start(it->second.particleSystem, data);
 					it->second.prevPosition = p;
 				}
 			}
@@ -110,7 +110,7 @@ void Trail::tick(float dt) {
 					it->second.timer = 0.0f;
 					ds::ParticleGeneratorData data(it->second.prevPosition);
 					data.rotation = it->second.angle;
-					ctx->particles.start(it->second.particleSystem, data);
+					ctx->particles->start(it->second.particleSystem, data);
 					it->second.prevPosition = p;
 				}
 			}

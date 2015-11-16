@@ -2,6 +2,7 @@
 #include <base\GameState.h>
 #include <renderer\render_types.h>
 #include "utils\BorderLines.h"
+#include "Player.h"
 
 enum {ASTEROID_MAX_SEGMENTS = 36};
 
@@ -28,9 +29,10 @@ struct Dodger {
 typedef std::vector<Dodger> Dodgers;
 
 public:
-	TestMe();
+	TestMe(GameContext* ctx);
 	virtual ~TestMe() {
 		delete _borderLines;
+		delete _player;
 	}
 	void init();
 	const char* getTitle() {
@@ -54,8 +56,6 @@ private:
 	BorderLines* _borderLines;
 	float _timer;
 	Asteroid _asteroid;
-	GameContext _context;
-	GameSettings _gameSettings;
-	int _states[16];
-	v2 _templateBoxPos;
+	GameContext* _context;
+	Player* _player;
 };
