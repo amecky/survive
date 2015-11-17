@@ -30,23 +30,13 @@ Worms::~Worms(void) {
 // init
 // --------------------------------------------------------------------------
 void Worms::init() {
-
-	resetHUD();
-	
-
-	//ds::assets::loadSpriteTemplates("sprites");
-
 	ds::SID backID = _context->world->create(Vector2f(512, 384), "background", BG_LAYER);
-
 	_player = new Player(_context);
-	_player->create();
-
 	m_AddBS = ds::renderer::createBlendState("alpha_blend_state",ds::BL_ONE, ds::BL_ONE, true);	
 	m_ColliderText = ds::math::buildTexture(0,160,40,40);
 
 	// prepare particle system
 	ds::Descriptor desc;
-	//desc.shader = ds::renderer::loadShader("particle_shader", "ParticleTech");
 	desc.shader = ds::shader::createParticleShader();
 	assert(desc.shader != 0);
 	desc.texture = 0;
@@ -55,7 +45,6 @@ void Worms::init() {
 	_context->particles->init(desc);
 	ds::assets::loadParticleSystem("particlesystems", _context->particles);
 
-	
 	_rt1 = ds::renderer::createRenderTarget(ds::Color(0,0,0,0));
 	_rt2 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));
 	//snakes = new Snake(&m_Context);
@@ -85,14 +74,16 @@ void Worms::init() {
 	_dodgers = new Dodgers(_context);
 	_borderLines = new BorderLines(_context);
 
-	restart();
 }
 
+// --------------------------------------------------------------------------
+// increment kills
+// --------------------------------------------------------------------------
 void Worms::incrementKills(int points) {
-	//m_HudData.points += points;
-	//++m_HudData.kills;
-	//m_HUD.setCounterValue(0, m_HudData.points);
-	//m_HUD.setCounterValue(1, m_HudData.kills);
+	_context->points += points;
+	++_context->kills;
+	_context->hud->setNumber(0, _context->points);
+	_context->hud->setNumber(1, _context->kills);
 	startShaking();
 }
 
@@ -100,13 +91,13 @@ void Worms::incrementKills(int points) {
 // kill enemy and bullet
 // --------------------------------------------------------------------------
 void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemyID, const Vector2f& enemyPos, int enemyType) {
-	/*
+	
 	if (enemyType == SNAKE_TAIL) {
 		for (size_t i = 0; i < snakes.size(); ++i) {
 			if (snakes[i]->containsTail(enemyID)) {
 				snakes[i]->removeTail(enemyID);
-				m_Context.particles.start(0, enemyPos);
-				m_Context.particles.start(2, enemyPos);
+				_context->particles->start(0, enemyPos);
+				_context->particles->start(2, enemyPos);
 				incrementKills(100);
 			}
 		}
@@ -119,29 +110,29 @@ void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemy
 			if (snakes[i]->isHead(enemyID) && snakes[i]->isKillable()) {
 				if (snakes[i]->incHeadShots()) {
 					// FIXME: kill worm
-					m_Context.particles.start(0, enemyPos);
-					m_Context.particles.start(6, enemyPos);
-					m_HudData.points += 1000;
+					_context->particles->start(0, enemyPos);
+					_context->particles->start(6, enemyPos);
+					//m_HudData.points += 1000;
 					//m_HUD.setCounterValue(0, m_HudData.points);
 				}
 				else {
-					m_HudData.points += 1000;
+					//m_HudData.points += 1000;
 					//m_HUD.setCounterValue(0, m_HudData.points);
 					startShaking();
 				}
 			}
 		}
 	}
-	if (m_World.contains(bulletID)) {
-		m_Context.particles.start(1, bulletPos);
-		m_World.remove(bulletID);
+	if (_context->world->contains(bulletID)) {
+		_context->particles->start(1, bulletPos);
+		_context->world->remove(bulletID);
 	}	
-	*/
 }
 
+// --------------------------------------------------------------------------
+// common tick
+// --------------------------------------------------------------------------
 void Worms::commonTick(float dt) {
-	_player->move(dt);
-	_player->shootBullets(dt);
 	_context->world->tick(dt);
 	_context->particles->update(dt);
 	_context->trails->tick(dt);
@@ -155,6 +146,7 @@ void Worms::commonTick(float dt) {
 		}
 	}
 }
+
 // --------------------------------------------------------------------------
 // tick
 // --------------------------------------------------------------------------
@@ -162,24 +154,24 @@ int Worms::update(float dt) {
 	PR_START("CatcheMe:tick")
 
 	commonTick(dt);
-	/*
-	if (_game_state == GS_WARM_UP) {
+	
+	if (_state == IS_PREPARING) {
 		_player->move(dt);
 		_warm_up_timer += dt;
-		float n = _warm_up_timer / m_Context.settings->warmUpTime;
+		float n = _warm_up_timer / _context->settings->warmUpTime;
 		if (n >= 1.0f) {
 			_dodgers->start();
-			_game_state = GS_RUNNING;
+			_state = IS_RUNNING;
 		}
 		else {
 			commonTick(dt);
 			_player->shootBullets(dt);
 		}
 	}
-	if (_game_state == GS_DYING) {		
+	if (_state == IS_DYING) {		
 		commonTick(dt);
 	}
-	if (_game_state == GS_RUNNING) {
+	if (_state == IS_RUNNING) {
 
 		_player->move(dt);
 		
@@ -190,7 +182,7 @@ int Worms::update(float dt) {
 		}
 
 		
-		const ds::ActionEventBuffer& buffer = m_World.getEventBuffer();
+		const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 		for (size_t i = 0; i < snakes.size(); ++i) {
 			snakes[i]->handleEvents(buffer);
 		}
@@ -198,10 +190,10 @@ int Worms::update(float dt) {
 		_player->shootBullets(dt);
 
 		PR_START("CatchMe:tick:collision")
-		int numCollisions = m_World.getNumCollisions();
+		int numCollisions = _context->world->getNumCollisions();
 		if (numCollisions > 0) {
 			for (int i = 0; i < numCollisions; ++i) {
-				const ds::Collision& c = m_World.getCollision(i);
+				const ds::Collision& c = _context->world->getCollision(i);
 				if (c.containsType(BULLET_TYPE)) {
 					if (c.containsType(SNAKE_TAIL)) {
 						if (c.firstType == BULLET_TYPE) {
@@ -215,7 +207,7 @@ int Worms::update(float dt) {
 				else if (c.containsType(PLAYER_TYPE)) {
 					_player->kill();
 					LOG << "player hit!!!!";
-					_game_state = GS_DYING;
+					_state = IS_DYING;
 					_warm_up_timer = 0.0f;
 					_dodgers->killAll();
 					// FIXME: remove all
@@ -225,7 +217,7 @@ int Worms::update(float dt) {
 			}
 		}
 		PR_END("CatchMe:tick:collision")
-		
+			/*
 		if (m_Shaking){
 			m_ShakeTimer += dt;
 			if (m_ShakeTimer > m_Context.settings->shakeTTL) {
@@ -237,22 +229,13 @@ int Worms::update(float dt) {
 			_dodgers->tick(dt);
 			_dodgers->move(dt);
 		}
-		/*
 	}
-	if (_game_state == GS_DYING) {
+	if (_state == IS_DYING) {
 		_warm_up_timer += dt;
-		if (_warm_up_timer >= m_Context.settings->dyingTime) {
-			m_Context.dialogs->activate("GameOver");
-			_game_state = GS_GAME_OVER;
-			ds::GUIDialog* dlg = m_Context.dialogs->get("GameOver");
-			std::string str;
-			ds::string::formatInt(m_HudData.points, str);
-			dlg->updateText(12, str);
-			ds::string::formatInt(m_HudData.kills, str);
-			dlg->updateText(8, str);
+		if (_warm_up_timer >= _context->settings->dyingTime) {
+			return 1;
 		}
 	}
-	*/
 	PR_END("CatcheMe:tick")
 	return 0;
 }
@@ -262,100 +245,68 @@ int Worms::update(float dt) {
 // --------------------------------------------------------------------------
 void Worms::render() {
 	PR_START("CatchMe:render")
-	
-
-	//if (_game_state == GS_RUNNING || _game_state == GS_WARM_UP || _game_state == GS_DYING) {
-		
-		//_borderLines->draw();
-		/*
-		int sid = ds::renderer::getDefaultShaderID();
-		if (m_Shaking) {
-			ds::Shader* shader = ds::renderer::getShader(_shakeShader);
-			float norm = m_ShakeTimer;
-			shader->setFloat("timer", norm);
-			shader->setFloat("period", m_Context.settings->shakePeriod);
-			shader->setFloat("shakeAmount", m_Context.settings->shakeAmount / 1024.0f);
-			ds::renderer::setCurrentShader(_shakeShader);
-			sid = _shakeShader;
-		}
-		*/
-		ds::renderer::setRenderTarget(_rt1);
-		
-		_context->world->renderSingleLayer(BG_LAYER);
-		
-		
-		//m_Context.lights->render();
-
-		ds::sprites::flush();
-		int current = ds::sprites::getDescriptorID();
-		ds::sprites::setDescriptorID(_light_desc);
-
-		_context->world->renderSingleLayer(LIGHT_LAYER);
-
-		ds::sprites::flush();
-		ds::sprites::setDescriptorID(current);
-
-		_context->world->renderSingleLayer(MESSAGE_LAYER);
-
-		_context->particles->render();
-		
-		_context->world->renderSingleLayer(OBJECT_LAYER);
-		
-		ds::renderer::restoreBackBuffer();
-		ds::renderer::draw_render_target(_rt1);
-
-		if (m_DebugFlag) {
-			//_snakes[i]->debug();
-		}
-
-		//m_HUD.render();
-	//}
-
-	//m_World.drawColliders(m_ColliderText);
-	//snakes->debug();
+	ds::renderer::setRenderTarget(_rt1);
+	_context->world->renderSingleLayer(BG_LAYER);
+	ds::sprites::flush();
+	int current = ds::sprites::getDescriptorID();
+	ds::sprites::setDescriptorID(_light_desc);
+	_context->world->renderSingleLayer(LIGHT_LAYER);
+	ds::sprites::flush();
+	ds::sprites::setDescriptorID(current);
+	_context->world->renderSingleLayer(MESSAGE_LAYER);
+	_context->particles->render();
+	_context->world->renderSingleLayer(OBJECT_LAYER);
+	ds::renderer::restoreBackBuffer();
+	ds::renderer::draw_render_target(_rt1);
 	PR_END("CatchMe:render")
 }
 
 // --------------------------------------------------------------------------
-// restart game
+// deactivate
 // --------------------------------------------------------------------------
-void Worms::restart() {
-	/*
+void Worms::deactivate() {
+	_context->hud->deactivate();
+}
+
+// --------------------------------------------------------------------------
+// activate
+// --------------------------------------------------------------------------
+void Worms::activate() {
+	_state = IS_PREPARING;
+	_context->hud->activate();
 	resetHUD();
 	m_Shaking = false;
 	// warm up
-	_game_state = GS_WARM_UP;
 	_player->create();
 	
 	_warm_up_timer = 0.0f;
 	
 	// create light behind get ready message
-	_get_ready_id = m_World.create(Vector2f(512, 384), ds::math::buildTexture(600, 512, 440, 102), -1, LIGHT_LAYER);
-	m_World.setColor(_get_ready_id, ds::Color(192, 0, 0, 255));
-	m_World.removeAfter(_get_ready_id, m_Context.settings->warmUpTime);
-	m_World.fadeAlphaTo(_get_ready_id, 1.0f, 0.0f, m_Context.settings->warmUpTime);
+	_get_ready_id = _context->world->create(Vector2f(512, 384), ds::math::buildTexture(600, 512, 440, 102), -1, LIGHT_LAYER);
+	_context->world->setColor(_get_ready_id, ds::Color(192, 0, 0, 255));
+	_context->world->removeAfter(_get_ready_id, _context->settings->warmUpTime);
+	_context->world->fadeAlphaTo(_get_ready_id, 1.0f, 0.0f, _context->settings->warmUpTime);
 
 	// create get ready message
-	ds::SID gid = m_World.create(Vector2f(512, 384), "get_ready", MESSAGE_LAYER);
-	m_World.removeAfter(gid, m_Context.settings->warmUpTime);
-	m_World.fadeAlphaTo(gid, 1.0f, 0.0f, m_Context.settings->warmUpTime);
+	ds::SID gid = _context->world->create(Vector2f(512, 384), "get_ready", MESSAGE_LAYER);
+	_context->world->removeAfter(gid, _context->settings->warmUpTime);
+	_context->world->fadeAlphaTo(gid, 1.0f, 0.0f, _context->settings->warmUpTime);
 
 	// FIXME: clear any dodgers that are left over
-	m_Context.playerSpeed = 200.0f;
-	m_Context.doubleFire = false;
-	m_Context.fireRate = 0.75f;
-	m_Context.tripleShot = false;
-	*/
+	//m_Context.playerSpeed = 200.0f;
+	//m_Context.doubleFire = false;
+	//m_Context.fireRate = 0.75f;
+	//m_Context.tripleShot = false;
 }
 
 // --------------------------------------------------------------------------
 // restart HUD
 // --------------------------------------------------------------------------
 void Worms::resetHUD() {
-	//m_HudData.points = 0;
-	//m_HudData.kills = 0;
-	//m_HUD.setCounterValue(0, 0);
-	//m_HUD.setCounterValue(1, 0);
+	_context->points = 0;
+	_context->kills = 0;
+	_context->hud->setNumber(0, 0);
+	_context->hud->setNumber(1, 0);
 }
 
 // --------------------------------------------------------------------------
@@ -382,72 +333,8 @@ int Worms::onButtonUp(int button, int x, int y) {
 // --------------------------------------------------------------------------
 int Worms::onChar(int ascii) {
 	if (ascii == '3') {
-		_context->particles->start(0, Vector3f(512, 384, 0));
-	}
-	/*
-	if (ascii == '1') {
-	}
-	if (ascii == '2') {
-		Snake* s = new Snake(&m_Context);
-		s->start(20);
-		m_HudData.kills = 0;
-		snakes.push_back(s);
-	}
-	if (ascii == '3') {
-		m_World.debug();
-	}
-	if (ascii == '4') {
-		startShaking();
-	}
-	if (ascii == '6') {
 		_dodgers->start();
 	}
-	if (ascii == 'r') {
-		restart();
-	}
-	if (ascii == '7') {
-		Vector2f mp = ds::renderer::getMousePosition();
-		
-		//int idx = m_Context.lights->add(mp, ds::Color(255, 0, 0, 255), 0.5f, 4);
-		//m_Context.lights->scale(idx, { { 0.2f, 0.2f }, { 0.8f, 0.8f } });
-	}
-	if (ascii == 'i') {
-		for (int i = 0; i < 16; ++i) {
-			if (_pbits.isSet(i) != 0) {
-				m_Context.particles.start(i, Vector3f(512, 384, 0));
-			}
-		}
-	}
-	if (ascii == '+') {
-		++_pindex;
-		if (_pindex > 15) {
-			_pindex = 0;
-		}
-		LOG << "pindex: " << _pindex;
-	}
-	if (ascii == '-') {
-		--_pindex;
-		if (_pindex < 0) {
-			_pindex = 15;
-		}
-		LOG << "pindex: " << _pindex;
-	}
-	if (ascii == '.') {
-		_pbits.toggle(_pindex);		
-		char buffer[256];
-		std::string tmp;
-		for (int i = 0; i < 16; ++i) {
-			if (_pbits.isSet(i)) {
-				sprintf(buffer, "x ");
-			}
-			else {
-				sprintf(buffer, "- ");
-			}			
-			tmp += buffer;
-		}
-		LOG << tmp;
-	}
-	*/
 	return 0;
 }
 

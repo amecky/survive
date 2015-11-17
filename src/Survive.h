@@ -7,9 +7,8 @@
 #pragma once
 #include "base\BaseApp.h"
 #include "dxstdafx.h"
-#include <renderer\render_types.h>
-#include "Worms.h"
 #include "utils\SettingsConverter.h"
+#include "utils\GameContext.h"
 
 class Survive : public ds::BaseApp {
 
@@ -28,19 +27,9 @@ public:
 	}
 	void update(float dt);
 	void draw();
-	virtual void OnChar( char ascii,unsigned int keyState );
-	virtual void OnButtonUp( int button,int x,int y );
-	virtual void OnButtonDown( int button,int x,int y );
+	void OnChar(char ascii, unsigned int keyState);
 private:
-	void stopGame();
-	void restart();
 	void onGUIButton( ds::DialogID dlgID,int button );
-
-	float m_Timer;
 	GameContext* _context;
-	bool _showGameStates;
 	bool _showSettings;
-	v2 _settingsPosition;
-	int _settingsStates[16];
-	
 };

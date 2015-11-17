@@ -13,16 +13,20 @@ struct GameContext {
 
 	ds::World* world;
 	GameSettings* settings;
-	Vector2f playerPos;
+	v2 playerPos;
 	ds::ParticleManager* particles;
-	ds::BitmapFont* font;
+	//ds::BitmapFont* font;
 	Trail* trails;
-	ds::DialogManager* dialogs;
+	//ds::DialogManager* dialogs;
 	//FlashLights* lights;
+	ds::GUIDialog* hud;
 
 	float playerSpeed;
 	bool doubleFire;
 	float fireRate;
 	bool tripleShot;
 
+	// score
+	int kills;
+	int points;
 };

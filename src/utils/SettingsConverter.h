@@ -26,8 +26,6 @@ struct GameSettings : public ds::DynamicGameSettings {
 	float borderShakeRadius;
 	
 	/*
-	"bullet_trail_distance" : "2" ,
-	"bullet_velocity" : "1000"
 	"spawn_timer" : "1.5" ,
 	"snake_tail_color" : "0,255,128,255" ,
 	"snake_velocity" : "3.0" ,
@@ -37,15 +35,6 @@ struct GameSettings : public ds::DynamicGameSettings {
 	"shake_ttl" : "0.4" ,
 	"shake_period" : "10" , 
 	"shake_amount" : "6" ,
-	"player_fire_rate" : "0.1" ,
-	"dodgers_relaxation" : "15" ,
-	"dodgers_spawn_timer" : "0.3" ,
-	"dodgers_spawn_delay" : "0.6" ,
-	"dodgers_velocity" : "200" ,
-	"warm_up_time" : "3.0" ,
-	"dying_time" : "4.0" ,
-	"get_ready_amplitude" : "4.0" ,
-	"get_ready_scale" : "0.1" ,
 	"border_amplitude" : "4" ,
 	"border_shake_radius" : "10"
 
@@ -60,6 +49,10 @@ struct GameSettings : public ds::DynamicGameSettings {
 		addFloat("dodgersSpawnTimer", &dodgersSpawnTimer, 0.3f);
 		addFloat("dodgersSpawnDelay", &dodgersSpawnDelay, 0.6f);
 		addFloat("dodgersVelocity", &dodgersVelocity, 200.0f);
+		addFloat("warmUpTime", &warmUpTime, 3.0f);
+		addFloat("dyingTime", &dyingTime, 4.0f);
+		addFloat("getReadyAmplitude", &getReadyAmplitude, 4.0f);
+		addFloat("getReadyScale", &getReadyScale, 0.1f);
 	}
 
 };

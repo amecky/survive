@@ -5,6 +5,8 @@
 #include <base\GameStateMachine.h>
 #include "GUITest.h"
 #include "TestMe.h"
+#include "Worms.h"
+#include "gamestates\GameOverState.h"
 
 ds::BaseApp *app = new Survive(); 
 
@@ -14,7 +16,6 @@ Survive::Survive() : ds::BaseApp() {
 	_settings.screenHeight = 768;
 	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
 	_settings.showEditor = true;
-	m_Timer = 0.0f;
 	_context = new GameContext;
 	_context->settings = new GameSettings;
 	_context->world = new ds::World;
@@ -24,11 +25,7 @@ Survive::Survive() : ds::BaseApp() {
 	_context->doubleFire = false;
 	_context->fireRate = 0.4f;
 	_context->tripleShot = false;
-	_showSettings = true;
-	for (int i = 0; i < 16; ++i) {
-		_settingsStates[i] = 1;
-	}
-	_settingsPosition = v2(800, 740);
+	_showSettings = _settings.showEditor;
 }
 
 // -------------------------------------------------------
@@ -41,11 +38,14 @@ bool Survive::loadContent() {
 	ds::sprites::initializeTextSystem(font);
 	gui::initialize();
 	initializeGUI(font);
+	_context->hud = gui.get("HUD");
 	_context->settings->load();
 	stateMachine->add(new GUITest());
 	stateMachine->add(new TestMe(_context));
 	stateMachine->add(new Worms(_context));
-	_showGameStates = false;
+	stateMachine->add(new GameOverState(_context,&gui));
+	stateMachine->connect("MainGameState", 1, "GameOverState");
+	stateMachine->connect("GameOverState", 1, "MainGameState");
 	return true;
 }
 
@@ -53,11 +53,6 @@ void Survive::init() {
 	stateMachine->activate("MainGameState");
 }
 
-// -------------------------------------------------------
-// Restart game
-// -------------------------------------------------------
-void Survive::restart() {
-}
 // -------------------------------------------------------
 // Update
 // -------------------------------------------------------
@@ -68,9 +63,6 @@ void Survive::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void Survive::draw() {	
-	if (_showGameStates) {
-		stateMachine->showDialog();
-	}
 	if (_showSettings) {
 		_context->settings->showDialog();
 	}
@@ -80,9 +72,6 @@ void Survive::draw() {
 // OnChar
 // -------------------------------------------------------
 void Survive::OnChar( char ascii,unsigned int keyState ) {
-	if (ascii == '1') {
-		_showGameStates = !_showGameStates;
-	}
 	if (ascii == '2') {
 		_showSettings = !_showSettings;
 	}
@@ -90,19 +79,8 @@ void Survive::OnChar( char ascii,unsigned int keyState ) {
 }
 
 // -------------------------------------------------------
-// Stop game
-// -------------------------------------------------------
-void Survive::stopGame() {
-}
-
-// -------------------------------------------------------
 // OnButtonUp
 // -------------------------------------------------------
-void Survive::OnButtonUp( int button,int x,int y ) {
-}
-
 void Survive::onGUIButton( ds::DialogID dlgID,int button ) {
 }
 
-void Survive::OnButtonDown( int button,int x,int y ) {
-}

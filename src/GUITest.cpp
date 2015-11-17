@@ -48,6 +48,7 @@ int GUITest::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void GUITest::render() {
+	/*
 	PR_START("GUITest::render")
 	gui::start(1,&_startPos);
 	if (gui::begin("Test", &_state)) {
@@ -95,5 +96,6 @@ void GUITest::render() {
 	}
 	gui::end();
 	PR_END("GUITest::render")
+	*/
 }
 

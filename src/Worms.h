@@ -22,6 +22,12 @@ class Trail;
 
 class Worms : public ds::GameState {
 
+	enum InternalState {
+		IS_PREPARING,
+		IS_RUNNING,
+		IS_DYING
+	};
+
 typedef std::vector<Snake*> Snakes;
 
 public:
@@ -32,47 +38,17 @@ public:
 	void render();
 	int onButtonDown(int button, int x, int y);
 	int onButtonUp(int button, int x, int y);
-
-	void debug() {
-		_context->world->debug();
-		_context->particles->debug();
-	}
-	void startShooting() {
-		_player->setShooting(SM_SHOOTING);
-		
-	}
-	void stopShooting() {
-		_player->setShooting(SM_IDLE);
-	}
-	ds::SID pick(const Vector2f& p) {
-		return _context->world->pick(p);
-	}
-	void debug(ds::SID sid) {
-		_context->world->debug(sid);
-		_context->particles->debug();
-	}
-	void setTargetPos(const Vector2f& tp) {
-		m_TargetPos = tp;
-	}
-	void bomb() {
-		_context->particles->start(0, Vector3f(512, 384, 0));
-		_context->particles->start(2, Vector3f(512, 384, 0));
-	}
-	void startParticles() {
-		//m_Context.particles.start(m_SelectedParticles,Vector2f(640,512));
-		_context->particles->start(6, Vector3f(512, 384, 0));
-	}
-	void toggleDebugFlag() {
-		m_DebugFlag = !m_DebugFlag;
-	}
 	int onChar(int ascii);
-	void restart();
+	void activate();
+	void deactivate();
 private:
 	void incrementKills(int points = 100);
 	void commonTick(float dt);
 	void resetHUD();
 	void killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemyID, const Vector2f& enemyPos, int enemyType);
 	void startShaking();
+
+	InternalState _state;
 
 	//ds::Shader* _particleShader;
 	//ds::Shader* _lightShader;
