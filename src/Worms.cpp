@@ -7,13 +7,10 @@
 #include "Trail.h"
 #include "utils\util.h"
 #include <physics\ColliderArray.h>
-
+#include "GameRenderer.h"
+#include "utils\FadingMessage.h"
 
 Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) {
-	m_DebugFlag = false;
-	_pbits.clear();
-	_pindex = 0;
-
 	// HERE !!!!!
 	_no_enemies = false;
 }
@@ -21,7 +18,7 @@ Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) 
 
 Worms::~Worms(void) {
 	//delete m_Context.lights;
-	delete _borderLines;
+	//delete _borderLines;
 	delete _dodgers;
 	delete _player;
 }
@@ -32,7 +29,7 @@ Worms::~Worms(void) {
 void Worms::init() {
 	ds::SID backID = _context->world->create(Vector2f(512, 384), "background", BG_LAYER);
 	_player = new Player(_context);
-	m_AddBS = ds::renderer::createBlendState("alpha_blend_state",ds::BL_ONE, ds::BL_ONE, true);	
+	int m_AddBS = ds::renderer::createBlendState("alpha_blend_state",ds::BL_ONE, ds::BL_ONE, true);	
 	m_ColliderText = ds::math::buildTexture(0,160,40,40);
 
 	// prepare particle system
@@ -40,17 +37,12 @@ void Worms::init() {
 	desc.shader = ds::shader::createParticleShader();
 	assert(desc.shader != 0);
 	desc.texture = 0;
-	//desc.blendState = m_AddBS;
+	desc.blendState = m_AddBS;
 	desc.blendState = ds::renderer::getDefaultBlendState();
 	_context->particles->init(desc);
 	ds::assets::loadParticleSystem("particlesystems", _context->particles);
 
-	_rt1 = ds::renderer::createRenderTarget(ds::Color(0,0,0,0));
-	_rt2 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));
 	//snakes = new Snake(&m_Context);
-
-	m_Level = 0;
-	
 	//_shakeShader = ds::assets::loadShader("shake");
 	m_ShakeTimer = 0.0f;
 	m_Shaking = false;
@@ -65,14 +57,8 @@ void Worms::init() {
 	_context->world->ignoreLayer(BG_LAYER);
 	_context->world->ignoreLayer(LIGHT_LAYER);
 
-	ds::Descriptor light_desc;
-	light_desc.shader = ds::renderer::loadShader("lightning", "LTTech");
-	assert(light_desc.shader != 0);
-	light_desc.texture = 0;
-	_light_desc = ds::renderer::addDescriptor(light_desc);
-
+	
 	_dodgers = new Dodgers(_context);
-	_borderLines = new BorderLines(_context);
 
 }
 
@@ -244,21 +230,7 @@ int Worms::update(float dt) {
 // render
 // --------------------------------------------------------------------------
 void Worms::render() {
-	PR_START("CatchMe:render")
-	ds::renderer::setRenderTarget(_rt1);
-	_context->world->renderSingleLayer(BG_LAYER);
-	ds::sprites::flush();
-	int current = ds::sprites::getDescriptorID();
-	ds::sprites::setDescriptorID(_light_desc);
-	_context->world->renderSingleLayer(LIGHT_LAYER);
-	ds::sprites::flush();
-	ds::sprites::setDescriptorID(current);
-	_context->world->renderSingleLayer(MESSAGE_LAYER);
-	_context->particles->render();
-	_context->world->renderSingleLayer(OBJECT_LAYER);
-	ds::renderer::restoreBackBuffer();
-	ds::renderer::draw_render_target(_rt1);
-	PR_END("CatchMe:render")
+	_context->renderer->renderWorld();
 }
 
 // --------------------------------------------------------------------------
@@ -281,16 +253,7 @@ void Worms::activate() {
 	
 	_warm_up_timer = 0.0f;
 	
-	// create light behind get ready message
-	_get_ready_id = _context->world->create(Vector2f(512, 384), ds::math::buildTexture(600, 512, 440, 102), -1, LIGHT_LAYER);
-	_context->world->setColor(_get_ready_id, ds::Color(192, 0, 0, 255));
-	_context->world->removeAfter(_get_ready_id, _context->settings->warmUpTime);
-	_context->world->fadeAlphaTo(_get_ready_id, 1.0f, 0.0f, _context->settings->warmUpTime);
-
-	// create get ready message
-	ds::SID gid = _context->world->create(Vector2f(512, 384), "get_ready", MESSAGE_LAYER);
-	_context->world->removeAfter(gid, _context->settings->warmUpTime);
-	_context->world->fadeAlphaTo(gid, 1.0f, 0.0f, _context->settings->warmUpTime);
+	messages::fadingMessage(_context, "get_ready", _context->settings->warmUpTime * 1.5f);
 
 	// FIXME: clear any dodgers that are left over
 	//m_Context.playerSpeed = 200.0f;

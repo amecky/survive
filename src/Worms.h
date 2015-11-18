@@ -53,30 +53,26 @@ private:
 	//ds::Shader* _particleShader;
 	//ds::Shader* _lightShader;
 
-	Vector2f m_TargetPos;
+	v2 m_TargetPos;
 	
 	ds::Texture m_ColliderText;
-	int m_AddBS;
+	//int m_AddBS;
 	GameContext* _context;
-	bool m_DebugFlag;
+	//bool m_DebugFlag;
 	Snakes snakes;
-	int m_Level;
-	ds::RTID _rt1;
+	//int m_Level;
+	//ds::RTID _rt1;
 	int _shakeShader;
-	ds::RTID _rt2;
+	//ds::RTID _rt2;
 
 	bool m_Shaking;
 	float m_ShakeTimer;
 
-	ds::Bits _pbits;
-	int _pindex;
-	//ds::Sprite _get_ready;
-	ds::SID _get_ready_id;
 	Player* _player;
 	Dodgers* _dodgers;
 	float _warm_up_timer;
 	bool _no_enemies;
-	int _light_desc;
-	BorderLines* _borderLines;
+	//int _light_desc;
+	//BorderLines* _borderLines;
 };
 

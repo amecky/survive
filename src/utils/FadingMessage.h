@@ -6,6 +6,6 @@ namespace messages {
 
 	void fadingMessage(GameContext* context,const ds::Texture & texture);
 
-	void fadingMessage(GameContext* context, const char* templateName);
+	void fadingMessage(GameContext* context, const char* templateName, float ttl);
 };
 

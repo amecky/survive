@@ -50,7 +50,7 @@ void TestMe::init() {
 }
 
 void TestMe::activate() {
-	messages::fadingMessage(_context, "get_ready");
+	messages::fadingMessage(_context, "get_ready", _context->settings->warmUpTime * 2.0f);
 }
 
 void TestMe::renderAsteroid(const Asteroid& asteroid) {

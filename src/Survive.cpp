@@ -42,6 +42,7 @@ bool Survive::loadContent() {
 	_context->hud = gui.get("HUD");
 	_context->settings->load();
 	_context->renderer = new GameRenderer(_context);
+	ds::assets::loadSpriteTemplates();
 	stateMachine->add(new GUITest());
 	stateMachine->add(new TestMe(_context));
 	stateMachine->add(new Worms(_context));
@@ -49,7 +50,8 @@ bool Survive::loadContent() {
 	stateMachine->add(new ds::BasicMenuGameState("MainMenuState", "MainMenu", &gui));
 	stateMachine->connect("MainGameState", 1, "GameOverState");
 	stateMachine->connect("GameOverState", 1, "MainGameState");
-	stateMachine->connect("MainMenuState", 1, "TestState");
+	stateMachine->connect("MainMenuState", 2, "TestState");
+	stateMachine->connect("MainMenuState", 1, "MainGameState");
 	return true;
 }
 
