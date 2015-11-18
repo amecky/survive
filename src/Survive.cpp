@@ -7,6 +7,7 @@
 #include "TestMe.h"
 #include "Worms.h"
 #include "gamestates\GameOverState.h"
+#include "GameRenderer.h"
 
 ds::BaseApp *app = new Survive(); 
 
@@ -40,17 +41,20 @@ bool Survive::loadContent() {
 	initializeGUI(font);
 	_context->hud = gui.get("HUD");
 	_context->settings->load();
+	_context->renderer = new GameRenderer(_context);
 	stateMachine->add(new GUITest());
 	stateMachine->add(new TestMe(_context));
 	stateMachine->add(new Worms(_context));
 	stateMachine->add(new GameOverState(_context,&gui));
+	stateMachine->add(new ds::BasicMenuGameState("MainMenuState", "MainMenu", &gui));
 	stateMachine->connect("MainGameState", 1, "GameOverState");
 	stateMachine->connect("GameOverState", 1, "MainGameState");
+	stateMachine->connect("MainMenuState", 1, "TestState");
 	return true;
 }
 
 void Survive::init() {
-	stateMachine->activate("MainGameState");
+	stateMachine->activate("MainMenuState");
 }
 
 // -------------------------------------------------------

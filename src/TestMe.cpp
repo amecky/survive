@@ -3,6 +3,8 @@
 #include <renderer\shader.h>
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
+#include "utils\FadingMessage.h"
+#include "GameRenderer.h"
 
 TestMe::TestMe(GameContext* ctx) : ds::GameState("TestState") , _context(ctx) {
 	_player = new Player(ctx);
@@ -12,8 +14,7 @@ TestMe::TestMe(GameContext* ctx) : ds::GameState("TestState") , _context(ctx) {
 // Load content and prepare game
 // -------------------------------------------------------
 void TestMe::init() {
-	int texture = ds::renderer::loadTexture("TextureArray");
-	assert(texture != -1);
+	/*
 	_texture = ds::math::buildTexture(515, 80, 64, 64);
 	for (int i = 0; i < 5; ++i) {
 		Dodger d;
@@ -42,11 +43,14 @@ void TestMe::init() {
 	_asteroid.rotation = 0.0f;
 
 	_borderLines = new BorderLines(_context);
-
-	ds::assets::loadSpriteTemplates();
+	*/
 
 	//_player->create();
 	
+}
+
+void TestMe::activate() {
+	messages::fadingMessage(_context, "get_ready");
 }
 
 void TestMe::renderAsteroid(const Asteroid& asteroid) {
@@ -86,9 +90,12 @@ void TestMe::drawSegment(const v2& pos,float alpha, float ra, float beta, float 
 // -------------------------------------------------------
 // https://processing.org/examples/flocking.html
 int TestMe::update(float dt) {
+	_context->world->tick(dt);
+
+	/*
 	_timer += dt;
 	_player->move(dt);
-	_context->world->tick(dt);
+	
 	_borderLines->update(dt);
 	
 	v2 mp = ds::renderer::getMousePosition();
@@ -103,6 +110,7 @@ int TestMe::update(float dt) {
 		d.position += d.velocity * dt;
 		d.angle = ds::math::getTargetAngle(d.velocity, V2_RIGHT);
 	}
+	*/
 	return 0;
 }
 
@@ -198,8 +206,9 @@ void TestMe::render() {
 	//renderAsteroid(_asteroid);
 	//settings::showDialog(&_gameSettings,_states);
 	
-	ds::sprites::drawTemplate("player");
+	//ds::sprites::drawTemplate("player");
 	//ds::renderer::getSpriteTemplates()->showDialog();
+	_context->renderer->renderWorld();
 }
 
 // -------------------------------------------------------

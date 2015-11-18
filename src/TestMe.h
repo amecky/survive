@@ -31,7 +31,7 @@ typedef std::vector<Dodger> Dodgers;
 public:
 	TestMe(GameContext* ctx);
 	virtual ~TestMe() {
-		delete _borderLines;
+		//delete _borderLines;
 		delete _player;
 	}
 	void init();
@@ -43,6 +43,7 @@ public:
 	virtual void OnChar(char ascii, unsigned int keyState);
 	virtual void OnButtonUp(int button, int x, int y);
 	virtual void OnButtonDown(int button, int x, int y);
+	void activate();
 private:
 	void renderAsteroid(const Asteroid& asteroid);
 	void drawCircle(const v2& pos, int segments, float radius, float thickness, const ds::Texture& t, float angleOffset = 0.0f);

@@ -5,9 +5,9 @@
 #include "..\Trail.h"
 #include <dialogs\DialogManager.h>
 #include <renderer\BitmapFont.h>
-//#include "Lights.h"
 
-//class FlashLights;
+
+class GameRenderer;
 
 struct GameContext {
 
@@ -15,11 +15,9 @@ struct GameContext {
 	GameSettings* settings;
 	v2 playerPos;
 	ds::ParticleManager* particles;
-	//ds::BitmapFont* font;
 	Trail* trails;
-	//ds::DialogManager* dialogs;
-	//FlashLights* lights;
 	ds::GUIDialog* hud;
+	GameRenderer* renderer;
 
 	float playerSpeed;
 	bool doubleFire;
