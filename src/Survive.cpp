@@ -16,7 +16,7 @@ Survive::Survive() : ds::BaseApp() {
 	_settings.screenWidth = 1024;
 	_settings.screenHeight = 768;
 	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
-	_settings.showEditor = true;
+	_settings.initializeEditor = true;
 	_context = new GameContext;
 	_context->settings = new GameSettings;
 	_context->world = new ds::World;
@@ -26,7 +26,7 @@ Survive::Survive() : ds::BaseApp() {
 	_context->doubleFire = false;
 	_context->fireRate = 0.4f;
 	_context->tripleShot = false;
-	_showSettings = _settings.showEditor;
+	_showSettings = false;
 }
 
 // -------------------------------------------------------
