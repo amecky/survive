@@ -20,13 +20,14 @@ Survive::Survive() : ds::BaseApp() {
 	_context = new GameContext;
 	_context->settings = new GameSettings;
 	_context->world = new ds::World;
-	_context->trails = new Trail(_context);
+	_context->trails = new Trail(_context,512);
 	_context->particles = particles;
 	_context->playerSpeed = 200.0f;
 	_context->doubleFire = false;
 	_context->fireRate = 0.4f;
 	_context->tripleShot = false;
 	_showSettings = false;
+	activateMonitoring(12.0f);
 }
 
 // -------------------------------------------------------

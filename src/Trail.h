@@ -15,7 +15,8 @@ class Trail {
 
 	struct TrailPiece {
 
-		Vector2f prevPosition;
+		ds::SID id;
+		v2 prevPosition;
 		int particleSystem;
 		union {
 			float distance;
@@ -32,10 +33,10 @@ class Trail {
 
 	};
 
-typedef std::map<ds::SID,TrailPiece> Pieces;
+//typedef std::map<ds::SID,TrailPiece> Pieces;
 
 public:
-	Trail(GameContext* context);
+	Trail(GameContext* context,int maxTrails);
 	~Trail(void);
 	void add(ds::SID sid,float distance,int particleSystem);
 	void add(ds::SID sid,float angle,float distance,int particleSystem);
@@ -44,7 +45,11 @@ public:
 	void tick(float dt);
 	void remove(ds::SID sid);
 private:
+	void kill(int index);
+	int _maxTrails;
+	int _currentTrails;
 	GameContext* ctx;
-	Pieces m_Pieces;
+	//Pieces m_Pieces;
+	TrailPiece* _pieces;
 };
 

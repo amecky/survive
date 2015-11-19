@@ -8,20 +8,22 @@ Dodgers::Dodgers(GameContext* context) : ds::TimedObject() , _context(context) {
 // create dodger
 // ------------------------------------------------
 void Dodgers::create(const Vector2f& start) {
-	Dodger d;
-	d.sid = _context->world->create(start, "dodger", OBJECT_LAYER);
-	//_context->world->setColor(d.sid, ds::Color(255,0,0,255));
-	_context->world->attachCollider(d.sid, SNAKE_TAIL, OBJECT_LAYER);
-	d.lightID = _context->world->create(start, "lightning", LIGHT_LAYER);
-	d.timer = 0.0f;
-	d.wobble = 0.0f;
-	d.position = start;
-	d.angle = ds::math::getTargetAngle(_context->playerPos, start);
-	_context->world->setColor(d.lightID,ds::Color(50, 213, 255, 255));
-	_context->world->scale(d.lightID, 0.7f, 0.7f);
-	_context->world->setRotation(d.sid, d.angle);
-	_list.push_back(d);
-	_context->trails->add(d.sid, 5.0f, 11);
+	if (_list.size() < 32) {
+		Dodger d;
+		d.sid = _context->world->create(start, "dodger", OBJECT_LAYER);
+		//_context->world->setColor(d.sid, ds::Color(255,0,0,255));
+		_context->world->attachCollider(d.sid, SNAKE_TAIL, OBJECT_LAYER);
+		d.lightID = _context->world->create(start, "lightning", LIGHT_LAYER);
+		d.timer = 0.0f;
+		d.wobble = 0.0f;
+		d.position = start;
+		d.angle = ds::math::getTargetAngle(_context->playerPos, start);
+		_context->world->setColor(d.lightID, ds::Color(50, 213, 255, 255));
+		_context->world->scale(d.lightID, 0.7f, 0.7f);
+		_context->world->setRotation(d.sid, d.angle);
+		_list.push_back(d);
+		_context->trails->add(d.sid, 5.0f, 11);
+	}
 }
 
 // ------------------------------------------------
@@ -188,7 +190,7 @@ ds::SID Dodgers::findNearest(const Vector2f& pos, float radius,ds::SID self) {
 
 bool Dodgers::kill(ds::SID sid) {
 	if (contains(sid)) {		
-		Vector2f enemyPos = _context->world->getPosition(sid);
+		v2 enemyPos = _context->world->getPosition(sid);
 		_context->particles->start(0, enemyPos);
 		_context->particles->start(2, enemyPos);
 		remove(sid);

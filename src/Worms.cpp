@@ -77,8 +77,9 @@ void Worms::incrementKills(int points) {
 // kill enemy and bullet
 // --------------------------------------------------------------------------
 void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemyID, const Vector2f& enemyPos, int enemyType) {
-	
+	PR_START("Worms:killEnemy")
 	if (enemyType == SNAKE_TAIL) {
+		/*
 		for (size_t i = 0; i < snakes.size(); ++i) {
 			if (snakes[i]->containsTail(enemyID)) {
 				snakes[i]->removeTail(enemyID);
@@ -87,10 +88,12 @@ void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemy
 				incrementKills(100);
 			}
 		}
+		*/
 		if (_dodgers->kill(enemyID)) {
 			incrementKills(100);			
 		}
 	}
+	/*
 	if (enemyType == SNAKE_HEAD) {
 		for (size_t i = 0; i < snakes.size(); ++i) {
 			if (snakes[i]->isHead(enemyID) && snakes[i]->isKillable()) {
@@ -109,19 +112,23 @@ void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemy
 			}
 		}
 	}
+	*/
 	if (_context->world->contains(bulletID)) {
 		_context->particles->start(1, bulletPos);
 		_context->world->remove(bulletID);
 	}	
+	PR_END("Worms:killEnemy")
 }
 
 // --------------------------------------------------------------------------
 // common tick
 // --------------------------------------------------------------------------
 void Worms::commonTick(float dt) {
+	PR_START("Worms:commonTick")
 	_context->world->tick(dt);
 	_context->particles->update(dt);
 	_context->trails->tick(dt);
+	PR_START("Worms:commonTickAEB")
 	const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 	if (buffer.num > 0) {
 		for (int i = 0; i < buffer.num; ++i) {
@@ -131,15 +138,17 @@ void Worms::commonTick(float dt) {
 			}
 		}
 	}
+	PR_END("Worms:commonTickAEB")
+	PR_END("Worms:commonTick")
 }
 
 // --------------------------------------------------------------------------
 // tick
 // --------------------------------------------------------------------------
 int Worms::update(float dt) {
-	PR_START("CatcheMe:tick")
+	PR_START("Worms:tick")
 
-	commonTick(dt);
+	//commonTick(dt);
 	
 	if (_state == IS_PREPARING) {
 		_player->move(dt);
@@ -162,7 +171,7 @@ int Worms::update(float dt) {
 		_player->move(dt);
 		
 		commonTick(dt);
-
+		/*
 		for (size_t i = 0; i < snakes.size(); ++i) {
 			snakes[i]->moveTrail(dt);
 		}
@@ -172,14 +181,15 @@ int Worms::update(float dt) {
 		for (size_t i = 0; i < snakes.size(); ++i) {
 			snakes[i]->handleEvents(buffer);
 		}
-
-		_player->shootBullets(dt);
-
-		PR_START("CatchMe:tick:collision")
-		int numCollisions = _context->world->getNumCollisions();
+		*/
+		_player->shootBullets(dt);		
+		PR_START("Worms:tick:collision")
+		int numCollisions = _context->world->getNumCollisions();		
 		if (numCollisions > 0) {
+			//LOG << "collisions: " << numCollisions;
 			for (int i = 0; i < numCollisions; ++i) {
-				const ds::Collision& c = _context->world->getCollision(i);
+				PR_START("Worms:tick:innerCollision")
+				const ds::Collision& c = _context->world->getCollision(i);				
 				if (c.containsType(BULLET_TYPE)) {
 					if (c.containsType(SNAKE_TAIL)) {
 						if (c.firstType == BULLET_TYPE) {
@@ -200,10 +210,11 @@ int Worms::update(float dt) {
 					//m_Context.lights->clear();
 					
 				}
+				PR_END("Worms:tick:innerCollision")
 			}
 		}
-		PR_END("CatchMe:tick:collision")
-			/*
+		PR_END("Worms:tick:collision")
+		/*
 		if (m_Shaking){
 			m_ShakeTimer += dt;
 			if (m_ShakeTimer > m_Context.settings->shakeTTL) {
@@ -222,7 +233,7 @@ int Worms::update(float dt) {
 			return 1;
 		}
 	}
-	PR_END("CatcheMe:tick")
+	PR_END("Worms:tick")
 	return 0;
 }
 

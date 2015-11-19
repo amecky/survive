@@ -20,7 +20,7 @@ const int GRID_MAX_Y = 24;
 
 const int MAX_SNAKE_TAILS = 10;
 
-const int MAX_DODGERS = 64;
+const int MAX_DODGERS = 32;
 
 const int BG_LAYER      = 0;
 const int LIGHT_LAYER   = 1;
