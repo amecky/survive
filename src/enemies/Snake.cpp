@@ -1,12 +1,12 @@
 #include "Snake.h"
-#include "Constants.h"
+#include "..\Constants.h"
 #include <math\GameMath.h>
-#include "utils\util.h"
+#include "..\utils\util.h"
 
 // ------------------------------------------------
 // Snake
 // ------------------------------------------------
-Snake::Snake(GameContext* context) : ctx(context) {
+Snake::Snake(GameContext* context) : Enemies(context) {
 	m_DotTex = ds::math::buildTexture(145, 0, 10, 10);
 	m_Active = false;
 }
@@ -21,27 +21,30 @@ Snake::~Snake() {
 // create tail
 // ------------------------------------------------
 void Snake::createTail(const Vector2f& start,float scale) {
-	ds::SID tailID = ctx->world->create(start, "snake_tail");
-	ctx->world->setColor(tailID, ctx->settings->snakeTailColor);
-	ctx->world->scale(tailID, scale, scale);
-	ctx->world->attachCollider(tailID, SNAKE_TAIL,OBJECT_LAYER);
+	ds::SID tailID = _context->world->create(start, "snake_tail");
+	_context->world->setColor(tailID, _context->settings->snakeTailColor);
+	_context->world->scale(tailID, scale, scale);
+	_context->world->attachCollider(tailID, SNAKE_TAIL, OBJECT_LAYER);
 	SnakeTrail st;
 	st.id = tailID;
 	st.distance = 2.4f * (scale);
 	m_Trails.push_back(st);
 }
 
+void Snake::deactivate() {
+	// FIXME: kill all
+}
 // ------------------------------------------------
 // start
 // ------------------------------------------------
-void Snake::start(int killSize) {
+void Snake::activate() {
 	Vector2f start(200, 200);
 	float angle = PI;
-	m_HeadID = ctx->world->create(start, "snake_head");
-	m_ShieldID = ctx->world->create(start, "snake_shield");
-	ctx->world->setColor(m_HeadID, ds::Color(192, 0, 0, 255));
-	ctx->world->attachCollider(m_HeadID, SNAKE_HEAD,OBJECT_LAYER);
-	ctx->world->attachCollider(m_ShieldID, SNAKE_SHIELD,OBJECT_LAYER);
+	m_HeadID = _context->world->create(start, "snake_head");
+	m_ShieldID = _context->world->create(start, "snake_shield");
+	_context->world->setColor(m_HeadID, ds::Color(192, 0, 0, 255));
+	_context->world->attachCollider(m_HeadID, SNAKE_HEAD, OBJECT_LAYER);
+	_context->world->attachCollider(m_ShieldID, SNAKE_SHIELD, OBJECT_LAYER);
 	for (int i = 0; i < MAX_SNAKE_TAILS; ++i) {
 		ds::vector::addRadial(start, 32.0f, PI);
 		float scale = 1.0f - static_cast<float>(i) / static_cast<float>(MAX_SNAKE_TAILS) * 0.2f;
@@ -50,10 +53,10 @@ void Snake::start(int killSize) {
 	m_Sector = 1;
 	m_Sector = util::buildSingleCurve(Vector2f(200, 200), m_Sector, &m_Path,220.0f, false);
 	m_Path.build();
-	ctx->world->followPath(m_HeadID, &m_Path, ctx->settings->snakeVelocity);
+	_context->world->followPath(m_HeadID, &m_Path, _context->settings->snakeVelocity);
 	m_Active = true;
 	m_Kills = 0;
-	m_KillSize = killSize;
+	m_KillSize = 10;
 	m_SpawnTimer = 0.0f;
 	m_ShieldActive = true;
 	m_HeadShots = 0;
@@ -62,35 +65,35 @@ void Snake::start(int killSize) {
 // ------------------------------------------------
 // move trail
 // ------------------------------------------------
-void Snake::moveTrail(float dt) {
+void Snake::tick(float dt) {
 	ds::SID id = m_HeadID;
 	float angle = 0.0f;
 	TrailList::iterator it = m_Trails.begin();
 	while (it != m_Trails.end()) {
-		Vector2f prev = ctx->world->getPosition(id);
-		Vector2f current = ctx->world->getPosition(it->id);
-		ds::math::followRelative(prev, current, &angle, it->distance, dt * ctx->settings->snakeFollowVelocity);
-		ctx->world->setPosition(it->id, current);
-		ctx->world->setRotation(it->id, ds::math::reflect(angle));
+		Vector2f prev = _context->world->getPosition(id);
+		Vector2f current = _context->world->getPosition(it->id);
+		ds::math::followRelative(prev, current, &angle, it->distance, dt * _context->settings->snakeFollowVelocity);
+		_context->world->setPosition(it->id, current);
+		_context->world->setRotation(it->id, ds::math::reflect(angle));
 		id = it->id;
 		++it;
 	}
 	// move shield
 	if (m_ShieldActive) {
-		ctx->world->setPosition(m_ShieldID, ctx->world->getPosition(m_HeadID));
+		_context->world->setPosition(m_ShieldID, _context->world->getPosition(m_HeadID));
 	}
 
 	// spawn new tail if necessary
 	m_SpawnTimer += dt;
-	if (m_SpawnTimer > ctx->settings->spawnTimer) {
+	if (m_SpawnTimer > _context->settings->spawnTimer) {
 		m_SpawnTimer = 0.0f;
 		Vector2f start;
 		if (m_Trails.size() > 0) {
 			SnakeTrail& last = m_Trails.back();
-			start = ctx->world->getPosition(last.id);
+			start = _context->world->getPosition(last.id);
 		}
 		else {
-			start = ctx->world->getPosition(m_HeadID);
+			start = _context->world->getPosition(m_HeadID);
 		}
 		ds::vector::addRadial(start, 32.0f, PI);
 		float scale = 0.8f;
@@ -118,7 +121,7 @@ void Snake::handleEvents(const ds::ActionEventBuffer& buffer) {
 				Vector2f end = m_Path.getElement(0).p3;
 				m_Sector = util::buildSingleCurve(end, m_Sector, &m_Path,220.0f, false);
 				m_Path.build();
-				ctx->world->followPath(m_HeadID, &m_Path, ctx->settings->snakeVelocity);
+				_context->world->followPath(m_HeadID, &m_Path, _context->settings->snakeVelocity);
 			}
 		}
 	}
@@ -145,12 +148,12 @@ void Snake::removeTail(ds::SID sid) {
 	TrailList::iterator it = m_Trails.begin();
 	while (it != m_Trails.end()) {
 		if (it->id == sid) {
-			ctx->world->remove(sid);
+			_context->world->remove(sid);
 			it = m_Trails.erase(it);
 			++m_Kills;
 			if (m_ShieldActive && (m_Kills > m_KillSize)) {
 				//ctx->world->setColor(m_HeadID, ds::Color(0, 192, 0, 255));
-				ctx->world->remove(m_ShieldID);
+				_context->world->remove(m_ShieldID);
 				m_ShieldActive = false;
 			}
 		}

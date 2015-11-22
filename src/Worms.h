@@ -9,7 +9,6 @@
 #include "utils\util.h"
 #include <tasks\TaskManager.h>
 #include "utils\IntroText.h"
-#include "Snake.h"
 #include <objects\BloomComponent.h>
 #include "enemies\Dodgers.h"
 #include <math\Bitset.h>
@@ -17,6 +16,7 @@
 #include <renderer\shader.h>
 #include "utils\BorderLines.h"
 #include <base\GameState.h>
+#include "enemies\Enemies.h"
 
 class Trail;
 
@@ -28,7 +28,7 @@ class Worms : public ds::GameState {
 		IS_DYING
 	};
 
-typedef std::vector<Snake*> Snakes;
+typedef std::vector<Enemies*> Enemies;
 
 public:
 	Worms(GameContext* ctx);
@@ -49,22 +49,10 @@ private:
 	void startShaking();
 
 	InternalState _state;
-
-	//ds::Shader* _particleShader;
-	//ds::Shader* _lightShader;
-
 	v2 m_TargetPos;
-	
 	ds::Texture m_ColliderText;
-	//int m_AddBS;
 	GameContext* _context;
-	//bool m_DebugFlag;
-	Snakes snakes;
-	//int m_Level;
-	//ds::RTID _rt1;
 	int _shakeShader;
-	//ds::RTID _rt2;
-
 	bool m_Shaking;
 	float m_ShakeTimer;
 
@@ -72,7 +60,7 @@ private:
 	Dodgers* _dodgers;
 	float _warm_up_timer;
 	bool _no_enemies;
-	//int _light_desc;
-	//BorderLines* _borderLines;
+
+	Enemies _enemies;
 };
 

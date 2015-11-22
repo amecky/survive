@@ -1,8 +1,8 @@
 #pragma once
-#include "utils\GameContext.h"
+#include "..\utils\GameContext.h"
+#include "Enemies.h"
 
-
-class Snake {
+class Snake : public Enemies {
 
 struct SnakeTrail {
 
@@ -16,9 +16,35 @@ typedef std::vector<SnakeTrail> TrailList;
 public:
 	Snake(GameContext* context);
 	~Snake();
-	void start(int killSize);
-	void moveTrail(float dt);
+
+	
+
+	const bool contains(ds::SID sid) const {
+		return false;
+	}
+
+	void remove(ds::SID sid) {
+
+	}
+
+	void handleImpact(ds::SID sid) {
+	}
+
+	
+
+	int getKillCounter() const {
+		return 0;
+	}
+
+
+	void deactivate();
+	void activate();
+	void tick(float dt);
 	void handleEvents(const ds::ActionEventBuffer& buffer);
+	const EnemyType getType() const {
+		return ET_SNAKE;
+	}
+
 	void debug();
 	const bool isActive() const {
 		return m_Active;
@@ -38,7 +64,6 @@ public:
 	}
 private:
 	void createTail(const Vector2f& start, float scale);
-	GameContext* ctx;
 	ds::SID m_HeadID;
 	ds::SID m_ShieldID;
 	ds::CubicBezierPath m_Path;
