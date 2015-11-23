@@ -8,12 +8,9 @@ enum EnemyType {
 	ET_EOL
 };
 
-struct EnemyDefinition {
-	EnemyType type;
-	int count;
-	int health;
-	float delay;
-};
+
+
+
 
 class Enemies {
 
@@ -22,7 +19,7 @@ public:
 
 	virtual ~Enemies() {}
 
-	virtual void activate() = 0;
+	virtual void activate(int maxEnemies) = 0;
 	
 	virtual void deactivate() = 0;
 	
@@ -34,11 +31,9 @@ public:
 
 	virtual const EnemyType getType() const = 0;
 
-	virtual int getKillCounter() const = 0;
-
 	virtual void handleEvents(const ds::ActionEventBuffer& buffer) = 0;
 
-	virtual void handleImpact(ds::SID sid) = 0;
+	virtual bool handleImpact(ds::SID sid) = 0;
 
 protected:
 	GameContext* _context;

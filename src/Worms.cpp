@@ -13,13 +13,14 @@
 Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) {
 	// HERE !!!!!
 	_no_enemies = false;
+	_stageManager = new StageManager(ctx);
 }
 
 
 Worms::~Worms(void) {
 	//delete m_Context.lights;
 	//delete _borderLines;
-	delete _dodgers;
+	delete _stageManager;
 	delete _player;
 }
 
@@ -29,20 +30,8 @@ Worms::~Worms(void) {
 void Worms::init() {
 	ds::SID backID = _context->world->create(Vector2f(512, 384), "background", BG_LAYER);
 	_player = new Player(_context);
-	int m_AddBS = ds::renderer::createBlendState("alpha_blend_state",ds::BL_ONE, ds::BL_ONE, true);	
 	m_ColliderText = ds::math::buildTexture(0,160,40,40);
 
-	// prepare particle system
-	ds::Descriptor desc;
-	desc.shader = ds::shader::createParticleShader();
-	assert(desc.shader != 0);
-	desc.texture = 0;
-	desc.blendState = m_AddBS;
-	desc.blendState = ds::renderer::getDefaultBlendState();
-	_context->particles->init(desc);
-	ds::assets::loadParticleSystem("particlesystems", _context->particles);
-
-	//snakes = new Snake(&m_Context);
 	//_shakeShader = ds::assets::loadShader("shake");
 	m_ShakeTimer = 0.0f;
 	m_Shaking = false;
@@ -57,8 +46,7 @@ void Worms::init() {
 	_context->world->ignoreLayer(BG_LAYER);
 	_context->world->ignoreLayer(LIGHT_LAYER);
 
-	
-	_dodgers = new Dodgers(_context);
+	createStages();
 
 }
 
@@ -76,43 +64,12 @@ void Worms::incrementKills(int points) {
 // --------------------------------------------------------------------------
 // kill enemy and bullet
 // --------------------------------------------------------------------------
-void Worms::killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemyID, const Vector2f& enemyPos, int enemyType) {
+void Worms::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType) {
 	PR_START("Worms:killEnemy")
-	if (enemyType == SNAKE_TAIL) {
-		/*
-		for (size_t i = 0; i < snakes.size(); ++i) {
-			if (snakes[i]->containsTail(enemyID)) {
-				snakes[i]->removeTail(enemyID);
-				_context->particles->start(0, enemyPos);
-				_context->particles->start(2, enemyPos);
-				incrementKills(100);
-			}
-		}
-		*/
-		if (_dodgers->kill(enemyID)) {
-			incrementKills(100);			
-		}
+	int points = _stageManager->handleImpact(enemyID);
+	if (points != 0) {
+		incrementKills(points);
 	}
-	/*
-	if (enemyType == SNAKE_HEAD) {
-		for (size_t i = 0; i < snakes.size(); ++i) {
-			if (snakes[i]->isHead(enemyID) && snakes[i]->isKillable()) {
-				if (snakes[i]->incHeadShots()) {
-					// FIXME: kill worm
-					_context->particles->start(0, enemyPos);
-					_context->particles->start(6, enemyPos);
-					//m_HudData.points += 1000;
-					//m_HUD.setCounterValue(0, m_HudData.points);
-				}
-				else {
-					//m_HudData.points += 1000;
-					//m_HUD.setCounterValue(0, m_HudData.points);
-					startShaking();
-				}
-			}
-		}
-	}
-	*/
 	if (_context->world->contains(bulletID)) {
 		_context->particles->start(1, bulletPos);
 		_context->world->remove(bulletID);
@@ -148,14 +105,12 @@ void Worms::commonTick(float dt) {
 int Worms::update(float dt) {
 	PR_START("Worms:tick")
 
-	//commonTick(dt);
-	
 	if (_state == IS_PREPARING) {
 		_player->move(dt);
 		_warm_up_timer += dt;
 		float n = _warm_up_timer / _context->settings->warmUpTime;
 		if (n >= 1.0f) {
-			_dodgers->start();
+			_stageManager->start();
 			_state = IS_RUNNING;
 		}
 		else {
@@ -171,18 +126,9 @@ int Worms::update(float dt) {
 		_player->move(dt);
 		
 		commonTick(dt);
-		/*
-		for (size_t i = 0; i < snakes.size(); ++i) {
-			snakes[i]->moveTrail(dt);
-		}
-
 		
-		const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
-		for (size_t i = 0; i < snakes.size(); ++i) {
-			snakes[i]->handleEvents(buffer);
-		}
-		*/
 		_player->shootBullets(dt);		
+
 		PR_START("Worms:tick:collision")
 		int numCollisions = _context->world->getNumCollisions();		
 		if (numCollisions > 0) {
@@ -205,7 +151,7 @@ int Worms::update(float dt) {
 					LOG << "player hit!!!!";
 					_state = IS_DYING;
 					_warm_up_timer = 0.0f;
-					_dodgers->killAll();
+					_stageManager->killAll();
 					// FIXME: remove all
 					//m_Context.lights->clear();
 					
@@ -223,8 +169,7 @@ int Worms::update(float dt) {
 		}
 		*/
 		if (!_no_enemies) {
-			_dodgers->tick(dt);
-			_dodgers->move(dt);
+			_stageManager->tick(dt);
 		}
 	}
 	if (_state == IS_DYING) {
@@ -306,9 +251,9 @@ int Worms::onButtonUp(int button, int x, int y) {
 // OnChar
 // --------------------------------------------------------------------------
 int Worms::onChar(int ascii) {
-	if (ascii == '3') {
-		_dodgers->start();
-	}
 	return 0;
 }
 
+void Worms::createStages() {
+	_stageManager->addStage(0, {ET_DODGERS, 20, 10, 0.0f, -1});
+}

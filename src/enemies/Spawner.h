@@ -1,6 +1,13 @@
 #pragma once
 #include <math\GameMath.h>
 
+struct StartPoint {
+
+	v2 position;
+	float timer;
+
+};
+
 struct SpawnBox {
 
 	int x;

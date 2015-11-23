@@ -44,6 +44,7 @@ bool Survive::loadContent() {
 	_context->settings->load();
 	_context->renderer = new GameRenderer(_context);
 	ds::assets::loadSpriteTemplates();
+	ds::assets::loadParticleSystem("particlesystems", _context->particles);
 	stateMachine->add(new GUITest());
 	stateMachine->add(new TestMe(_context));
 	stateMachine->add(new Worms(_context));

@@ -11,7 +11,8 @@ GameRenderer::GameRenderer(GameContext* context) : _context(context) {
 	desc.texture = 0;
 	//desc.blendState = m_AddBS;
 	desc.blendState = ds::renderer::getDefaultBlendState();
-
+	_context->particles->init(desc);
+	
 	_rt1 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));
 	_rt2 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));
 	//snakes = new Snake(&m_Context);

@@ -1,9 +1,12 @@
 #include "Dodgers.h"
 #include "..\Constants.h"
 
-Dodgers::Dodgers(GameContext* context) : ds::TimedObject() , _context(context) {
+Dodgers::Dodgers(GameContext* context) : ds::TimedObject() , Enemies(context) {
 }
 
+Dodgers::~Dodgers() {
+
+}
 // ------------------------------------------------
 // create dodger
 // ------------------------------------------------
@@ -77,11 +80,12 @@ const bool Dodgers::contains(ds::SID sid) const {
 // ------------------------------------------------
 // start timer
 // ------------------------------------------------
-void Dodgers::start() {
+void Dodgers::activate(int maxEnemies) {
 	startTimer();
 	_spawner.minSpawns = 4;
 	_spawner.maxSpawns = 8;
 	_spawner.totalSpawns = ds::math::random(_spawner.minSpawns, _spawner.maxSpawns);
+	_maxEnemies = maxEnemies;
 }
 
 // ------------------------------------------------
@@ -145,7 +149,7 @@ void Dodgers::move(float dt) {
 // ------------------------------------------------
 void Dodgers::tick(float dt) {
 	if (tickTimer(dt, _context->settings->dodgersSpawnTimer, true)) {
-		if (_list.size() < MAX_DODGERS){
+		if (_list.size() < _maxEnemies){
 			StartPoint sp;
 			sp.position = _spawner.pick();
 			sp.timer = 0.0f;
@@ -165,6 +169,7 @@ void Dodgers::tick(float dt) {
 			++it;
 		}
 	}
+	move(dt);
 }
 
 // -------------------------------------------------------
@@ -188,7 +193,7 @@ ds::SID Dodgers::findNearest(const Vector2f& pos, float radius,ds::SID self) {
 	return ret;
 }
 
-bool Dodgers::kill(ds::SID sid) {
+bool Dodgers::handleImpact(ds::SID sid) {
 	if (contains(sid)) {		
 		v2 enemyPos = _context->world->getPosition(sid);
 		_context->particles->start(0, enemyPos);

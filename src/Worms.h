@@ -16,7 +16,7 @@
 #include <renderer\shader.h>
 #include "utils\BorderLines.h"
 #include <base\GameState.h>
-#include "enemies\Enemies.h"
+#include "enemies\StageManager.h"
 
 class Trail;
 
@@ -47,6 +47,7 @@ private:
 	void resetHUD();
 	void killEnemy(ds::SID bulletID, const Vector2f& bulletPos, ds::SID enemyID, const Vector2f& enemyPos, int enemyType);
 	void startShaking();
+	void createStages();
 
 	InternalState _state;
 	v2 m_TargetPos;
@@ -57,10 +58,8 @@ private:
 	float m_ShakeTimer;
 
 	Player* _player;
-	Dodgers* _dodgers;
 	float _warm_up_timer;
 	bool _no_enemies;
-
-	Enemies _enemies;
+	StageManager* _stageManager;
 };
 

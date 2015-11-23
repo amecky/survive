@@ -27,7 +27,8 @@ public:
 
 	}
 
-	void handleImpact(ds::SID sid) {
+	bool handleImpact(ds::SID sid) {
+		return false;
 	}
 
 	
@@ -38,7 +39,7 @@ public:
 
 
 	void deactivate();
-	void activate();
+	void activate(int maxEnemies);
 	void tick(float dt);
 	void handleEvents(const ds::ActionEventBuffer& buffer);
 	const EnemyType getType() const {

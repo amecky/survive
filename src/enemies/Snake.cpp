@@ -37,7 +37,7 @@ void Snake::deactivate() {
 // ------------------------------------------------
 // start
 // ------------------------------------------------
-void Snake::activate() {
+void Snake::activate(int maxEnemies) {
 	Vector2f start(200, 200);
 	float angle = PI;
 	m_HeadID = _context->world->create(start, "snake_head");
