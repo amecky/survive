@@ -11,7 +11,7 @@ Dodgers::~Dodgers() {
 // create dodger
 // ------------------------------------------------
 void Dodgers::create(const Vector2f& start) {
-	if (_list.size() < 32) {
+	if (_counter < _maxEnemies) {
 		Dodger d;
 		d.sid = _context->world->create(start, "dodger", OBJECT_LAYER);
 		//_context->world->setColor(d.sid, ds::Color(255,0,0,255));
@@ -26,6 +26,7 @@ void Dodgers::create(const Vector2f& start) {
 		_context->world->setRotation(d.sid, d.angle);
 		_list.push_back(d);
 		_context->trails->add(d.sid, 5.0f, 11);
+		++_counter;
 	}
 }
 
@@ -86,6 +87,7 @@ void Dodgers::activate(int maxEnemies) {
 	_spawner.maxSpawns = 8;
 	_spawner.totalSpawns = ds::math::random(_spawner.minSpawns, _spawner.maxSpawns);
 	_maxEnemies = maxEnemies;
+	_counter = 0;
 }
 
 // ------------------------------------------------
@@ -149,7 +151,7 @@ void Dodgers::move(float dt) {
 // ------------------------------------------------
 void Dodgers::tick(float dt) {
 	if (tickTimer(dt, _context->settings->dodgersSpawnTimer, true)) {
-		if (_list.size() < _maxEnemies){
+		if (_counter < _maxEnemies){
 			StartPoint sp;
 			sp.position = _spawner.pick();
 			sp.timer = 0.0f;

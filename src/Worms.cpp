@@ -255,5 +255,6 @@ int Worms::onChar(int ascii) {
 }
 
 void Worms::createStages() {
-	_stageManager->addStage(0, {ET_DODGERS, 20, 10, 0.0f, -1});
+	_stageManager->addStage(0, { 0, ET_DODGERS, 20, 10, 0.0f, 1});
+	_stageManager->addStage(0, { 1, ET_DODGERS, 20, 10, 0.0f, -1 });
 }

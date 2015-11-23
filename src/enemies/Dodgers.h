@@ -49,4 +49,5 @@ private:
 	StartPoints _startPoints;
 	Spawner _spawner;
 	int _maxEnemies;
+	int _counter;
 };
