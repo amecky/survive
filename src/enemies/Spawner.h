@@ -23,6 +23,9 @@ struct Spawner {
 	int totalSpawns;
 	int count;
 
+
+	// Spawner(int xPoints,int yPoints)
+	// count = xPoints * yPoints * 2
 	Spawner() : current(-1), maxSpawns(0), minSpawns(0), totalSpawns(0) {
 		for (int i = 0; i < 8; ++i) {
 			boxes[i].x = i;
@@ -53,7 +56,7 @@ struct Spawner {
 			reset();
 		}
 		SpawnBox& box = boxes[current];
-		float x = 25.0f + 12.0f + box.x * 125.0f;
+		float x = 25.0f + 12.0f + box.x * 160.0f;
 		float y = 25.0f + 9.0f + box.y * 125.0f;
 		x += ds::math::random(0.0f, 75.0f);
 		y += ds::math::random(0.0f, 75.0f);

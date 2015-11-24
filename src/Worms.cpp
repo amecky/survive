@@ -28,7 +28,7 @@ Worms::~Worms(void) {
 // init
 // --------------------------------------------------------------------------
 void Worms::init() {
-	ds::SID backID = _context->world->create(Vector2f(512, 384), "background", BG_LAYER);
+	ds::SID backID = _context->world->create(Vector2f(640, 360), "background", BG_LAYER);
 	_player = new Player(_context);
 	m_ColliderText = ds::math::buildTexture(0,160,40,40);
 
@@ -36,7 +36,7 @@ void Worms::init() {
 	m_ShakeTimer = 0.0f;
 	m_Shaking = false;
 
-	_context->world->setBoundingRect(ds::Rect(0, 0, 1024, 768));
+	_context->world->setBoundingRect(ds::Rect(0, 0, 1280, 720));
 	// define ignored collisions
 	_context->world->ignoreCollisions(BULLET_TYPE, PLAYER_TYPE);
 	_context->world->ignoreCollisions(SNAKE_HEAD, SNAKE_TAIL);

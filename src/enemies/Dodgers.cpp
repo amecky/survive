@@ -116,6 +116,7 @@ void Dodgers::move(float dt) {
 		d.angle = ds::math::getTargetAngle(d.velocity, V2_RIGHT);
 		_context->world->setRotation(d.sid, d.angle);
 		_context->world->setPosition(d.sid, d.position);
+		_context->world->setPosition(d.lightID, d.position);
 	}
 
 	/*

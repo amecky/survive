@@ -7,14 +7,16 @@
 #include "TestMe.h"
 #include "Worms.h"
 #include "gamestates\GameOverState.h"
+#include "gamestates\StageTest.h"
 #include "GameRenderer.h"
 
 ds::BaseApp *app = new Survive(); 
 
 Survive::Survive() : ds::BaseApp() {
 	//_CrtSetBreakAlloc(79);
-	_settings.screenWidth = 1024;
-	_settings.screenHeight = 768;
+	// 720p
+	_settings.screenWidth = 1280;
+	_settings.screenHeight = 720;
 	_settings.clearColor = ds::Color(0.0f,0.0f,0.0f,1.0f);	
 	_settings.initializeEditor = true;
 	_context = new GameContext;
@@ -48,6 +50,7 @@ bool Survive::loadContent() {
 	stateMachine->add(new GUITest());
 	stateMachine->add(new TestMe(_context));
 	stateMachine->add(new Worms(_context));
+	stateMachine->add(new StageTest(_context));
 	stateMachine->add(new GameOverState(_context,&gui));
 	stateMachine->add(new ds::BasicMenuGameState("MainMenuState", "MainMenu", &gui));
 	stateMachine->connect("MainGameState", 1, "GameOverState");
@@ -58,7 +61,7 @@ bool Survive::loadContent() {
 }
 
 void Survive::init() {
-	stateMachine->activate("MainMenuState");
+	stateMachine->activate("StageTest");
 }
 
 // -------------------------------------------------------

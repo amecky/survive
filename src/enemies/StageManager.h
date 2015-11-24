@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemies.h"
 #include <compiler\DataFile.h>
+#include "EnemySpawner.h"
 
 const int MAX_WAVES = 16;
 // -------------------------------------------
@@ -121,5 +122,7 @@ private:
 	EnemyList _enemyList;
 	GameContext* _context;
 	int _killCounter;
+
+	EdgesSpawner* _edgesSpawner;
 };
 

@@ -6,6 +6,11 @@
 // stage manager
 // -------------------------------------------
 StageManager::StageManager(GameContext* context) : _context(context) , _index(0) , _killCounter(0) {
+	SpawnerData data;
+	data.count_x = 10;
+	data.count_y = 5;
+	data.border = v2(40, 40);
+	_edgesSpawner = new EdgesSpawner(data);
 	_enemyList.push_back(new Dodgers(_context));
 	for (int i = 0; i < MAX_WAVES; ++i) {
 		_activesWaves[i].active = false;
@@ -14,6 +19,7 @@ StageManager::StageManager(GameContext* context) : _context(context) , _index(0)
 
 
 StageManager::~StageManager() {
+	delete _edgesSpawner;
 	for (size_t i = 0; i < _enemyList.size(); ++i) {
 		delete _enemyList[i];
 	}
@@ -38,6 +44,11 @@ void StageManager::addStage(int idx, const WaveDefinition& def) {
 // -------------------------------------------
 void StageManager::start() {
 	LOGC("StageManager") << "start";
+	_edgesSpawner->rebuild();
+	for (int i = 0; i < 10; ++i) {
+		v2 p = _edgesSpawner->next();
+		LOG << "------- " << i << " = " << DBG_V2(p);
+	}
 	_index = 0;
 	_killCounter = 0;
 	_stages[0].index = 0;	

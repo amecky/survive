@@ -3,17 +3,19 @@
 #include <renderer\render_types.h>
 #include <ui\IMGUI.h>
 #include "..\utils\GameContext.h"
+#include "..\enemies\EnemySpawner.h"
 
-class GameOverState : public ds::GameState {
+class StageTest : public ds::GameState {
 
 public:
-	GameOverState(GameContext* ctx,ds::DialogManager* gui);
-	virtual ~GameOverState() {}
+	StageTest(GameContext* ctx);
+	virtual ~StageTest() {}
 	int update(float dt);
 	void render();
 	void activate();
 	void deactivate();
 private:
 	GameContext* _context;
-	ds::DialogManager* _gui;
+	EdgesSpawner* _edgesSpawner;
 };
+

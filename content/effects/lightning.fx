@@ -1,7 +1,7 @@
 uniform extern float4x4 gWVP;
 uniform extern texture gTex;
-float sx = 1024.0;
-float sy = 768.0;
+float sx = 1280.0;
+float sy = 720.0;
 
 sampler TexS = sampler_state {
 	Texture = <gTex>;
@@ -23,7 +23,7 @@ OutputVS BasicVS(float3 posL : POSITION0,float2 tex0 : TEXCOORD0 , float4 color 
 	OutputVS outVS = (OutputVS)0;	
 	outVS.posH = mul(float4(posL, 1.0f), gWVP);		
 	outVS.tex1.x = 0.5 + (posL.x + sx / 2.0) / (2.0 * sx);
-	outVS.tex1.y = (sy / 2.0 - posL.y ) / sy * 0.375;
+	outVS.tex1.y = (sy / 2.0 - posL.y ) / sy * 0.35;
 	outVS.tex0 = tex0;
 	outVS.color0 = color;
 	return outVS;
