@@ -12,7 +12,7 @@ Dodgers::~Dodgers() {
 // ------------------------------------------------
 void Dodgers::create(const Vector2f& start) {
 	if (_counter < _maxEnemies) {
-		Dodger d;
+		Enemy d;
 		d.sid = _context->world->create(start, "dodger", OBJECT_LAYER);
 		//_context->world->setColor(d.sid, ds::Color(255,0,0,255));
 		_context->world->attachCollider(d.sid, SNAKE_TAIL, OBJECT_LAYER);
@@ -30,29 +30,13 @@ void Dodgers::create(const Vector2f& start) {
 	}
 }
 
-// ------------------------------------------------
-// remove dodger
-// ------------------------------------------------
-void Dodgers::remove(ds::SID sid) {
-	DodgerList::iterator it = _list.begin();
-	while (it != _list.end()) {
-		if (it->sid == sid) {
-			_context->world->remove(sid);
-			_context->trails->remove(sid);			
-			_context->world->remove(it->lightID);
-			it = _list.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-}
+
 
 // ------------------------------------------------
 // kill all
 // ------------------------------------------------
 void Dodgers::killAll() {
-	DodgerList::iterator it = _list.begin();
+	EnemyList::iterator it = _list.begin();
 	while (it != _list.end()) {
 		if (_context->world->contains(it->sid)) {
 			Vector2f enemyPos = _context->world->getPosition(it->sid);
@@ -64,18 +48,6 @@ void Dodgers::killAll() {
 		}
 		it = _list.erase(it);
 	}
-}
-
-// ------------------------------------------------
-// check if this is a dodger
-// ------------------------------------------------
-const bool Dodgers::contains(ds::SID sid) const {
-	for (int i = 0; i < _list.size(); ++i) {
-		if (_list[i].sid == sid) {
-			return true;
-		}
-	}
-	return false;
 }
 
 // ------------------------------------------------
@@ -106,7 +78,7 @@ void Dodgers::move(float dt) {
 	*/
 	v2 v;
 	for (size_t i = 0; i < _list.size(); ++i) {
-		Dodger& d = _list[i];
+		Enemy& d = _list[i];
 		v2 acceleration = v2(0, 0);
 		acceleration += seek(i, _context->playerPos);
 		acceleration += align(i);
@@ -224,7 +196,7 @@ v2 Dodgers::align(int index) {
 	int count = 0;
 	for (size_t i = 0; i < _list.size(); ++i) {
 		if (i != index) {
-			Dodger& d = _list[i];
+			Enemy& d = _list[i];
 			v2 diff = d.position - _list[index].position;
 			if (sqr_length(diff) < (dist * dist)) {
 				++count;
@@ -257,7 +229,7 @@ v2 Dodgers::separate(int index) {
 	// For every boid in the system, check if it's too close
 	for (size_t i = 0; i < _list.size(); ++i) {
 		if (i != index) {
-			Dodger& d = _list[i];
+			Enemy& d = _list[i];
 			v2 diff = _list[index].position - d.position;
 			if (sqr_length(diff) < (dist * dist)) {
 				float d = length(diff);

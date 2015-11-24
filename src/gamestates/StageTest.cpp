@@ -10,8 +10,9 @@ StageTest::StageTest(GameContext* ctx) : ds::GameState("StageTest"), _context(ct
 	data.count_x = 10;
 	data.count_y = 5;
 	data.border = v2(40, 40);
-	_edgesSpawner = new EdgesSpawner(data);
-	_edgesSpawner->rebuild();
+	//_spawner = new EdgesSpawner(data);
+	_spawner = new PartialEdgesSpawner(10, data);
+	_spawner->rebuild();
 }
 
 // -------------------------------------------------------
@@ -25,8 +26,8 @@ int StageTest::update(float dt) {
 // render
 // -------------------------------------------------------
 void StageTest::render() {
-	for (int i = 0; i < _edgesSpawner->size(); ++i) {
-		const v2& p = _edgesSpawner->next();
+	for (int i = 0; i < _spawner->size(); ++i) {
+		const v2& p = _spawner->next();
 		ds::sprites::draw(p, ds::math::buildTexture(0, 0, 40, 40));
 	}
 }

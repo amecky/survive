@@ -16,6 +16,6 @@ public:
 	void deactivate();
 private:
 	GameContext* _context;
-	EdgesSpawner* _edgesSpawner;
+	EnemySpawner* _spawner;
 };
 

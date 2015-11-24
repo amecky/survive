@@ -55,34 +55,22 @@ protected:
 class EdgesSpawner : public EnemySpawner {
 
 public:
-	EdgesSpawner(const SpawnerData& data) : EnemySpawner(data) {
-		_total = 2 * _data.count_x * _data.count_y;
-		_points = new v2[_total];
-	}
+	EdgesSpawner(const SpawnerData& data);
 	virtual ~EdgesSpawner() {}
-	
-	void rebuild() {
-		float stepX = (ds::renderer::getScreenWidth() - _data.border.x) / static_cast<float>(_data.count_x);
-		float stepY = (ds::renderer::getScreenHeight() - _data.border.y) / static_cast<float>(_data.count_y);
-		v2 steps(stepX, stepY);
-		int cnt = 0;
-		for (int i = 0; i < _data.count_x; ++i) {
-			v2& sp = _points[cnt++];
-			from_grid(i, 0, steps, sp);
-		}
-		for (int i = 0; i < _data.count_x; ++i) {
-			v2& sp = _points[cnt++];
-			from_grid(_data.count_x - 1 - i, _data.count_y, steps, sp);
-		}
-		for (int i = 0; i < _data.count_y; ++i) {
-			v2& sp = _points[cnt++];
-			from_grid(0, i, steps, sp);
-		}
-		for (int i = 0; i < _data.count_y; ++i) {
-			v2& sp = _points[cnt++];
-			from_grid(_data.count_x - 1, _data.count_y - 1 - i, steps, sp);
-		}
-	}
+	void rebuild();
+};
+
+// --------------------------------------
+// edges spawner
+// --------------------------------------
+class PartialEdgesSpawner : public EnemySpawner {
+
+public:
+	PartialEdgesSpawner(int sides, const SpawnerData& data);
+	virtual ~PartialEdgesSpawner() {}
+	void rebuild();
+private:
+	int _sides;
 };
 
 // --------------------------------------
