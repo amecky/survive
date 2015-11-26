@@ -1,6 +1,15 @@
 #pragma once
 #include "..\utils\GameContext.h"
 #include <sprites\Sprite.h>
+#include "EnemySpawner.h"
+
+struct StartPoint {
+	v2 position;
+	float timer;
+	v2 normal;
+};
+
+typedef std::vector<StartPoint> StartPoints;
 
 enum EnemyType {
 	ET_DODGERS,
@@ -29,15 +38,15 @@ typedef std::vector<Enemy> EnemyList;
 class Enemies {
 
 public:
-	Enemies(GameContext* context) : _context(context) {}
+	Enemies(GameContext* context, const SpawnerData& data);
 
-	virtual ~Enemies() {}
+	virtual ~Enemies();
 
-	virtual void activate(int maxEnemies) = 0;
+	void activate(int maxEnemies);
 	
-	virtual void deactivate() = 0;
-	
-	virtual void tick(float dt) = 0;
+	virtual void move(float dt) = 0;
+
+	void tick(float dt);
 	
 	const bool contains(ds::SID sid) const;
 	
@@ -49,8 +58,19 @@ public:
 
 	virtual bool handleImpact(ds::SID sid) = 0;
 
+	virtual void killAll() = 0;
+
+	virtual void create(const StartPoint& startPoint) = 0;
+
 protected:
+	void createSpawner(const SpawnerData& data);
 	EnemyList _list;
 	GameContext* _context;
+	EnemySpawner* _spawner;
+	StartPoints _startPoints;
+	float _spawnTimer;
+	SpawnerData _spawnData;
+	int _maxEnemies;
+	int _counter;
 };
 

@@ -1,7 +1,8 @@
 #include "Bouncer.h"
 #include "..\Constants.h"
 
-Bouncer::Bouncer(GameContext* context) : ds::TimedObject() ,Enemies(context) {
+Bouncer::Bouncer(GameContext* context, const SpawnerData& data) : ds::TimedObject(), Enemies(context,data) {
+	
 }
 
 Bouncer::~Bouncer() {
@@ -10,22 +11,33 @@ Bouncer::~Bouncer() {
 // ------------------------------------------------
 // create dodger
 // ------------------------------------------------
-void Bouncer::create(const Vector2f& start) {
+void Bouncer::create(const StartPoint& start) {
 	if (_counter < _maxEnemies) {
 		Enemy d;
-		d.sid = _context->world->create(start, "dodger", OBJECT_LAYER);
+		d.sid = _context->world->create(start.position, "bouncer", OBJECT_LAYER);
 		//_context->world->setColor(d.sid, ds::Color(255,0,0,255));
 		_context->world->attachCollider(d.sid, SNAKE_TAIL, OBJECT_LAYER);
-		d.lightID = _context->world->create(start, "lightning", LIGHT_LAYER);
+		d.lightID = _context->world->create(start.position, "lightning", LIGHT_LAYER);
 		d.timer = 0.0f;
-		d.position = start;
-		d.angle = ds::math::getTargetAngle(_context->playerPos, start);
+		d.position = start.position;
+		v2 diff = v2(640, 360) - start.position;	
+		float dt = dot(v2(640, 360), start.position);
+		v2 rotated(start.normal.y, -start.normal.x);
+		v2 dd = ds::math::reflect(diff, rotated);
+		float angle = ds::math::getAngle(dd, V2_RIGHT);
+		//LOG << "start: " << DBG_V2(start.position) << " normal: " << DBG_V2(start.normal) << " diff: " << DBG_V2(diff) << " dd: " << DBG_V2(dd) << " angle: " << RADTODEG(angle) << " dt: " << dt;
+		//angle -= DEGTORAD(90.0f);
+		//angle = ds::math::reflect(angle);
+		//d.angle = ds::math::getTargetAngle(_context->playerPos, start);
+		d.angle = angle;
+		d.velocity = ds::math::getRadialVelocity(RADTODEG(angle), 200.0f);
+		//d.velocity.x *= -1.0f;
+		_context->world->moveBy(d.sid, d.velocity, true);
 		_context->world->setColor(d.lightID, ds::Color(50, 213, 255, 255));
 		_context->world->scale(d.lightID, 0.7f, 0.7f);
-		_context->world->setRotation(d.sid, d.angle);
+		_context->world->setRotation(d.sid, angle);
 		_list.push_back(d);
 		_context->trails->add(d.sid, 5.0f, 11);
-		++_counter;
 	}
 }
 
@@ -47,17 +59,6 @@ void Bouncer::killAll() {
 	}
 }
 
-// ------------------------------------------------
-// start timer
-// ------------------------------------------------
-void Bouncer::activate(int maxEnemies) {
-	startTimer();
-	_spawner.minSpawns = 4;
-	_spawner.maxSpawns = 8;
-	_spawner.totalSpawns = ds::math::random(_spawner.minSpawns, _spawner.maxSpawns);
-	_maxEnemies = maxEnemies;
-	_counter = 0;
-}
 
 // ------------------------------------------------
 // move
@@ -66,40 +67,8 @@ void Bouncer::move(float dt) {
 	v2 v;
 	for (size_t i = 0; i < _list.size(); ++i) {
 		Enemy& d = _list[i];
-		d.position += d.velocity * dt;
-		d.angle = ds::math::getTargetAngle(d.velocity, V2_RIGHT);
-		_context->world->setRotation(d.sid, d.angle);
-		_context->world->setPosition(d.sid, d.position);
-		_context->world->setPosition(d.lightID, d.position);
+		_context->world->setPosition(d.lightID, _context->world->getPosition(d.sid));
 	}
-}
-
-// ------------------------------------------------
-// tick and create new dodgers
-// ------------------------------------------------
-void Bouncer::tick(float dt) {
-	if (tickTimer(dt, _context->settings->dodgersSpawnTimer, true)) {
-		if (_counter < _maxEnemies){
-			StartPoint sp;
-			sp.position = _spawner.pick();
-			sp.timer = 0.0f;
-			_startPoints.push_back(sp);
-			//_context->particles.start(9, sp.position);
-			_context->particles->start(10, sp.position);
-		}
-	}
-	StartPoints::iterator it = _startPoints.begin();
-	while (it != _startPoints.end()) {
-		it->timer += dt;
-		if (it->timer >= _context->settings->dodgersSpawnDelay) {
-			create(it->position);
-			it = _startPoints.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
-	move(dt);
 }
 
 bool Bouncer::handleImpact(ds::SID sid) {

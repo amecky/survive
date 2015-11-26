@@ -24,10 +24,10 @@ namespace util {
 			p = Vector2f(ds::math::random(20,200),ds::math::random(20,150));
 			break;
 		case 1 : 
-			p = Vector2f(ds::math::random(900,1000),ds::math::random(20,150));
+			p = Vector2f(ds::math::random(1100,1200),ds::math::random(20,150));
 			break;
 		case 2 : 
-			p = Vector2f(ds::math::random(900,1000),ds::math::random(600,700));
+			p = Vector2f(ds::math::random(110,1200),ds::math::random(600,700));
 			break;
 		case 3 : 
 			p = Vector2f(ds::math::random(20,200),ds::math::random(600,700));
@@ -119,6 +119,33 @@ namespace util {
 			path->create(start, pa, pb, end);
 		}
 		return next;
+	}
+
+	int buildSingleCurve(const v2& start, const v2& end, ds::CubicBezierPath* path, float amplitude, bool append) {
+		//LOG << "start: " << DBG_V2(start) << " end: " << DBG_V2(end) << " sector: " << sector << " next: " << next;
+		float da = 0.25f;//ds::math::random(0.15f, 0.35f);
+		float db = 0.75f;// ds::math::random(0.65f, 0.85f);
+		Vector2f diff = end - start;
+		Vector2f pa = start + diff * da;
+		Vector2f pb = start + diff * db;
+		Vector2f rpa = pa;
+		ds::vector::rotate(rpa, DEGTORAD(90.0f));
+		Vector2f nrpa = normalize(rpa);
+		nrpa *= -amplitude;
+		pa += nrpa;
+
+		Vector2f rpb = pb;
+		ds::vector::rotate(rpb, DEGTORAD(90.0f));
+		Vector2f nrpb = normalize(rpb);
+		nrpb *= amplitude;
+		pb += nrpb;
+		if (append) {
+			path->add(pa, pb, end);
+		}
+		else {
+			path->create(start, pa, pb, end);
+		}
+		return -1;
 	}
 
 	void drawCurve(ds::CubicBezierPath& path,const ds::Texture& dotTex) {

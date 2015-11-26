@@ -14,10 +14,8 @@ struct SnakeTrail {
 typedef std::vector<SnakeTrail> TrailList;
 
 public:
-	Snake(GameContext* context);
+	Snake(GameContext* context,const SpawnerData& data);
 	~Snake();
-
-	
 
 	const bool contains(ds::SID sid) const {
 		return false;
@@ -31,16 +29,13 @@ public:
 		return false;
 	}
 
-	
-
 	int getKillCounter() const {
 		return 0;
 	}
 
+	void killAll() {}
 
-	void deactivate();
-	void activate(int maxEnemies);
-	void tick(float dt);
+	void move(float dt);
 	void handleEvents(const ds::ActionEventBuffer& buffer);
 	const EnemyType getType() const {
 		return ET_SNAKE;
@@ -63,6 +58,7 @@ public:
 		// FIXME: read from settings
 		return m_HeadShots >= 4;
 	}
+	void create(const StartPoint& start);
 private:
 	void createTail(const Vector2f& start, float scale);
 	ds::SID m_HeadID;

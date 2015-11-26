@@ -53,6 +53,10 @@ struct GameSettings : public ds::DynamicGameSettings {
 		addFloat("dyingTime", &dyingTime, 4.0f);
 		addFloat("getReadyAmplitude", &getReadyAmplitude, 4.0f);
 		addFloat("getReadyScale", &getReadyScale, 0.1f);
+		//ds::Color snakeTailColor;
+		addFloat("snakeVelocity", &snakeVelocity, 100.0f);
+		addFloat("snakeFollowVelocity", &snakeFollowVelocity, 2.0f);
+		addFloat("spawnTimer", &spawnTimer, 1.0f);
 	}
 
 };

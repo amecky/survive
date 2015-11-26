@@ -10,17 +10,18 @@ const int MAX_WAVES = 16;
 struct WaveDefinition {
 
 	int index;
-	int enemyIndex;
+	EnemyType enemy_type;
+	SpawnerData spawner_data;
 	int count;
 	int health;
 	float delay;
 	int next;
 	bool used;
 
-	WaveDefinition() : index(-1) , enemyIndex(-1), count(0), health(0), delay(0.0f), next(-1) , used(false) {}
+	WaveDefinition() : index(-1) , enemy_type(ET_EOL), spawner_data() , count(0), health(0), delay(0.0f), next(-1) , used(false) {}
 
-	WaveDefinition(int _index, int _type, int _count, int _health, float _delay, int _next) 
-		: index(_index), enemyIndex(_type), count(_count), health(_health), delay(_delay), next(_next) , used(true) {}
+	WaveDefinition(int _index, EnemyType _type, const SpawnerData& data,int _count, int _health, float _delay, int _next) 
+		: index(_index), enemy_type(_type), spawner_data(data) , count(_count), health(_health), delay(_delay), next(_next) , used(true) {}
 
 };
 
@@ -87,8 +88,6 @@ struct Stage {
 // -------------------------------------------
 class StageManager : public ds::DataFile {
 
-typedef std::vector<Enemies*> EnemyList;
-
 public:
 	StageManager(GameContext* context);
 	~StageManager();
@@ -99,6 +98,8 @@ public:
 	void killAll();
 	int handleImpact(ds::SID id);
 
+	void startWave(const WaveDefinition& def);
+	void handleEvents(const ds::ActionEventBuffer& buffer);
 	bool exportData(JSONWriter& writer);
 	bool importData(JSONReader& reader);
 	bool saveData(BinaryWriter& writer);
@@ -119,10 +120,7 @@ private:
 	Wave _activesWaves[16];
 	int _stageCount;
 	int _index;
-	EnemyList _enemyList;
 	GameContext* _context;
 	int _killCounter;
-
-	EdgesSpawner* _edgesSpawner;
 };
 

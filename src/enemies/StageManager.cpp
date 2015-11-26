@@ -1,5 +1,7 @@
 #include "StageManager.h"
 #include "Dodgers.h"
+#include "Bouncer.h"
+#include "Snake.h"
 #include <utils\Log.h>
 
 // -------------------------------------------
@@ -10,8 +12,6 @@ StageManager::StageManager(GameContext* context) : _context(context) , _index(0)
 	data.count_x = 10;
 	data.count_y = 5;
 	data.border = v2(40, 40);
-	_edgesSpawner = new EdgesSpawner(data);
-	_enemyList.push_back(new Dodgers(_context));
 	for (int i = 0; i < MAX_WAVES; ++i) {
 		_activesWaves[i].active = false;
 	}
@@ -19,10 +19,6 @@ StageManager::StageManager(GameContext* context) : _context(context) , _index(0)
 
 
 StageManager::~StageManager() {
-	delete _edgesSpawner;
-	for (size_t i = 0; i < _enemyList.size(); ++i) {
-		delete _enemyList[i];
-	}
 }
 
 // -------------------------------------------
@@ -44,11 +40,6 @@ void StageManager::addStage(int idx, const WaveDefinition& def) {
 // -------------------------------------------
 void StageManager::start() {
 	LOGC("StageManager") << "start";
-	_edgesSpawner->rebuild();
-	for (int i = 0; i < 10; ++i) {
-		v2 p = _edgesSpawner->next();
-		LOG << "------- " << i << " = " << DBG_V2(p);
-	}
 	_index = 0;
 	_killCounter = 0;
 	_stages[0].index = 0;	
@@ -98,7 +89,7 @@ void StageManager::startWaves(int stageIndex) {
 			LOGC("StageManager") << "free slot: " << idx;
 			if (idx != -1) {
 				Wave& w = _activesWaves[idx];
-				w.enemies = new Dodgers(_context);
+				//w.enemies = new Dodgers(_context);
 				w.count = def.count;
 				w.enemies->activate(def.count);
 				w.immedate = true;
@@ -110,6 +101,39 @@ void StageManager::startWaves(int stageIndex) {
 	}
 }
 
+// -------------------------------------------
+// start waves
+// -------------------------------------------
+void StageManager::startWave(const WaveDefinition& def) {
+	int idx = findFreeSlot();
+	LOGC("StageManager") << "free slot: " << idx;
+	if (idx != -1) {
+		Wave& w = _activesWaves[idx];
+		if (def.enemy_type == ET_BOUNCER) {
+			w.enemies = new Bouncer(_context, def.spawner_data);
+		}
+		else if (def.enemy_type == ET_DODGERS) {
+			w.enemies = new Dodgers(_context, def.spawner_data);
+		}
+		else if (def.enemy_type == ET_SNAKE) {
+			w.enemies = new Snake(_context, def.spawner_data);
+		}
+		w.count = def.count;
+		w.enemies->activate(def.count);
+		w.immedate = true;
+		w.health = def.health;
+		w.active = true;
+		w.killCounter = 0;
+	}
+}
+
+void StageManager::handleEvents(const ds::ActionEventBuffer& buffer) {
+	for (int i = 0; i < MAX_WAVES; ++i) {
+		if (_activesWaves[i].active) {
+			_activesWaves[i].enemies->handleEvents(buffer);
+		}
+	}
+}
 // -------------------------------------------
 // tick
 // -------------------------------------------
@@ -149,7 +173,13 @@ int StageManager::handleImpact(ds::SID id) {
 // kill all
 // -------------------------------------------
 void StageManager::killAll() {
-
+	for (int i = 0; i < MAX_WAVES; ++i) {
+		if (_activesWaves[i].active) {
+			_activesWaves[i].enemies->killAll();
+			delete _activesWaves[i].enemies;
+			_activesWaves[i].active = false;
+		}
+	}
 }
 
 // -------------------------------------------
@@ -200,7 +230,7 @@ bool StageManager::importData(JSONReader& reader) {
 						int widx = w->getInt("index", -1);
 						if (widx != -1) {
 							def.index = widx;
-							w->getInt("enemy_index", &def.enemyIndex);
+							//w->getInt("enemy_index", &def.enemy_index);
 							w->getInt("count", &def.count);
 							w->getInt("health", &def.health);
 							w->getFloat("delay", &def.delay);

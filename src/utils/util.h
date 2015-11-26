@@ -22,5 +22,7 @@ namespace util {
 
 	int buildSingleCurve(const Vector2f& start, int sector, ds::CubicBezierPath* path,float amplitude = 140.0f, bool append = true);
 
+	int buildSingleCurve(const v2& start, const v2& end, ds::CubicBezierPath* path, float amplitude = 140.0f, bool append = true);
+
 	void drawCurve(ds::CubicBezierPath& path, const ds::Texture& dotTex);
 }
