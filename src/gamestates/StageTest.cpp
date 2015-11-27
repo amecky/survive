@@ -5,6 +5,7 @@
 #include <math\GameMath.h>
 #include <utils\Profiler.h>
 #include "..\GameRenderer.h"
+#include "..\Constants.h"
 
 StageTest::StageTest(GameContext* ctx) : ds::GameState("StageTest"), _context(ctx) {
 	_count = 1;
@@ -15,7 +16,7 @@ StageTest::StageTest(GameContext* ctx) : ds::GameState("StageTest"), _context(ct
 	_data.delay = _context->settings->dodgersSpawnTimer;
 	_data.type = SPT_PARTIAL_EDGES;
 	_data.emitter_type = SET_IMMEDIATE;
-	_stageManager = new StageManager(_context);
+	_stageManager = std::make_unique<StageManager>(_context);
 	_startPos = v2(1000, 710);
 	_state = 1;
 	_emitterTypes.push_back("IMMEDIATE");
@@ -26,16 +27,19 @@ StageTest::StageTest(GameContext* ctx) : ds::GameState("StageTest"), _context(ct
 	_showEditor = true;
 	_enemySelection = 2;
 	_emitterSelection = 0;
+	_context->playerID = _context->world->create(v2(640, 360), "player",OBJECT_LAYER);
 }
 
 StageTest::~StageTest() {	
-	delete _stageManager;
 }
 
 // -------------------------------------------------------
 // update
 // -------------------------------------------------------
 int StageTest::update(float dt) {
+
+	_context->playerPos = ds::renderer::getMousePosition();
+	_context->world->setPosition(_context->playerID, _context->playerPos);
 	_context->world->tick(dt);
 	_context->particles->update(dt);
 	_context->trails->tick(dt);

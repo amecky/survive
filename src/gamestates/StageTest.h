@@ -18,7 +18,7 @@ public:
 	void deactivate();
 private:
 	GameContext* _context;
-	StageManager* _stageManager;
+	std::unique_ptr<StageManager> _stageManager;
 	v2 _startPos;
 	int _state;
 	SpawnerData _data;
@@ -28,5 +28,6 @@ private:
 	std::vector<std::string> _enemyTypes;
 	int _enemySelection;
 	bool _showEditor;
+
 };
 

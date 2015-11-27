@@ -16,6 +16,7 @@ Player::~Player() {
 void Player::create() {
 	_position = Vector2f(512, 384);
 	_id = _context->world->create(_position, "player",OBJECT_LAYER);
+	_context->playerID = _id;
 	_context->world->attachCollider(_id, Vector2f(46.0f, 46.0f), PLAYER_TYPE,OBJECT_LAYER);
 	_angle = 0.0f;
 	_position = Vector2f(100, 384);
@@ -69,6 +70,7 @@ void Player::kill() {
 	_context->particles->start(8, _position);
 	_context->world->remove(_id);
 	_context->world->remove(_lightIndex);
+	_context->playerID = ds::INVALID_SID;
 	_shootingMode = SM_IDLE;
 }
 

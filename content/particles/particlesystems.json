@@ -46,3 +46,7 @@
 	"file" : "dodger_trail",
 	"id" : "11"
 }
+"bouncer_trail" {
+	"file" : "bouncer_trail",
+	"id" : "12"
+}

@@ -37,7 +37,7 @@ void Bouncer::create(const StartPoint& start) {
 		_context->world->scale(d.lightID, 0.7f, 0.7f);
 		_context->world->setRotation(d.sid, angle);
 		_list.push_back(d);
-		_context->trails->add(d.sid, 5.0f, 11);
+		_context->trails->add(d.sid, 5.0f, 12);
 	}
 }
 

@@ -14,6 +14,7 @@ struct GameContext {
 	ds::World* world;
 	GameSettings* settings;
 	v2 playerPos;
+	ds::SID playerID;
 	ds::ParticleManager* particles;
 	Trail* trails;
 	ds::GUIDialog* hud;
