@@ -5,6 +5,7 @@
 #include "..\utils\GameContext.h"
 #include "..\enemies\EnemySpawner.h"
 #include "..\enemies\Bouncer.h"
+#include "..\enemies\Snake.h"
 #include "..\enemies\StageManager.h"
 
 class StageTest : public ds::GameState {
@@ -17,6 +18,7 @@ public:
 	void activate();
 	void deactivate();
 private:
+	void drawBorder(const v2& pos, const v2& center,const ds::Color& color,float descale);
 	GameContext* _context;
 	std::unique_ptr<StageManager> _stageManager;
 	v2 _startPos;
@@ -28,6 +30,7 @@ private:
 	std::vector<std::string> _enemyTypes;
 	int _enemySelection;
 	bool _showEditor;
+	Snake* _snake;
 
 };
 

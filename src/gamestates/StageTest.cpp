@@ -28,9 +28,11 @@ StageTest::StageTest(GameContext* ctx) : ds::GameState("StageTest"), _context(ct
 	_enemySelection = 2;
 	_emitterSelection = 0;
 	_context->playerID = _context->world->create(v2(640, 360), "player",OBJECT_LAYER);
+	_snake = new Snake(_context,_data);
 }
 
 StageTest::~StageTest() {	
+	delete _snake;
 }
 
 // -------------------------------------------------------
@@ -46,6 +48,10 @@ int StageTest::update(float dt) {
 	const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 	_stageManager->tick(dt);
 	_stageManager->handleEvents(buffer);
+
+	_snake->tick(dt);
+	_snake->handleEvents(buffer);
+	//_snake->move(dt);
 	return 0;
 }
 
@@ -53,7 +59,9 @@ int StageTest::update(float dt) {
 // render
 // -------------------------------------------------------
 void StageTest::render() {
+
 	_context->renderer->renderWorld();
+
 	if (_showEditor) {
 		int offset = 0;
 		gui::start(1, &_startPos);
@@ -98,12 +106,32 @@ void StageTest::render() {
 		}
 		gui::end();
 	}
+	/*
+	v2 diff = v2(640, 360) - _context->playerPos;
+	diff *= 0.03f;
+	drawBorder(v2(640, 360), diff, ds::Color(255, 120, 0, 255),0.1f);
+	diff = v2(640, 360) - _context->playerPos;
+	diff *= 0.025f;
+	drawBorder(v2(640, 360), diff, ds::Color(192, 90, 0, 255), 0.2f);
+	diff = v2(640, 360) - _context->playerPos;
+	diff *= 0.02f;
+	drawBorder(v2(640, 360), diff, ds::Color(128, 60, 0, 255),0.3f);
+	*/
+	_snake->render_debug();
+}
+
+void StageTest::drawBorder(const v2& pos, const v2& center, const ds::Color& color,float descale) {
+	v2 p;
+	p.x = pos.x - center.x;
+	p.y = pos.y - center.y;
+	ds::sprites::draw(p, ds::math::buildTexture(720, 640, 320, 180), 0.0f, 4.0f - descale, 4.0f - descale * 1.5f, color);
 }
 
 // -------------------------------------------------------
 // activate
 // -------------------------------------------------------
 void StageTest::activate() {
+	_snake->activate(1);
 }
 
 // -------------------------------------------------------

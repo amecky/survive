@@ -9,6 +9,7 @@
 Snake::Snake(GameContext* context,const SpawnerData& data) : Enemies(context,data) {
 	m_Active = false;
 	m_HeadID = ds::INVALID_SID;
+	_trailCount = 0;
 }
 
 // ------------------------------------------------
@@ -35,18 +36,24 @@ void Snake::createTail(const Vector2f& start,float scale) {
 // ------------------------------------------------
 void Snake::create(const StartPoint& start) {
 	if (!m_Active){
+		_sector = ds::math::random(0, 11);
+		v2 ssp = util::buildStartingPoint(_sector,v2(40,40));
 		float angle = PI;
-		m_HeadID = _context->world->create(start.position, "snake_head", OBJECT_LAYER);
+		m_HeadID = _context->world->create(ssp, "snake_head", OBJECT_LAYER);
 		_context->world->setColor(m_HeadID, ds::Color(192, 0, 0, 255));
 		_context->world->attachCollider(m_HeadID, SNAKE_HEAD, OBJECT_LAYER);
-		v2 sp = start.position;
-		for (int i = 0; i < MAX_SNAKE_TAILS; ++i) {
+		v2 sp = ssp;
+		for (int i = 0; i < 1; ++i) {
 			ds::vector::addRadial(sp, 32.0f + i * 32.0f, PI);
 			float scale = 1.0f - static_cast<float>(i) / static_cast<float>(MAX_SNAKE_TAILS)* 0.2f;
 			createTail(sp, scale);
 		}
-		_context->world->followTarget(m_HeadID, _context->playerID, 100.0f);
+		_sector = util::buildSingleCurve(ssp, _sector, &_path, 220.0f, false);
+		_path.build();
+		//_context->world->followTarget(m_HeadID, _context->playerID, 100.0f);
+		_context->world->followPath(m_HeadID, &_path, 4.0f);
 		m_Active = true;
+		_previousHeadPos = ssp;
 	}
 }
 
@@ -54,8 +61,29 @@ void Snake::create(const StartPoint& start) {
 // move trail
 // ------------------------------------------------
 void Snake::move(float dt) {
+	// http://genericgamedev.com/general/snake-smooth-and-accurate-following-behaviour/
 	if (m_Active) {
+		if ((_trailCount + 1) >= 256) {
+			_trailCount = 0;
+		}
 		ds::SID id = m_HeadID;
+		v2 current = _context->world->getPosition(id);
+		if (sqr_length(current - _previousHeadPos) > 400.0f) {
+			_trailPath[_trailCount++] = current;
+			_previousHeadPos = current;
+		}
+		v2 tp = _context->world->getPosition(m_Trails[0].id);
+		for (int i = 0; i < _trailCount; ++i) {
+			v2 diff = tp - _trailPath[i];
+			if (sqr_length(diff) > 400.0f) {
+				float percentageAlongSegment = 20.0f / length(diff);
+				tp = _trailPath[i] + diff * percentageAlongSegment;
+				_context->world->setPosition(m_Trails[0].id, tp);
+				break;
+			}
+		}
+		/*
+		
 		float angle = 0.0f;
 		TrailList::iterator it = m_Trails.begin();
 		while (it != m_Trails.end()) {
@@ -67,6 +95,14 @@ void Snake::move(float dt) {
 			id = it->id;
 			++it;
 		}
+		*/
+	}
+	
+}
+
+void Snake::render_debug() {
+	for (int i = 0; i < _trailCount; ++i) {
+		ds::sprites::draw(_trailPath[i], ds::math::buildTexture(477,42,16,16));
 	}
 }
 
@@ -74,20 +110,18 @@ void Snake::move(float dt) {
 // handle events
 // ------------------------------------------------
 void Snake::handleEvents(const ds::ActionEventBuffer& buffer) {
-	/*
 	if (buffer.num > 0) {
 		for (int i = 0; i < buffer.num; ++i) {
 			if (buffer.events[i].type == ds::AT_FOLLOW_PATH && buffer.events[i].sid == m_HeadID) {
 				//LOG << "head done";
-				Vector2f end = m_Path.getElement(0).p3;
-				const SpawnPoint& next = _spawner->random();
-				util::buildSingleCurve(end, next.position, &m_Path,220.0f, false);
-				m_Path.build();
-				_context->world->followPath(m_HeadID, &m_Path, 4.0f);
+				v2 end = _path.getElement(0).p3;
+				//const SpawnPoint& next = _spawner->random();
+				_sector = util::buildSingleCurve(end, _sector, &_path,220.0f, false);
+				_path.build();
+				_context->world->followPath(m_HeadID, &_path, 4.0f);
 			}
 		}
 	}
-	*/
 }
 
 
