@@ -3,6 +3,7 @@
 #include <utils\Log.h>
 #include "..\Constants.h"
 #include <sprites\SpriteBatch.h>
+#include <renderer\graphics.h>
 
 namespace util {
 
@@ -17,21 +18,92 @@ namespace util {
 		return convert(gridPos.x, gridPos.y);
 	}
 
-	Vector2f buildStartingPoint(int sector) {		
-		Vector2f p;
+	// -------------------------------------------
+	// 12
+	// 03
+	// -------------------------------------------
+	v2 buildStartingPoint(int sector) {
+		v2 p;
+		
 		switch ( sector ) {
-		case 0 : 
-			p = Vector2f(ds::math::random(20,200),ds::math::random(20,150));
-			break;
-		case 1 : 
-			p = Vector2f(ds::math::random(1100,1200),ds::math::random(20,150));
-			break;
-		case 2 : 
-			p = Vector2f(ds::math::random(110,1200),ds::math::random(600,700));
-			break;
-		case 3 : 
-			p = Vector2f(ds::math::random(20,200),ds::math::random(600,700));
-			break;
+			case 0: p = ds::math::random(v2(  40,  40), v2(  80,  80)); break;
+			case 1: p = ds::math::random(v2(  40, 640), v2(  80, 680)); break;
+			case 2: p = ds::math::random(v2(1120, 640), v2(1160, 680));	break;
+			case 3: p = ds::math::random(v2(1120,  40), v2(1160,  80)); break;
+		}
+		return p;
+	}
+
+	v2 buildStartingPoint(int sector,const v2& border) {
+		v2 p;
+		float dx = (ds::renderer::getScreenWidth() - 2.0f * border.x) / 3.0f;
+		float dy = (ds::renderer::getScreenHeight() - 2.0f * border.y) / 3.0f;
+		float max_x = ds::renderer::getScreenWidth() - border.x;
+		float max_y = ds::renderer::getScreenHeight() - border.y;
+		float x = 0.0f;
+		float y = 0.0f;
+		switch (sector) {
+			case 0: {
+				p.x = border.x; 
+				p.y = border.y + ds::math::random(0.0f, dy);
+				break;
+			}
+			case 1: {
+				p.x = border.x;
+				p.y = border.y + ds::math::random(0.0f, dy) + dy;
+				break;
+			}
+			case 2: {
+				p.x = border.x;
+				p.y = border.y + ds::math::random(0.0f, dy) + dy * 2.0f;
+				break;
+			}
+			case 3: {
+				p.x = border.x + ds::math::random(0.0f,dx);
+				p.y = max_y;
+				break;
+			}
+			case 4: {
+				p.x = border.x + ds::math::random(0.0f, dx) + dx;
+				p.y = max_y;
+				break;
+			}
+			case 5: {
+				p.x = border.x + ds::math::random(0.0f, dx) + dx * 2.0f;
+				p.y = max_y;
+				break;
+			}
+			case 6: {
+				p.x = max_x;
+				p.y = border.y + ds::math::random(0.0f, dy);
+				break;
+			}
+			case 7: {
+				p.x = max_x;
+				p.y = border.y + ds::math::random(0.0f, dy) + dy;
+				break;
+			}
+			case 8: {
+				p.x = max_x;
+				p.y = border.y + ds::math::random(0.0f, dy) + dy * 2.0f;
+				break;
+			}
+			case 9: {
+				p.x = border.x + ds::math::random(0.0f, dx);
+				p.y = border.y;
+				break;
+			}
+			case 10: {
+				p.x = border.x + ds::math::random(0.0f, dx) + dx;
+				p.y = border.y;
+				break;
+			}
+			case 11: {
+				p.x = border.x + ds::math::random(0.0f, dx) + dx * 2.0f;
+				p.y = border.y;
+				break;
+			}
+			
 		}
 		return p;
 	}
@@ -90,26 +162,26 @@ namespace util {
 	}
 
 	int buildSingleCurve(const Vector2f& start, int sector, ds::CubicBezierPath* path,float amplitude, bool append) {
-		int next = sector + 1;
-		if (next > 3) {
-			next = 0;
+		int next = sector + 5;
+		if (next > 11) {
+			next -= 11;
 		}
-		Vector2f end = buildStartingPoint(next);
-		//LOG << "start: " << DBG_V2(start) << " end: " << DBG_V2(end) << " sector: " << sector << " next: " << next;
+		v2 end = buildStartingPoint(next,v2(40,40));
+		LOG << "start: " << DBG_V2(start) << " end: " << DBG_V2(end) << " sector: " << sector << " next: " << next;
 		float da = 0.25f;//ds::math::random(0.15f, 0.35f);
 		float db = 0.75f;// ds::math::random(0.65f, 0.85f);
-		Vector2f diff = end - start;
-		Vector2f pa = start + diff * da;
-		Vector2f pb = start + diff * db;
-		Vector2f rpa = pa;
+		v2 diff = end - start;
+		v2 pa = start + diff * da;
+		v2 pb = start + diff * db;
+		v2 rpa = pa;
 		ds::vector::rotate(rpa, DEGTORAD(90.0f));
-		Vector2f nrpa = normalize(rpa);
+		v2 nrpa = normalize(rpa);
 		nrpa *= -amplitude;
 		pa += nrpa;
 
-		Vector2f rpb = pb;
+		v2 rpb = pb;
 		ds::vector::rotate(rpb, DEGTORAD(90.0f));
-		Vector2f nrpb = normalize(rpb);
+		v2 nrpb = normalize(rpb);
 		nrpb *= amplitude;
 		pb += nrpb;
 		if (append) {

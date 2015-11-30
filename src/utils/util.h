@@ -10,6 +10,8 @@ namespace util {
 
 	Vector2f buildStartingPoint(int sector);
 
+	v2 buildStartingPoint(int sector, const v2& border);
+
 	int pickRandomSector(int current);
 
 	void simpleMove(Vector2f& p,float* angle,float t);

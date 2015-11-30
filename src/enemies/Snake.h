@@ -41,10 +41,17 @@ public:
 		return ET_SNAKE;
 	}
 	void create(const StartPoint& start);
+	void render_debug();
 private:
 	void createTail(const Vector2f& start, float scale);
 	ds::SID m_HeadID;
 	TrailList m_Trails;
 	bool m_Active;
+	int _sector;
+	ds::CubicBezierPath _path;
+
+	v2 _trailPath[256];
+	int _trailCount;
+	v2 _previousHeadPos;
 };
 
