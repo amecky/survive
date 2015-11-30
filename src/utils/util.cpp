@@ -167,7 +167,7 @@ namespace util {
 			next -= 11;
 		}
 		v2 end = buildStartingPoint(next,v2(40,40));
-		LOG << "start: " << DBG_V2(start) << " end: " << DBG_V2(end) << " sector: " << sector << " next: " << next;
+		//LOG << "start: " << DBG_V2(start) << " end: " << DBG_V2(end) << " sector: " << sector << " next: " << next;
 		float da = 0.25f;//ds::math::random(0.15f, 0.35f);
 		float db = 0.75f;// ds::math::random(0.65f, 0.85f);
 		v2 diff = end - start;

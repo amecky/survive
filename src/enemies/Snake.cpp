@@ -27,7 +27,7 @@ void Snake::createTail(const Vector2f& start,float scale) {
 	_context->world->attachCollider(tailID, SNAKE_TAIL, OBJECT_LAYER);
 	SnakeTrail st;
 	st.id = tailID;
-	st.distance = 2.4f * (scale);
+	st.distance = 40.0f * (scale);
 	m_Trails.push_back(st);
 }
 
@@ -73,13 +73,18 @@ void Snake::move(float dt) {
 			_previousHeadPos = current;
 		}
 		v2 tp = _context->world->getPosition(m_Trails[0].id);
-		for (int i = 0; i < _trailCount; ++i) {
-			v2 diff = tp - _trailPath[i];
-			if (sqr_length(diff) > 400.0f) {
-				float percentageAlongSegment = 20.0f / length(diff);
-				tp = _trailPath[i] + diff * percentageAlongSegment;
-				_context->world->setPosition(m_Trails[0].id, tp);
-				break;
+		if (_trailCount > 0) {
+			float parentDistance = m_Trails[0].distance;
+			for (int i = 1; i < _trailCount; ++i) {
+				v2 diff = _trailPath[i] - current;
+				if (sqr_length(diff) <= parentDistance * parentDistance) {
+					v2 td = _trailPath[i] - _trailPath[i - 1];
+					float percentageAlongSegment = length(td) / length(diff);
+					tp = _trailPath[i] - td * percentageAlongSegment;
+					_context->world->setPosition(m_Trails[0].id, tp);
+					break;
+				}
+				//segStart = _trailPath[i];
 			}
 		}
 		/*

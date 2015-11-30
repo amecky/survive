@@ -24,7 +24,7 @@ StageTest::StageTest(GameContext* ctx) : ds::GameState("StageTest"), _context(ct
 	_enemyTypes.push_back("Dodgers");
 	_enemyTypes.push_back("Bouncer");
 	_enemyTypes.push_back("Snake");
-	_showEditor = true;
+	_showEditor = false;
 	_enemySelection = 2;
 	_emitterSelection = 0;
 	_context->playerID = _context->world->create(v2(640, 360), "player",OBJECT_LAYER);
@@ -117,7 +117,7 @@ void StageTest::render() {
 	diff *= 0.02f;
 	drawBorder(v2(640, 360), diff, ds::Color(128, 60, 0, 255),0.3f);
 	*/
-	_snake->render_debug();
+	//_snake->render_debug();
 }
 
 void StageTest::drawBorder(const v2& pos, const v2& center, const ds::Color& color,float descale) {
