@@ -18,6 +18,7 @@ public:
 		delete _context->settings;
 		delete _context->trails;
 		delete _context->world;
+		delete _context->renderer;
 		delete _context;
 	}	
 	bool loadContent();

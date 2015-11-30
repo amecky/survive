@@ -65,7 +65,7 @@ void Worms::incrementKills(int points) {
 // kill enemy and bullet
 // --------------------------------------------------------------------------
 void Worms::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType) {
-	PR_START("Worms:killEnemy")
+	PR_START("Worms:killEnemy");
 	int points = _stageManager->handleImpact(enemyID);
 	if (points != 0) {
 		incrementKills(points);
@@ -74,18 +74,18 @@ void Worms::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, co
 		_context->particles->start(1, bulletPos);
 		_context->world->remove(bulletID);
 	}	
-	PR_END("Worms:killEnemy")
+	PR_END("Worms:killEnemy");
 }
 
 // --------------------------------------------------------------------------
 // common tick
 // --------------------------------------------------------------------------
 void Worms::commonTick(float dt) {
-	PR_START("Worms:commonTick")
+	PR_START("Worms:commonTick");
 	_context->world->tick(dt);
 	_context->particles->update(dt);
 	_context->trails->tick(dt);
-	PR_START("Worms:commonTickAEB")
+	PR_START("Worms:commonTickAEB");
 	const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 	if (buffer.num > 0) {
 		for (int i = 0; i < buffer.num; ++i) {
@@ -95,15 +95,15 @@ void Worms::commonTick(float dt) {
 			}
 		}
 	}
-	PR_END("Worms:commonTickAEB")
-	PR_END("Worms:commonTick")
+	PR_END("Worms:commonTickAEB");
+	PR_END("Worms:commonTick");
 }
 
 // --------------------------------------------------------------------------
 // tick
 // --------------------------------------------------------------------------
 int Worms::update(float dt) {
-	PR_START("Worms:tick")
+	PR_START("Worms:tick");
 
 	if (_state == IS_PREPARING) {
 		_player->move(dt);
@@ -129,12 +129,12 @@ int Worms::update(float dt) {
 		
 		_player->shootBullets(dt);		
 
-		PR_START("Worms:tick:collision")
+		PR_START("Worms:tick:collision");
 		int numCollisions = _context->world->getNumCollisions();		
 		if (numCollisions > 0) {
 			//LOG << "collisions: " << numCollisions;
 			for (int i = 0; i < numCollisions; ++i) {
-				PR_START("Worms:tick:innerCollision")
+				PR_START("Worms:tick:innerCollision");
 				const ds::Collision& c = _context->world->getCollision(i);				
 				if (c.containsType(BULLET_TYPE)) {
 					if (c.containsType(SNAKE_TAIL)) {
@@ -156,10 +156,10 @@ int Worms::update(float dt) {
 					//m_Context.lights->clear();
 					
 				}
-				PR_END("Worms:tick:innerCollision")
+				PR_END("Worms:tick:innerCollision");
 			}
 		}
-		PR_END("Worms:tick:collision")
+		PR_END("Worms:tick:collision");
 		/*
 		if (m_Shaking){
 			m_ShakeTimer += dt;
@@ -178,7 +178,7 @@ int Worms::update(float dt) {
 			return 1;
 		}
 	}
-	PR_END("Worms:tick")
+	PR_END("Worms:tick");
 	return 0;
 }
 

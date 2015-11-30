@@ -30,7 +30,7 @@ GameRenderer::~GameRenderer() {
 
 
 void GameRenderer::renderWorld() {
-	PR_START("GameRenderer:render")
+	PR_START("GameRenderer:render");
 	ds::renderer::setRenderTarget(_rt1);
 	_context->world->renderSingleLayer(BG_LAYER);
 	ds::sprites::flush();
@@ -44,5 +44,5 @@ void GameRenderer::renderWorld() {
 	_context->world->renderSingleLayer(OBJECT_LAYER);
 	ds::renderer::restoreBackBuffer();
 	ds::renderer::draw_render_target(_rt1);
-	PR_END("GameRenderer:render")
+	PR_END("GameRenderer:render");
 }

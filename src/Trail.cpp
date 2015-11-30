@@ -96,7 +96,7 @@ void Trail::kill(int index) {
 // tick
 // --------------------------------------------------------------------------
 void Trail::tick(float dt) {
-	PR_START("Trail:tick")
+	PR_START("Trail:tick");
 	for (int i = 0; i < _currentTrails; ++i) {
 		TrailPiece& piece = _pieces[i];
 		if (ctx->world->contains(piece.id)) {
@@ -134,5 +134,5 @@ void Trail::tick(float dt) {
 			kill(i);
 		}		
 	}
-	PR_END("Trail:tick")
+	PR_END("Trail:tick");
 }

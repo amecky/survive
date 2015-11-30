@@ -19,6 +19,11 @@ StageManager::StageManager(GameContext* context) : _context(context) , _index(0)
 
 
 StageManager::~StageManager() {
+	for (int i = 0; i < MAX_WAVES; ++i) {
+		if (_activesWaves[i].active) {
+			delete _activesWaves[i].enemies;
+		}
+	}
 }
 
 // -------------------------------------------
@@ -105,10 +110,12 @@ void StageManager::startWaves(int stageIndex) {
 // start waves
 // -------------------------------------------
 void StageManager::startWave(const WaveDefinition& def) {
+	PR_START("StageManager:startWave");
 	int idx = findFreeSlot();
-	LOGC("StageManager") << "free slot: " << idx;
+	//LOGC("StageManager") << "free slot: " << idx;
 	if (idx != -1) {
 		Wave& w = _activesWaves[idx];
+		PR_START("StageManager:createEnemy");
 		if (def.enemy_type == ET_BOUNCER) {
 			w.enemies = new Bouncer(_context, def.spawner_data);
 		}
@@ -118,13 +125,17 @@ void StageManager::startWave(const WaveDefinition& def) {
 		else if (def.enemy_type == ET_SNAKE) {
 			w.enemies = new Snake(_context, def.spawner_data);
 		}
+		PR_END("StageManager:createEnemy");
 		w.count = def.count;
+		PR_START("StageManager:activateEnemy");
 		w.enemies->activate(def.count);
+		PR_END("StageManager:activateEnemy");
 		w.immedate = true;
 		w.health = def.health;
 		w.active = true;
 		w.killCounter = 0;
 	}
+	PR_END("StageManager:startWave");
 }
 
 void StageManager::handleEvents(const ds::ActionEventBuffer& buffer) {
@@ -138,11 +149,13 @@ void StageManager::handleEvents(const ds::ActionEventBuffer& buffer) {
 // tick
 // -------------------------------------------
 bool StageManager::tick(float dt) {
+	PR_START("StageManager:tick");
 	for (int i = 0; i < MAX_WAVES; ++i) {
 		if (_activesWaves[i].active) {
 			_activesWaves[i].enemies->tick(dt);
 		}
 	}
+	PR_END("StageManager:tick");
 	return false;
 }
 

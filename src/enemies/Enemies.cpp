@@ -52,6 +52,7 @@ void Enemies::createSpawner(const SpawnerData& data) {
 // tick and create new dodgers
 // ------------------------------------------------
 void Enemies::tick(float dt) {
+	PR_START("Enemies:tick:spawn");
 	if (_spawnData.emitter_type == SET_DELAYED) {
 		_spawnTimer += dt;
 		if (_spawnTimer > _spawnData.delay) {
@@ -70,6 +71,8 @@ void Enemies::tick(float dt) {
 			}
 		}
 	}
+	PR_END("Enemies:tick:spawn");
+	PR_START("Enemies:tick:create");
 	if (!_startPoints.empty()) {
 		StartPoints::iterator it = _startPoints.begin();
 		while (it != _startPoints.end()) {
@@ -83,7 +86,10 @@ void Enemies::tick(float dt) {
 			}
 		}
 	}
+	PR_END("Enemies:tick:create");
+	PR_START("Enemies:tick:move");
 	move(dt);
+	PR_END("Enemies:tick:move");
 }
 
 // ------------------------------------------------
