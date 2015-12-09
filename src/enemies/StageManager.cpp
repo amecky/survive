@@ -44,7 +44,7 @@ void StageManager::addStage(int idx, const WaveDefinition& def) {
 // start
 // -------------------------------------------
 void StageManager::start() {
-	LOGC("StageManager") << "start";
+	LOG << "start";
 	_index = 0;
 	_killCounter = 0;
 	_stages[0].index = 0;	
@@ -83,15 +83,15 @@ int StageManager::findFreeSlot() const {
 // start waves
 // -------------------------------------------
 void StageManager::startWaves(int stageIndex) {
-	LOGC("StageManager") << "start waves - stage: " << stageIndex;
+	LOG << "start waves - stage: " << stageIndex;
 	const Stage& stage = _stages[_index];
 	for (int i = 0; i < stage.count; ++i) {
 		const WaveDefinition& def = stage.waves[i];
 		// def has no parent -> start
 		if (!hasParent(def.index)) {
-			LOGC("StageManager") << def.index << " has no parent";
+			LOG << def.index << " has no parent";
 			int idx = findFreeSlot();
-			LOGC("StageManager") << "free slot: " << idx;
+			LOG << "free slot: " << idx;
 			if (idx != -1) {
 				Wave& w = _activesWaves[idx];
 				//w.enemies = new Dodgers(_context);

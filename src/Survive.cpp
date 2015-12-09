@@ -24,12 +24,14 @@ Survive::Survive() : ds::BaseApp() {
 	_context->world = new ds::World;
 	_context->trails = new Trail(_context,512);
 	_context->particles = particles;
-	_context->playerSpeed = 200.0f;
+	_context->playerSpeed = 300.0f;
 	_context->doubleFire = false;
 	_context->fireRate = 0.4f;
 	_context->tripleShot = false;
+	_context->world_pos = v2(960, 540);
 	_showSettings = false;
 	activateMonitoring(12.0f);
+	_settingPos = v2(900, 710);
 }
 
 // -------------------------------------------------------
@@ -61,7 +63,7 @@ bool Survive::loadContent() {
 }
 
 void Survive::init() {
-	stateMachine->activate("StageTest");
+	stateMachine->activate("MainMenuState");
 }
 
 // -------------------------------------------------------
@@ -75,7 +77,7 @@ void Survive::update(float dt) {
 // -------------------------------------------------------
 void Survive::draw() {	
 	if (_showSettings) {
-		_context->settings->showDialog();
+		_context->settings->showDialog(&_settingPos);
 	}
 }
 

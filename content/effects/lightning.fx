@@ -1,7 +1,7 @@
 uniform extern float4x4 gWVP;
 uniform extern texture gTex;
-float sx = 1280.0;
-float sy = 720.0;
+float sx = 1920.0;
+float sy = 1080.0;
 
 sampler TexS = sampler_state {
 	Texture = <gTex>;

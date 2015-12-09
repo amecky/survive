@@ -19,6 +19,7 @@ struct GameContext {
 	Trail* trails;
 	ds::GUIDialog* hud;
 	GameRenderer* renderer;
+	v2 world_pos;
 
 	float playerSpeed;
 	bool doubleFire;

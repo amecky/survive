@@ -14,6 +14,8 @@ Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) 
 	// HERE !!!!!
 	_no_enemies = false;
 	_stageManager = new StageManager(ctx);
+	_viewport_id = ds::renderer::createViewport(1280, 720, 1920, 1080);
+	ds::renderer::setViewportPosition(_viewport_id, v2(960, 540));
 }
 
 
@@ -36,7 +38,7 @@ void Worms::init() {
 	m_ShakeTimer = 0.0f;
 	m_Shaking = false;
 
-	_context->world->setBoundingRect(ds::Rect(0, 0, 1280, 720));
+	_context->world->setBoundingRect(ds::Rect(0, 0, 1920, 1080));
 	// define ignored collisions
 	_context->world->ignoreCollisions(BULLET_TYPE, PLAYER_TYPE);
 	_context->world->ignoreCollisions(SNAKE_HEAD, SNAKE_TAIL);
@@ -178,6 +180,8 @@ int Worms::update(float dt) {
 			return 1;
 		}
 	}
+
+	ds::renderer::setViewportPosition(_viewport_id, _context->playerPos);
 	PR_END("Worms:tick");
 	return 0;
 }
@@ -186,7 +190,18 @@ int Worms::update(float dt) {
 // render
 // --------------------------------------------------------------------------
 void Worms::render() {
+	ds::renderer::selectViewport(_viewport_id);
 	_context->renderer->renderWorld();
+
+	ds::sprites::draw(v2(960, 540), ds::math::buildTexture(40, 320, 120, 120));
+	ds::sprites::draw(v2(60, 540), ds::math::buildTexture(40, 320, 120, 120));
+	ds::sprites::draw(v2(60, 60), ds::math::buildTexture(40, 320, 120, 120));
+	ds::sprites::draw(v2(60, 1020), ds::math::buildTexture(40, 320, 120, 120));
+	ds::sprites::draw(v2(1860, 540), ds::math::buildTexture(40, 320, 120, 120));
+	ds::sprites::draw(v2(1860, 60), ds::math::buildTexture(40, 320, 120, 120));
+	ds::sprites::draw(v2(1860, 1020), ds::math::buildTexture(40, 320, 120, 120));
+
+	ds::renderer::selectViewport(0);
 }
 
 // --------------------------------------------------------------------------

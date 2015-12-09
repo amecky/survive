@@ -33,4 +33,5 @@ private:
 	void onGUIButton( ds::DialogID dlgID,int button );
 	GameContext* _context;
 	bool _showSettings;
+	v2 _settingPos;
 };

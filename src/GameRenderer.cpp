@@ -32,7 +32,12 @@ GameRenderer::~GameRenderer() {
 void GameRenderer::renderWorld() {
 	PR_START("GameRenderer:render");
 	ds::renderer::setRenderTarget(_rt1);
-	_context->world->renderSingleLayer(BG_LAYER);
+	//_context->world->renderSingleLayer(BG_LAYER);
+	ds::sprites::draw(v2(480, 270), ds::math::buildTexture(0, 512, 480, 270), 0.0f, 2.0f, 2.0f);
+	ds::sprites::draw(v2(480, 810), ds::math::buildTexture(0, 512, 480, 270), 0.0f, 2.0f, 2.0f);
+	ds::sprites::draw(v2(1440, 270), ds::math::buildTexture(0, 512, 480, 270), 0.0f, 2.0f, 2.0f);
+	ds::sprites::draw(v2(1440, 810), ds::math::buildTexture(0, 512, 480, 270), 0.0f, 2.0f, 2.0f);
+
 	ds::sprites::flush();
 	int current = ds::sprites::getDescriptorID();
 	ds::sprites::setDescriptorID(_light_desc);

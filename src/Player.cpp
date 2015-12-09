@@ -45,19 +45,42 @@ void Player::move(float dt) {
 	if (GetAsyncKeyState('D') & 0x8000) {
 		v += Vector2f(1, 0);
 	}
+
+	v2 cursor_pos = ds::renderer::getMousePosition();
+	v2 wp;
+	float dx = _context->world_pos.x - 1280.0f / 2.0f;
+	if (dx < 0.0f) {
+		dx = 0.0f;
+	}
+	if (dx > 640.0f) {
+		dx = 640.0f;
+	}
+	wp.x = cursor_pos.x + dx;
+
+	float dy = _context->world_pos.y - 720.0f / 2.0f;
+	if (dy < 0.0f) {
+		dy = 0.0f;
+	}
+	if (dy > 360.0f) {
+		dy = 360.0f;
+	}
+	wp.y = cursor_pos.y + dy;
+
+
 	Vector2f& mp = ds::renderer::getMousePosition();
-	Vector2f diff = mp - pp;
+	Vector2f diff = wp - pp;
 	_angle = ds::vector::calculateRotation(diff);
 	_context->world->setRotation(_id, _angle);
 
 	ds::Viewport& vp = ds::renderer::getSelectedViewport();
 	pp += v * dt * _context->playerSpeed;
-	if (vp.isInside(pp, Vector2f(46.0f, 46.0f))) {
+	//if (vp.isInside(pp, Vector2f(46.0f, 46.0f))) {
 		_context->world->setPosition(_id, pp);
 		_position = pp;
 		_context->playerPos = pp;
 		_context->world->setPosition(_lightIndex, _position);
-	}
+		_context->world_pos = pp;
+	//}
 
 }
 

@@ -61,5 +61,7 @@ private:
 	float _warm_up_timer;
 	bool _no_enemies;
 	StageManager* _stageManager;
+
+	int _viewport_id;
 };
 
