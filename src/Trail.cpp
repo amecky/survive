@@ -103,9 +103,10 @@ void Trail::tick(float dt) {
 			v2 p = ctx->world->getPosition(piece.id);
 			if (piece.emitType == TET_DISTANCE) {
 				if (sqr_distance(p, piece.prevPosition) > (piece.distance * piece.distance)) {
-					ds::ParticleGeneratorData data(piece.prevPosition);
-					data.rotation = piece.angle;
-					ctx->particles->start(piece.particleSystem, data);
+					//ds::ParticleGeneratorData data(piece.prevPosition);
+					//data.rotation = piece.angle;
+					//ctx->particles->start(piece.particleSystem, data);
+					ctx->particles->start(piece.particleSystem, piece.prevPosition);
 					piece.prevPosition = p;
 				}
 			}
@@ -113,9 +114,10 @@ void Trail::tick(float dt) {
 				++piece.frameCounter;
 				if (piece.frameCounter >= piece.frames) {
 					piece.frameCounter = 0;
-					ds::ParticleGeneratorData data(piece.prevPosition);
-					data.rotation = piece.angle;
-					ctx->particles->start(piece.particleSystem, data);
+					//ds::ParticleGeneratorData data(piece.prevPosition);
+					//data.rotation = piece.angle;
+					//ctx->particles->start(piece.particleSystem, data);
+					ctx->particles->start(piece.particleSystem, piece.prevPosition);
 					piece.prevPosition = p;
 				}
 			}
@@ -123,9 +125,10 @@ void Trail::tick(float dt) {
 				piece.timer += dt;
 				if (piece.timer >= piece.time) {
 					piece.timer = 0.0f;
-					ds::ParticleGeneratorData data(piece.prevPosition);
-					data.rotation = piece.angle;
-					ctx->particles->start(piece.particleSystem, data);
+					//ds::ParticleGeneratorData data(piece.prevPosition);
+					//data.rotation = piece.angle;
+					//ctx->particles->start(piece.particleSystem, data);
+					ctx->particles->start(piece.particleSystem, piece.prevPosition);
 					piece.prevPosition = p;
 				}
 			}

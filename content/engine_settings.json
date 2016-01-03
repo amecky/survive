@@ -1,0 +1,56 @@
+basic_settings {
+	name = "Stuff"
+	screen_width = 1280
+	screen_height = 720
+	clear_color = 0,0,0,255
+	initialize_editor = true 
+	full_screen = false
+	synched = true 
+	mode = 1
+}		
+
+init_actions {
+	textures = "TextureArray" 
+	fonts {
+		xscale {
+			file = "xscale"
+			texture = "TextureArray"
+		}
+	}
+	use_text_system {
+		font = "xscale"
+		texture = "TextureArray"
+	}
+	load_dialogs = true 
+	initialize_imgui {
+		font = "xscale"
+		texture = "TextureArray"
+	}
+	load_particles = true
+	load_sprite_templates = true
+	initialize_editor = true
+}
+
+
+buffers [
+
+	{ name = "FirstOne" , format = "A8R8G8B8" , size = 1024 }	
+]
+
+key_mapping [
+	{ key = "F1" , action = "print_profiler" } ,
+	{ key = "F2" , action = "show draw counter" } ,
+	{ key = "F3" , action = "show profiler" } ,
+	{ key = "F4" , action = "toggle update flag" } ,
+	{ key = "F5" , action = "toggle performance overlay" } ,
+	{ key = "F6" , action = "toggle editor" } ,
+	{ key = "F7" , action = "debug renderer" } ,
+	{ key = "F8" , action = "particle editor" } ,
+	{ key = "F9" , action = "sprite template editor" } ,
+	{ key = "F10" , action = "none" } ,
+	{ key = "F11" , action = "none" } ,
+	{ key = "F12" , action = "none" } ,
+]
+shaders [
+	{ name = "particle_shader" }
+]

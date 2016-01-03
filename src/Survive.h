@@ -14,13 +14,7 @@ class Survive : public ds::BaseApp {
 
 public:	
 	Survive();
-	virtual ~Survive() {
-		delete _context->settings;
-		delete _context->trails;
-		delete _context->world;
-		delete _context->renderer;
-		delete _context;
-	}	
+	virtual ~Survive();
 	bool loadContent();
 	void init();
 	const char* getTitle() {

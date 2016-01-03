@@ -210,7 +210,7 @@ bool StageManager::next() {
 // -------------------------------------------
 // export data
 // -------------------------------------------
-bool StageManager::exportData(JSONWriter& writer) {
+bool StageManager::saveData(JSONWriter& writer) {
 	return true;
 }
 
@@ -226,9 +226,9 @@ bool StageManager::exportData(JSONWriter& writer) {
 // -------------------------------------------
 // import data
 // -------------------------------------------
-bool StageManager::importData(JSONReader& reader) {
+bool StageManager::loadData(JSONReader& reader) {
 	// FIXME: reset
-	std::vector<Category*> categories = reader.getCategories();
+	const std::vector<Category*> categories = reader.getCategories();
 	for (size_t i = 0; i < categories.size(); ++i) {
 		Category* c = categories[i];
 		LOG << "name: " << c->getName();
@@ -257,19 +257,5 @@ bool StageManager::importData(JSONReader& reader) {
 		}
 		
 	}
-	return true;
-}
-
-// -------------------------------------------
-// save data
-// -------------------------------------------
-bool StageManager::saveData(BinaryWriter& writer) {
-	return true;
-}
-
-// -------------------------------------------
-// load data
-// -------------------------------------------
-bool StageManager::loadData(BinaryLoader& loader) {
 	return true;
 }

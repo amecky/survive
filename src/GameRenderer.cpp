@@ -3,15 +3,6 @@
 
 GameRenderer::GameRenderer(GameContext* context) : _context(context) {
 	m_AddBS = ds::renderer::createBlendState("alpha_blend_state", ds::BL_ONE, ds::BL_ONE, true);
-
-	// prepare particle system
-	ds::Descriptor desc;
-	desc.shader = ds::shader::createParticleShader();
-	assert(desc.shader != 0);
-	desc.texture = 0;
-	//desc.blendState = m_AddBS;
-	desc.blendState = ds::renderer::getDefaultBlendState();
-	_context->particles->init(desc);
 	
 	_rt1 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));
 	_rt2 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));

@@ -100,15 +100,10 @@ public:
 
 	void startWave(const WaveDefinition& def);
 	void handleEvents(const ds::ActionEventBuffer& buffer);
-	bool exportData(JSONWriter& writer);
-	bool importData(JSONReader& reader);
-	bool saveData(BinaryWriter& writer);
-	bool loadData(BinaryLoader& loader);
-	const char* getJSONFileName() const {
-		return "stages.json";
-	}
+	bool saveData(JSONWriter& writer);
+	bool loadData(JSONReader& reader);
 	const char* getFileName() const {
-		return "stages";
+		return "stages.json";
 	}
 private:
 	int findFreeSlot() const;

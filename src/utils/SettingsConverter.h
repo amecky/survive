@@ -59,4 +59,8 @@ struct GameSettings : public ds::DynamicGameSettings {
 		addFloat("spawnTimer", &spawnTimer, 1.0f);
 	}
 
+	const char* getName() const {
+		return "gameplay_settings";
+	}
+
 };

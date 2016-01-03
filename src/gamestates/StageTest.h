@@ -7,6 +7,7 @@
 #include "..\enemies\Bouncer.h"
 #include "..\enemies\Snake.h"
 #include "..\enemies\StageManager.h"
+#include "..\Player.h"
 
 class StageTest : public ds::GameState {
 
@@ -31,6 +32,7 @@ private:
 	int _enemySelection;
 	bool _showEditor;
 	Snake* _snake;
+	Player* _player;
 
 };
 

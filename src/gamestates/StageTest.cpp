@@ -27,11 +27,14 @@ StageTest::StageTest(GameContext* ctx) : ds::GameState("StageTest"), _context(ct
 	_showEditor = false;
 	_enemySelection = 2;
 	_emitterSelection = 0;
-	_context->playerID = _context->world->create(v2(640, 360), "player",OBJECT_LAYER);
+	//_context->playerID = _context->world->create(v2(640, 360), "player",OBJECT_LAYER);
 	_snake = new Snake(_context,_data);
+	_player = new Player(_context);
+	_player->create();
 }
 
 StageTest::~StageTest() {	
+	delete _player;
 	delete _snake;
 }
 
@@ -39,9 +42,9 @@ StageTest::~StageTest() {
 // update
 // -------------------------------------------------------
 int StageTest::update(float dt) {
-
-	_context->playerPos = ds::renderer::getMousePosition();
-	_context->world->setPosition(_context->playerID, _context->playerPos);
+	_player->move(dt);
+	//_context->playerPos = ds::renderer::getMousePosition();
+	//_context->world->setPosition(_context->playerID, _context->playerPos);
 	_context->world->tick(dt);
 	_context->particles->update(dt);
 	_context->trails->tick(dt);
@@ -66,19 +69,19 @@ void StageTest::render() {
 		int offset = 0;
 		gui::start(1, &_startPos);
 		if (gui::begin("Wave", &_state)) {
-			gui::InputInt(10, "Enemies", &_count);
-			gui::InputInt(6, "Count X", &_data.count_x);
-			gui::InputInt(7, "Count Y", &_data.count_y);
-			gui::InputVec2(8, "Border", &_data.border);
-			gui::InputInt(9, "Sides", &_data.sides);
-			gui::InputFloat(11, "Delay", &_data.delay);
-			gui::ComboBox(12, _emitterTypes, &_emitterSelection, &offset, 2);
-			gui::ComboBox(13, _enemyTypes, &_enemySelection, &offset, 3);
+			gui::InputInt("Enemies", &_count);
+			gui::InputInt("Count X", &_data.count_x);
+			gui::InputInt("Count Y", &_data.count_y);
+			gui::InputVec2("Border", &_data.border);
+			gui::InputInt("Sides", &_data.sides);
+			gui::InputFloat("Delay", &_data.delay);
+			gui::ComboBox(_emitterTypes, &_emitterSelection, &offset, 2);
+			gui::ComboBox(_enemyTypes, &_enemySelection, &offset, 3);
 			gui::beginGroup();
-			if (gui::Button(3, "Kill all")) {
+			if (gui::Button("Kill all")) {
 				_stageManager->killAll();
 			}
-			if (gui::Button(3, "Start")) {
+			if (gui::Button("Start")) {
 				if (_emitterSelection != -1) {
 					if (_emitterSelection == 0) {
 						_data.emitter_type = SET_IMMEDIATE;
