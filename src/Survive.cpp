@@ -59,7 +59,7 @@ bool Survive::loadContent() {
 }
 
 void Survive::init() {
-	activate("MainMenuState");
+	activate("StageTest");
 	//ds::repository::list();
 }
 

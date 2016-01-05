@@ -23,6 +23,20 @@ enum SpawnerType {
 };
 
 // --------------------------------------
+// start point
+// --------------------------------------
+struct StartPoint {
+	v2 position;
+	float timer;
+	v2 normal;
+};
+
+// --------------------------------------
+// start points
+// --------------------------------------
+typedef std::vector<StartPoint> StartPoints;
+
+// --------------------------------------
 // spawner emitter type
 // --------------------------------------
 enum SpawnEmitterType {
@@ -43,22 +57,25 @@ struct SpawnerData {
 	SpawnerType type;
 	SpawnEmitterType emitter_type;
 	float delay;
+	v2 world_size;
 
-	SpawnerData() : count_x(0), count_y(0), border(0, 0), random_offset(0, 0) , sides(0) , type(SPT_EOL) , emitter_type(SET_DELAYED) , delay(0.0f) {}
+	SpawnerData() : count_x(0), count_y(0), border(0, 0), random_offset(0, 0), sides(0), type(SPT_EOL), emitter_type(SET_DELAYED), delay(0.0f) , world_size(100,100) {}
 };
+
+
 // --------------------------------------
 // enemy spawner
 // --------------------------------------
-class EnemySpawner {
+class BallEmitter {
 
 public:
-	EnemySpawner(const SpawnerData& data) : _data(data) , _points(0), _total(0) , _index(0) {}
-	virtual ~EnemySpawner() {
+	BallEmitter(const SpawnerData& data);
+	virtual ~BallEmitter() {
 		if (_points != 0) {
 			delete[] _points;
 		}
 	}
-	virtual void rebuild() = 0;
+	void rebuild();
 	const SpawnPoint& next() {
 		if ((_index + 1) > _total) {
 			_index = 0;
@@ -82,16 +99,5 @@ protected:
 	SpawnPoint* _points;
 	int _total;
 	SpawnerData _data;
+	
 };
-
-// --------------------------------------
-// edges spawner
-// --------------------------------------
-class EdgesSpawner : public EnemySpawner {
-
-public:
-	EdgesSpawner(const SpawnerData& data);
-	virtual ~EdgesSpawner() {}
-	void rebuild();
-};
-

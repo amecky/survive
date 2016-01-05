@@ -30,27 +30,3 @@ init_actions {
 	load_sprite_templates = true
 	initialize_editor = true
 }
-
-
-buffers [
-
-	{ name = "FirstOne" , format = "A8R8G8B8" , size = 1024 }	
-]
-
-key_mapping [
-	{ key = "F1" , action = "print_profiler" } ,
-	{ key = "F2" , action = "show draw counter" } ,
-	{ key = "F3" , action = "show profiler" } ,
-	{ key = "F4" , action = "toggle update flag" } ,
-	{ key = "F5" , action = "toggle performance overlay" } ,
-	{ key = "F6" , action = "toggle editor" } ,
-	{ key = "F7" , action = "debug renderer" } ,
-	{ key = "F8" , action = "particle editor" } ,
-	{ key = "F9" , action = "sprite template editor" } ,
-	{ key = "F10" , action = "none" } ,
-	{ key = "F11" , action = "none" } ,
-	{ key = "F12" , action = "none" } ,
-]
-shaders [
-	{ name = "particle_shader" }
-]

@@ -1,4 +1,4 @@
-#include "EnemySpawner.h"
+#include "BallEmitter.h"
 #include <math\Bitset.h>
 // --------------------------------------
 // edges spawner
@@ -9,9 +9,9 @@
 //    4
 //
 // --------------------------------------
-EdgesSpawner::EdgesSpawner(const SpawnerData& data) : EnemySpawner(data) {
+BallEmitter::BallEmitter(const SpawnerData& data) : _data(data) , _points(0), _total(0), _index(0) {
 	_total = 0;
-	if (ds::bit::is_set(_data.sides,0)) {
+	if (ds::bit::is_set(_data.sides, 0)) {
 		_total += _data.count_y;
 	}
 	if (ds::bit::is_set(_data.sides, 1)) {
@@ -26,9 +26,9 @@ EdgesSpawner::EdgesSpawner(const SpawnerData& data) : EnemySpawner(data) {
 	_points = new SpawnPoint[_total];
 }
 
-void EdgesSpawner::rebuild() {
-	float stepX = (ds::renderer::getScreenWidth() - _data.border.x * 2.0f) / static_cast<float>(_data.count_x - 1);
-	float stepY = (ds::renderer::getScreenHeight() - _data.border.y * 2.0f) / static_cast<float>(_data.count_y + 1);
+void BallEmitter::rebuild() {
+	float stepX = (_data.world_size.x - _data.border.x * 2.0f) / static_cast<float>(_data.count_x - 1);
+	float stepY = (_data.world_size.y - _data.border.y * 2.0f) / static_cast<float>(_data.count_y + 1);
 	v2 steps(stepX, stepY);
 	int cnt = 0;
 	// bottom

@@ -1,6 +1,7 @@
 #pragma once
 #include <Vector.h>
 #include <math\CubicBezierPath.h>
+#include <renderer\render_types.h>
 
 namespace util {
 

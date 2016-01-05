@@ -8,6 +8,8 @@ public:
 	~GameRenderer();
 	void renderWorld();
 private:
+	void drawBorder();
+	ds::Color _border_color;
 	GameContext* _context;
 	int m_AddBS;
 	ds::RTID _rt1;

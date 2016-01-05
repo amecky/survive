@@ -10,13 +10,11 @@
 #include <tasks\TaskManager.h>
 #include "utils\IntroText.h"
 #include <objects\BloomComponent.h>
-#include "enemies\Dodgers.h"
 #include <math\Bitset.h>
 #include "Player.h"
 #include <renderer\shader.h>
 #include "utils\BorderLines.h"
 #include <base\GameState.h>
-#include "enemies\StageManager.h"
 
 class Trail;
 
@@ -28,7 +26,6 @@ class Worms : public ds::GameState {
 		IS_DYING
 	};
 
-typedef std::vector<Enemies*> Enemies;
 
 public:
 	Worms(GameContext* ctx);
@@ -60,7 +57,6 @@ private:
 	Player* _player;
 	float _warm_up_timer;
 	bool _no_enemies;
-	StageManager* _stageManager;
 
 	int _viewport_id;
 };

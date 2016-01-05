@@ -1,7 +1,6 @@
 #include "Worms.h"
 #include <math\GameMath.h>
 #include <sprites\SpriteBatch.h>
-#include <compiler\AssetCompiler.h>
 #include <renderer\Graphics.h>
 #include "Constants.h"
 #include "Trail.h"
@@ -13,7 +12,6 @@
 Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) {
 	// HERE !!!!!
 	_no_enemies = false;
-	_stageManager = new StageManager(ctx);
 	_viewport_id = ds::renderer::createViewport(1280, 720, 1920, 1080);
 	ds::renderer::setViewportPosition(_viewport_id, v2(960, 540));
 }
@@ -22,7 +20,6 @@ Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) 
 Worms::~Worms(void) {
 	//delete m_Context.lights;
 	//delete _borderLines;
-	delete _stageManager;
 	delete _player;
 }
 
@@ -68,10 +65,6 @@ void Worms::incrementKills(int points) {
 // --------------------------------------------------------------------------
 void Worms::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType) {
 	PR_START("Worms:killEnemy");
-	int points = _stageManager->handleImpact(enemyID);
-	if (points != 0) {
-		incrementKills(points);
-	}
 	if (_context->world->contains(bulletID)) {
 		_context->particles->start(1, bulletPos);
 		_context->world->remove(bulletID);
@@ -112,7 +105,6 @@ int Worms::update(float dt) {
 		_warm_up_timer += dt;
 		float n = _warm_up_timer / _context->settings->warmUpTime;
 		if (n >= 1.0f) {
-			_stageManager->start();
 			_state = IS_RUNNING;
 		}
 		else {
@@ -153,7 +145,6 @@ int Worms::update(float dt) {
 					LOG << "player hit!!!!";
 					_state = IS_DYING;
 					_warm_up_timer = 0.0f;
-					_stageManager->killAll();
 					// FIXME: remove all
 					//m_Context.lights->clear();
 					
@@ -171,7 +162,6 @@ int Worms::update(float dt) {
 		}
 		*/
 		if (!_no_enemies) {
-			_stageManager->tick(dt);
 		}
 	}
 	if (_state == IS_DYING) {

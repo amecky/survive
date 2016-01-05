@@ -52,8 +52,8 @@ void Player::move(float dt) {
 	if (dx < 0.0f) {
 		dx = 0.0f;
 	}
-	if (dx > 640.0f) {
-		dx = 640.0f;
+	if (dx > 320.0f) {
+		dx = 320.0f;
 	}
 	wp.x = cursor_pos.x + dx;
 
@@ -61,8 +61,8 @@ void Player::move(float dt) {
 	if (dy < 0.0f) {
 		dy = 0.0f;
 	}
-	if (dy > 360.0f) {
-		dy = 360.0f;
+	if (dy > 180.0f) {
+		dy = 180.0f;
 	}
 	wp.y = cursor_pos.y + dy;
 
@@ -74,14 +74,15 @@ void Player::move(float dt) {
 
 	ds::Viewport& vp = ds::renderer::getSelectedViewport();
 	pp += v * dt * _context->playerSpeed;
-	//if (vp.isInside(pp, Vector2f(46.0f, 46.0f))) {
-		_context->world->setPosition(_id, pp);
-		_position = pp;
-		_context->playerPos = pp;
-		_context->world->setPosition(_lightIndex, _position);
-		_context->world_pos = pp;
-	//}
 
+	ds::vector::clamp(pp, v2(60, 60), v2(1540, 840));
+
+	_context->world->setPosition(_id, pp);
+	_position = pp;
+	_context->playerPos = pp;
+	_context->world->setPosition(_lightIndex, _position);
+	_context->world_pos = pp;
+	ds::renderer::setViewportPosition(_context->viewport_id, pp);
 }
 
 void Player::setShooting(ShootingMode mode) {
@@ -157,5 +158,5 @@ void Player::fireBullet(const Vector2f& pos, const Vector2f& direction) {
 	_context->world->scale(lid, 0.5f, 0.5f);
 
 	_context->world->attachCollider(sid, Vector2f(10.0f, 10.0f), BULLET_TYPE,OBJECT_LAYER);
-	_context->trails->addFrameBased(sid, angle, 1, 4);
+	//_context->trails->addFrameBased(sid, angle, 1, 4);
 }

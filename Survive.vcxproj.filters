@@ -2,17 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="src\Player.cpp" />
-    <ClCompile Include="src\TestMe.cpp" />
-    <ClCompile Include="src\Worms.cpp" />
-    <ClCompile Include="src\Snake.cpp" />
     <ClCompile Include="src\Trail.cpp" />
     <ClCompile Include="src\utils\BorderLines.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\IntroText.cpp">
-      <Filter>utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\utils\SettingsConverter.cpp">
       <Filter>utils</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\tween.cpp">
@@ -21,20 +15,43 @@
     <ClCompile Include="src\utils\util.cpp">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\enemies\Dodgers.cpp">
+    <ClCompile Include="src\Survive.cpp" />
+    <ClCompile Include="src\GUITest.cpp">
+      <Filter>gamestates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestMe.cpp">
+      <Filter>gamestates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Worms.cpp">
+      <Filter>gamestates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gamestates\GameOverState.cpp">
+      <Filter>gamestates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\FadingMessage.cpp">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameRenderer.cpp" />
+    <ClCompile Include="src\gamestates\StageTest.cpp">
+      <Filter>gamestates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemies\BallEmitter.cpp">
       <Filter>enemies</Filter>
     </ClCompile>
-    <ClCompile Include="src\Survive.cpp" />
-    <ClCompile Include="src\gui\GUI.cpp" />
-    <ClCompile Include="src\GUITest.cpp" />
+    <ClCompile Include="src\enemies\Cubes.cpp">
+      <Filter>enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemies\EnergyBalls.cpp">
+      <Filter>enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemies\Behaviors.cpp">
+      <Filter>enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Player.h" />
-    <ClInclude Include="src\TestMe.h" />
-    <ClInclude Include="src\Worms.h" />
     <ClInclude Include="src\Constants.h" />
-    <ClInclude Include="src\Snake.h" />
     <ClInclude Include="src\Trail.h" />
     <ClInclude Include="src\utils\BorderLines.h">
       <Filter>utils</Filter>
@@ -54,12 +71,38 @@
     <ClInclude Include="src\utils\util.h">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\enemies\Dodgers.h">
+    <ClInclude Include="src\Survive.h" />
+    <ClInclude Include="src\GUITest.h">
+      <Filter>gamestates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestMe.h">
+      <Filter>gamestates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Worms.h">
+      <Filter>gamestates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gamestates\GameOverState.h">
+      <Filter>gamestates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\FadingMessage.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameRenderer.h" />
+    <ClInclude Include="src\gamestates\StageTest.h">
+      <Filter>gamestates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemies\BallEmitter.h">
       <Filter>enemies</Filter>
     </ClInclude>
-    <ClInclude Include="src\Survive.h" />
-    <ClInclude Include="src\gui\GUI.h" />
-    <ClInclude Include="src\GUITest.h" />
+    <ClInclude Include="src\enemies\Cubes.h">
+      <Filter>enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemies\EnergyBalls.h">
+      <Filter>enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemies\Behaviors.h">
+      <Filter>enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Survive.rc" />
@@ -70,49 +113,34 @@
     <None Include="content\resources\bloom.json">
       <Filter>content\resources</Filter>
     </None>
-    <None Include="content\resources\bottom_path.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\bs_path.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\center_path.json">
-      <Filter>content\resources</Filter>
-    </None>
     <None Include="content\resources\gui.json">
       <Filter>content\resources</Filter>
     </None>
     <None Include="content\resources\hud.json">
       <Filter>content\resources</Filter>
     </None>
-    <None Include="content\resources\levels.json">
-      <Filter>content\resources</Filter>
-    </None>
     <None Include="content\resources\sprites.json">
       <Filter>content\resources</Filter>
     </None>
-    <None Include="content\resources\straight_test.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\straight_top_down_path.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\tahoma_12.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\test_path.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\top_path.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\ts_path.json">
-      <Filter>content\resources</Filter>
-    </None>
-    <None Include="content\resources\worm_path.json">
-      <Filter>content\resources</Filter>
-    </None>
     <None Include="content\resources\xscale.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\settings\wave_descriptors.json">
+      <Filter>content\settings</Filter>
+    </None>
+    <None Include="content\settings\worms.json">
+      <Filter>content\settings</Filter>
+    </None>
+    <None Include="content\engine_settings.json">
+      <Filter>content</Filter>
+    </None>
+    <None Include="content\resources\sprite_templates.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\cube_definitions.json">
+      <Filter>content\resources</Filter>
+    </None>
+    <None Include="content\resources\wave_definitions.json">
       <Filter>content\resources</Filter>
     </None>
   </ItemGroup>
@@ -128,6 +156,12 @@
     </Filter>
     <Filter Include="content\resources">
       <UniqueIdentifier>{ceab129e-9025-47b0-8dc4-9ab8ebd971a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="content\settings">
+      <UniqueIdentifier>{734dcf5e-1029-4097-b0a8-9f2f1b2a0774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gamestates">
+      <UniqueIdentifier>{ae3c73a3-981a-4788-9a40-4a30fba0ad9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

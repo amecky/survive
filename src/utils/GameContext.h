@@ -20,7 +20,7 @@ struct GameContext {
 	ds::GUIDialog* hud;
 	GameRenderer* renderer;
 	v2 world_pos;
-
+	int viewport_id;
 	float playerSpeed;
 	bool doubleFire;
 	float fireRate;
