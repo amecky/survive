@@ -25,6 +25,7 @@ StageTest::~StageTest() {
 // update
 // -------------------------------------------------------
 int StageTest::update(float dt) {
+	_cursor_pos = ds::renderer::getMousePosition();
 	_player->move(dt);
 	_player->shootBullets(dt);
 
@@ -50,7 +51,8 @@ void StageTest::render() {
 	_context->renderer->renderWorld();
 	//ds::renderer::selectViewport(_context->viewport_id);
 	//_balls->render();
-	//ds::renderer::selectViewport(0);
+	ds::renderer::selectViewport(0);
+	ds::sprites::draw(_cursor_pos, ds::math::buildTexture(40, 160, 20, 20));
 }
 
 void StageTest::drawBorder(const v2& pos, const v2& center, const ds::Color& color,float descale) {

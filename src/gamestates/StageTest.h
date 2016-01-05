@@ -20,5 +20,6 @@ private:
 	GameContext* _context;
 	Player* _player;
 	EnergyBalls* _balls;
+	v2 _cursor_pos;
 };
 
