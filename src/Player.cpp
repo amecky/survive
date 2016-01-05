@@ -25,64 +25,67 @@ void Player::create() {
 	_context->world->setColor(_lightIndex, ds::Color(0, 255, 0, 255));
 	_shootingMode = SM_IDLE;
 	_shootTimer = _context->fireRate;
+	_alive = true;
 }
 
 // --------------------------------------------------------------------------
 // move player
 // --------------------------------------------------------------------------
 void Player::move(float dt) {
-	Vector2f pp = _context->world->getPosition(_id);
-	Vector2f v;
-	if (GetAsyncKeyState('W') & 0x8000) {
-		v += Vector2f(0, 1);
-	}
-	if (GetAsyncKeyState('S') & 0x8000) {
-		v += Vector2f(0, -1);
-	}
-	if (GetAsyncKeyState('A') & 0x8000) {
-		v += Vector2f(-1, 0);
-	}
-	if (GetAsyncKeyState('D') & 0x8000) {
-		v += Vector2f(1, 0);
-	}
+	if (_alive) {
+		Vector2f pp = _context->world->getPosition(_id);
+		Vector2f v;
+		if (GetAsyncKeyState('W') & 0x8000) {
+			v += Vector2f(0, 1);
+		}
+		if (GetAsyncKeyState('S') & 0x8000) {
+			v += Vector2f(0, -1);
+		}
+		if (GetAsyncKeyState('A') & 0x8000) {
+			v += Vector2f(-1, 0);
+		}
+		if (GetAsyncKeyState('D') & 0x8000) {
+			v += Vector2f(1, 0);
+		}
 
-	v2 cursor_pos = ds::renderer::getMousePosition();
-	v2 wp;
-	float dx = _context->world_pos.x - 1280.0f / 2.0f;
-	if (dx < 0.0f) {
-		dx = 0.0f;
+		v2 cursor_pos = ds::renderer::getMousePosition();
+		v2 wp;
+		float dx = _context->world_pos.x - 1280.0f / 2.0f;
+		if (dx < 0.0f) {
+			dx = 0.0f;
+		}
+		if (dx > 320.0f) {
+			dx = 320.0f;
+		}
+		wp.x = cursor_pos.x + dx;
+
+		float dy = _context->world_pos.y - 720.0f / 2.0f;
+		if (dy < 0.0f) {
+			dy = 0.0f;
+		}
+		if (dy > 180.0f) {
+			dy = 180.0f;
+		}
+		wp.y = cursor_pos.y + dy;
+
+
+		Vector2f& mp = ds::renderer::getMousePosition();
+		Vector2f diff = wp - pp;
+		_angle = ds::vector::calculateRotation(diff);
+		_context->world->setRotation(_id, _angle);
+
+		ds::Viewport& vp = ds::renderer::getSelectedViewport();
+		pp += v * dt * _context->playerSpeed;
+
+		ds::vector::clamp(pp, v2(60, 60), v2(1540, 840));
+
+		_context->world->setPosition(_id, pp);
+		_position = pp;
+		_context->playerPos = pp;
+		_context->world->setPosition(_lightIndex, _position);
+		_context->world_pos = pp;
+		ds::renderer::setViewportPosition(_context->viewport_id, pp);
 	}
-	if (dx > 320.0f) {
-		dx = 320.0f;
-	}
-	wp.x = cursor_pos.x + dx;
-
-	float dy = _context->world_pos.y - 720.0f / 2.0f;
-	if (dy < 0.0f) {
-		dy = 0.0f;
-	}
-	if (dy > 180.0f) {
-		dy = 180.0f;
-	}
-	wp.y = cursor_pos.y + dy;
-
-
-	Vector2f& mp = ds::renderer::getMousePosition();
-	Vector2f diff = wp - pp;
-	_angle = ds::vector::calculateRotation(diff);
-	_context->world->setRotation(_id, _angle);
-
-	ds::Viewport& vp = ds::renderer::getSelectedViewport();
-	pp += v * dt * _context->playerSpeed;
-
-	ds::vector::clamp(pp, v2(60, 60), v2(1540, 840));
-
-	_context->world->setPosition(_id, pp);
-	_position = pp;
-	_context->playerPos = pp;
-	_context->world->setPosition(_lightIndex, _position);
-	_context->world_pos = pp;
-	ds::renderer::setViewportPosition(_context->viewport_id, pp);
 }
 
 void Player::setShooting(ShootingMode mode) {
@@ -96,6 +99,7 @@ void Player::kill() {
 	_context->world->remove(_lightIndex);
 	_context->playerID = ds::INVALID_SID;
 	_shootingMode = SM_IDLE;
+	_alive = false;
 }
 
 // --------------------------------------------------------------------------
@@ -114,30 +118,32 @@ void Player::shootBullets(float dt) {
 // fire bullet
 // --------------------------------------------------------------------------
 void Player::fireBullet() {
-	if (_context->doubleFire) {
-		Vector2f p = _position;
-		ds::vector::addRadial(p, 24.0f, _angle);
-		//p.y += 7.0f;
-		//p.x += 20.0f;
-		fireBullet(p, V2_RIGHT);
-		//p.y -= 14.0f;
-		//fireBullet(p, V2_RIGHT);
-	}
-	else {
-		Vector2f p = _position;
-		ds::vector::addRadial(p, 24.0f, _angle);
-		//p.x += 20.0f;
-		fireBullet(p, V2_RIGHT);
-	}
-	if (_context->tripleShot) {
-		Vector2f p = _position;
-		p.y += 30.0f;
-		fireBullet(p, V2_UP);
-		p.y -= 60.0f;
-		fireBullet(p, V2_DOWN);
-		p.y += 30.0f;
-		p.x -= 20.0f;
-		fireBullet(p, V2_LEFT);
+	if (_alive) {
+		if (_context->doubleFire) {
+			Vector2f p = _position;
+			ds::vector::addRadial(p, 24.0f, _angle);
+			//p.y += 7.0f;
+			//p.x += 20.0f;
+			fireBullet(p, V2_RIGHT);
+			//p.y -= 14.0f;
+			//fireBullet(p, V2_RIGHT);
+		}
+		else {
+			Vector2f p = _position;
+			ds::vector::addRadial(p, 24.0f, _angle);
+			//p.x += 20.0f;
+			fireBullet(p, V2_RIGHT);
+		}
+		if (_context->tripleShot) {
+			Vector2f p = _position;
+			p.y += 30.0f;
+			fireBullet(p, V2_UP);
+			p.y -= 60.0f;
+			fireBullet(p, V2_DOWN);
+			p.y += 30.0f;
+			p.x -= 20.0f;
+			fireBullet(p, V2_LEFT);
+		}
 	}
 }
 

@@ -10,6 +10,8 @@ struct CubeDefinition {
 	int behaviorBits;
 	float growTTL;
 	int type;
+	int energy;
+	int nextType;
 };
 
 class CubeDefinitions : public ds::DataFile {

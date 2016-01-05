@@ -14,6 +14,8 @@ bool CubeDefinitions::loadData(JSONReader& reader) {
 			def.numStars = c->getInt("num_stars", 1);
 			def.behaviorBits = c->getInt("behavior_bits", 1);
 			def.growTTL = c->getFloat("grow_ttl", 0.2f);
+			def.energy = c->getInt("energy", 1);
+			def.nextType = c->getInt("next_type", -1);
 			_definitions.push_back(def);
 		}
 	}

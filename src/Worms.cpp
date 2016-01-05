@@ -9,7 +9,7 @@
 #include "GameRenderer.h"
 #include "utils\FadingMessage.h"
 
-Worms::Worms(GameContext* ctx) : ds::GameState("MainGameState") , _context(ctx) {
+Worms::Worms(GameContext* ctx) : ds::GameState("Worms") , _context(ctx) {
 	// HERE !!!!!
 	_no_enemies = false;
 	_viewport_id = ds::renderer::createViewport(1280, 720, 1920, 1080);

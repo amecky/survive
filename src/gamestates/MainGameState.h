@@ -6,16 +6,20 @@
 #include "..\Player.h"
 #include "..\enemies\EnergyBalls.h"
 
-class StageTest : public ds::GameState {
+class MainGameState : public ds::GameState {
 
 public:
-	StageTest(GameContext* ctx);
-	virtual ~StageTest();
+	MainGameState(GameContext* ctx);
+	virtual ~MainGameState();
 	int update(float dt);
 	void render();
 	void activate();
 	void deactivate();
+	int onButtonDown(int button, int x, int y);
+	int onButtonUp(int button, int x, int y);
 private:
+	bool handleCollisions();
+	void killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType);
 	void drawBorder(const v2& pos, const v2& center,const ds::Color& color,float descale);
 	GameContext* _context;
 	Player* _player;

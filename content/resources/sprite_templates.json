@@ -20,8 +20,8 @@
     "name" : "bullet" , 
     "texture_id" : "0" , 
     "position" : "640.00,360.00" , 
-    "rect" : "60,120,8,8" , 
-    "scale" : "1.00,0.00" , 
+    "rect" : "80,0,12,12" , 
+    "scale" : "1.00,1.00" , 
     "rotation" : "0.00" , 
     "color" : "255,253,190,255" , 
     "type" : "1"
@@ -106,8 +106,7 @@
     "rotation" : "0.00" , 
     "color" : "255,255,255,255" , 
     "type" : "200"
-}
-"sprite" { 
+}"sprite" { 
     "name" : "Follower" , 
     "texture_id" : "0" , 
     "position" : "640.00,360.00" , 

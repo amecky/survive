@@ -33,8 +33,9 @@ struct Ball : ds::BasicSprite {
 	int behaviors;
 	float timer;
 	int type;
+	int energy;
 
-	Ball() : ds::BasicSprite(), velocity(0, 0), force(0, 0), size(1.0f), state(BS_EOL), behaviors(0), timer(0.0f), type(0) {}
+	Ball() : ds::BasicSprite(), velocity(0, 0), force(0, 0), size(1.0f), state(BS_EOL), behaviors(0), timer(0.0f), type(0) , energy(0) {}
 
 };
 
@@ -59,6 +60,7 @@ public:
 	bool checkBallsInterception() const;
 	void killAll();
 	void emitt(int type);
+	int kill(ds::SID sid);
 private:
 	void move(float dt);
 	void createBall(const v2& pos, int current, int total,const CubeDefinition& cubeDefinition);

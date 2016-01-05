@@ -1,0 +1,14 @@
+"settings" {
+	"borderAmplitude" : "4.0" ,
+	"borderShakeRadius" : "10.0" ,
+	"bulletTrailDistance" : "20.0" ,
+	"bulletVelocity" : "800.0" ,
+	"playerFireRate" : "0.2" ,
+	"warmUpTime" : "3.0" ,
+	"dyingTime" : "4.0" ,
+	"getReadyAmplitude" : "4.0" ,
+	"getReadyScale" : "0.1" ,
+	"snakeVelocity" : "100.0" ,
+	"snakeFollowVelocity" : "2.0" ,
+	"spawnTimer" : "1.0"
+}		

@@ -74,7 +74,9 @@ void EnergyBalls::createBall(const v2& pos, int current, int total, const CubeDe
 	ds::bit::set(&ball.behaviors, SIMPLE_MOVE_BIT);
 	ball.type = cubeDefinition.type;
 	ball.force = v2(0, 0);
+	ball.energy = cubeDefinition.energy;
 	bool ret = buildFromTemplate(&ball, cubeDefinition.name);
+	_context->world->attachCollider(sid, v2(ball.size), ENEMY_TYPE, OBJECT_LAYER);
 	assert(ret);
 }
 
@@ -161,6 +163,29 @@ bool EnergyBalls::checkBallsInterception() const {
 	return false;
 }
 
+int EnergyBalls::kill(ds::SID sid) {
+	for (uint32 i = 0; i < _balls.numObjects; ++i) {
+		Ball& b = _balls.objects[i];
+		if (b.sid == sid) {
+			--b.energy;
+			if (b.energy <= 0) {
+				int type = b.type;
+				WaveRuntime& runtime = _waveRuntimes[type];
+				--runtime.current;
+				// FIXME: decrease energy
+				_context->world->remove(b.sid);
+				_balls.remove(b.id);
+				const CubeDefinition& def = _cubeDefintions.get(type);
+				if (def.nextType >= 0) {
+					// create two new one
+				}
+				return type;
+			}
+			return -1;
+		}
+	}
+	return -1;
+}
 // ---------------------------------------
 // kill balls in range
 // ---------------------------------------
@@ -196,7 +221,8 @@ void EnergyBalls::move(float dt) {
 void EnergyBalls::killAll() {
 	for (uint32 i = 0; i < _balls.numObjects; ++i) {
 		Ball& b = _balls.objects[i];
-		_context->particles->start(BALL_EXPLOSION, v3(b.position));
+		_context->world->remove(b.sid);
+		_context->particles->start(ENEMY_EXPLOSION, v3(b.position));
 	}
 	_balls.clear();
 }

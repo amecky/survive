@@ -7,7 +7,7 @@
 #include "TestMe.h"
 #include "Worms.h"
 #include "gamestates\GameOverState.h"
-#include "gamestates\StageTest.h"
+#include "gamestates\MainGameState.h"
 #include "GameRenderer.h"
 #include <io\FileRepository.h>
 
@@ -48,7 +48,7 @@ bool Survive::loadContent() {
 	addGameState(new GUITest());
 	addGameState(new TestMe(_context));
 	addGameState(new Worms(_context));
-	addGameState(new StageTest(_context));
+	addGameState(new MainGameState(_context));
 	addGameState(new GameOverState(_context, &gui));
 	addGameState(new ds::BasicMenuGameState("MainMenuState", "MainMenu", &gui));
 	connectGameStates("MainGameState", 1, "GameOverState");
@@ -59,7 +59,7 @@ bool Survive::loadContent() {
 }
 
 void Survive::init() {
-	activate("StageTest");
+	activate("MainGameState");
 	//ds::repository::list();
 }
 
@@ -92,5 +92,6 @@ void Survive::OnChar( char ascii,unsigned int keyState ) {
 // OnButtonUp
 // -------------------------------------------------------
 void Survive::onGUIButton( ds::DialogID dlgID,int button ) {
+	LOG << "dialog: " << dlgID << " button: " << button;
 }
 

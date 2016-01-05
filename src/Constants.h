@@ -41,9 +41,9 @@ const int SEPARATE_BIT = 2;
 const int ALIGN_BIT = 3;
 const int SIMPLE_MOVE_BIT = 4;
 
-const int DODGER_EXPLOSION = 5;
+const int BULLET_EXPLOSION = 1;
 const int PLAYER_EXPLOSION = 5;
-const int BOMB_EXPLOSION = 5;
+const int ENEMY_EXPLOSION = 0;
 const int BALL_EXPLOSION = 7;
 const int BOMB_STARTUP = 5;
 const int BIG_CUBE_EXPLOSION = 6;
