@@ -1,5 +1,6 @@
 #pragma once
 #include <compiler\DataFile.h>
+#include <lib\collection_types.h>
 
 struct CubeDefinition {
 
@@ -33,7 +34,7 @@ public:
 		return _definitions[index];
 	}
 private:
-	std::vector<CubeDefinition> _definitions;
+	ds::Array<CubeDefinition> _definitions;
 };
 
 struct WaveDefinition {
@@ -62,7 +63,7 @@ public:
 		return _definitions[index];
 	}
 private:
-	std::vector<WaveDefinition> _definitions;
+	ds::Array<WaveDefinition> _definitions;
 };
 
 class Cubes

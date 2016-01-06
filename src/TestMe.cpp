@@ -5,6 +5,19 @@
 #include <math\GameMath.h>
 #include "utils\FadingMessage.h"
 #include "GameRenderer.h"
+#include <lib\collection_types.h>
+#include <utils\StringUtils.h>
+
+struct Tester {
+	int value;
+
+	Tester() : value(1) {
+		LOG << "created";
+	}
+	~Tester() {
+		LOG << "destroyed (" << value << ")";
+	}
+};
 
 TestMe::TestMe(GameContext* ctx) : ds::GameState("TestState") , _context(ctx) {
 	_player = new Player(ctx);
@@ -50,7 +63,57 @@ void TestMe::init() {
 }
 
 void TestMe::activate() {
-	messages::fadingMessage(_context, "get_ready", _context->settings->warmUpTime * 2.0f);
+	LOG << "------------------------------------------------------------";
+	ds::Array<Tester> arr;
+	ds::Array<Tester> ar(4);
+	LOG << "at 2: " << ar[2].value;
+	LOG << "size: " << ar.size();
+	LOG << "capacity: " << ar.capacity();
+	Tester m;
+	m.value = 100;
+	ar.push_back(m);
+	LOG << "size after push: " << ar.size();
+	LOG << "value: " << ar[4].value;
+	ar.remove(2);
+	LOG << "size after remove: " << ar.size();
+	ds::Array<Tester>::iterator it = ar.begin();
+	while (it != ar.end()) {
+		LOG << it->value;
+		++it;
+	}
+	it = ar.begin();
+	while (it != ar.end()) {
+		if (it->value > 10) {
+			LOG << "---> removing";
+			it = ar.remove(it);
+		}
+		else {
+			++it;
+		}
+	}
+	ar.pop_back();
+	LOG << "######";
+	Tester t1;
+	t1.value = 200;
+	ar.insert(ar.begin(), t1);
+	Tester t2;
+	t2.value = 300;
+	ar.insert(ar.begin() + 2, t2);
+	it = ar.begin();
+	while (it != ar.end()) {
+		LOG << it->value;
+		++it;
+	}
+	LOG << "new capacity: " << ar.capacity();
+	ar.clear();
+	LOG << "new size: " << ar.size();
+	ds::Array<int> nar(4);
+	LOG << "------------------------------------------------------------";
+	ds::StringStream b;
+	b << "Hello " << 42 << " and " << v2(200, 200) << " which will be nearly " << 123.43f << " in total ";
+	b.format("%1d %1d", 200, 200);
+	LOG << b.c_str();
+	//messages::fadingMessage(_context, "get_ready", _context->settings->warmUpTime * 2.0f);
 }
 
 void TestMe::renderAsteroid(const Asteroid& asteroid) {

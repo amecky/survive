@@ -3,7 +3,6 @@
 #include <renderer\shader.h>
 #include <renderer\BitmapFont.h>
 #include <base\GameStateMachine.h>
-#include "GUITest.h"
 #include "TestMe.h"
 #include "Worms.h"
 #include "gamestates\GameOverState.h"
@@ -45,7 +44,6 @@ bool Survive::loadContent() {
 	_context->hud = gui.get("HUD");
 	_context->settings->load();
 	_context->renderer = new GameRenderer(_context);
-	addGameState(new GUITest());
 	addGameState(new TestMe(_context));
 	addGameState(new Worms(_context));
 	addGameState(new MainGameState(_context));
@@ -59,7 +57,7 @@ bool Survive::loadContent() {
 }
 
 void Survive::init() {
-	activate("MainGameState");
+	activate("TestState");
 	//ds::repository::list();
 }
 

@@ -46,7 +46,7 @@ struct WaveRuntime {
 	float timer;
 };
 
-typedef std::vector<WaveRuntime> WaveRuntimes;
+typedef ds::Array<WaveRuntime> WaveRuntimes;
 
 class EnergyBalls {
 

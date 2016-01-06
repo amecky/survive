@@ -15,6 +15,8 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_context->world->create(v2(800, 450), ds::math::buildTexture(840, 360, 120, 120), OBJECT_LAYER);
 	_context->world->ignoreCollisions(BULLET_TYPE, PLAYER_TYPE);
 	_context->world->ignoreCollisions(ENEMY_TYPE, ENEMY_TYPE);
+
+	
 }
 
 MainGameState::~MainGameState() {
