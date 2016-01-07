@@ -2,7 +2,7 @@
 #include <Vector.h>
 #include <math\GameMath.h>
 #include <renderer\graphics.h>
-
+#include <lib\collection_types.h>
 // --------------------------------------
 // spawn point
 // --------------------------------------
@@ -34,7 +34,7 @@ struct StartPoint {
 // --------------------------------------
 // start points
 // --------------------------------------
-typedef std::vector<StartPoint> StartPoints;
+typedef ds::Array<StartPoint> StartPoints;
 
 // --------------------------------------
 // spawner emitter type

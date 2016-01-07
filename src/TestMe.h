@@ -3,6 +3,7 @@
 #include <renderer\render_types.h>
 #include "utils\BorderLines.h"
 #include "Player.h"
+#include <memory\DefaultAllocator.h>
 
 enum {ASTEROID_MAX_SEGMENTS = 36};
 
@@ -48,9 +49,7 @@ private:
 	void renderAsteroid(const Asteroid& asteroid);
 	void drawCircle(const v2& pos, int segments, float radius, float thickness, const ds::Texture& t, float angleOffset = 0.0f);
 	void drawSegment(const v2& pos, float alpha, float ra, float beta, float rb,float thickness,const ds::Texture& t);
-	v2 align(int index);
-	v2 separate(int index);
-	v2 seek(int index,const v2& target);
+	void testMem();
 	ds::Texture _texture;
 	Dodgers _dodgers;
 	ds::Shape _shape;
@@ -59,4 +58,5 @@ private:
 	Asteroid _asteroid;
 	GameContext* _context;
 	Player* _player;
+	ds::DefaultAllocator alloc;
 };

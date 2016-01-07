@@ -7,6 +7,7 @@
 #include "GameRenderer.h"
 #include <lib\collection_types.h>
 #include <utils\StringUtils.h>
+#include <memory\DefaultAllocator.h>
 
 struct Tester {
 	int value;
@@ -109,11 +110,40 @@ void TestMe::activate() {
 	LOG << "new size: " << ar.size();
 	ds::Array<int> nar(4);
 	LOG << "------------------------------------------------------------";
+	ds::Array<int> tar(8);
+	for (int i = 0; i < 8; ++i) {
+		tar[i] = i;
+	}
+	for (uint32 s = 0; s < tar.size(); ++s) {
+		LOG << "tar (" << s << ") : " << tar[s];
+	}
+	tar.insert(tar.begin(), 100);
+	tar.insert(tar.begin() + 8, 300);
+	for (uint32 s = 0; s < tar.size(); ++s) {
+		LOG << "tar (" << s << ") : " << tar[s];
+	}
 	ds::StringStream b;
 	b << "Hello " << 42 << " and " << v2(200, 200) << " which will be nearly " << 123.43f << " in total ";
 	b.format("%1d %1d", 200, 200);
 	LOG << b.c_str();
 	//messages::fadingMessage(_context, "get_ready", _context->settings->warmUpTime * 2.0f);
+	//testMem();
+	ds::gDefaultMemory->debug();
+}
+
+void TestMe::testMem() {
+	
+	void* f = alloc.allocate(16);
+	void* s = alloc.allocate(16);
+	void* t = alloc.allocate(12);
+	void* r = alloc.allocate(6);
+	alloc.deallocate(f);
+	void* u = alloc.allocate(12);
+	alloc.deallocate(s);
+	alloc.deallocate(t);
+	alloc.deallocate(r);
+	alloc.deallocate(r);
+	alloc.debug();
 }
 
 void TestMe::renderAsteroid(const Asteroid& asteroid) {
@@ -151,129 +181,14 @@ void TestMe::drawSegment(const v2& pos,float alpha, float ra, float beta, float 
 // -------------------------------------------------------
 // Update
 // -------------------------------------------------------
-// https://processing.org/examples/flocking.html
 int TestMe::update(float dt) {
 	_context->world->tick(dt);
-
-	/*
-	_timer += dt;
-	_player->move(dt);
-	
-	_borderLines->update(dt);
-	
-	v2 mp = ds::renderer::getMousePosition();
-	v2 v;
-	for (size_t i = 0; i < _dodgers.size(); ++i) {
-		Dodger& d = _dodgers[i];
-		v2 acceleration = v2(0, 0);
-		acceleration += seek(i,mp);
-		acceleration += align(i);
-		acceleration += separate(i);
-		d.velocity += acceleration * dt;
-		d.position += d.velocity * dt;
-		d.angle = ds::math::getTargetAngle(d.velocity, V2_RIGHT);
-	}
-	*/
 	return 0;
 }
 
-v2 TestMe::seek(int index, const v2& target) {
-	v2 desired = target - _dodgers[index].position;
-	// Scale to maximum speed
-	normalize(desired);
-	desired.x *= 1.5f;
-	desired.y *= 1.5f;
-	// Steering = Desired minus Velocity
-	v2 steer = desired - _dodgers[index].velocity;
-	return steer;
-}
-
-v2 TestMe::align(int index) {
-	v2 sum(0, 0);
-	float dist = 40.0f;
-	int count = 0;
-	for (size_t i = 0; i < _dodgers.size(); ++i) {
-		if (i != index) {
-			Dodger& d = _dodgers[i];
-			v2 diff = d.position - _dodgers[index].position;
-			if (sqr_length(diff) < (dist * dist)) {
-				++count;
-				sum += d.velocity;
-			}
-		}
-	}
-	if (count > 0) {
-		sum.x /= count;
-		sum.y /= count;
-		// Implement Reynolds: Steering = Desired - Velocity
-		normalize(sum);
-		sum.x *= 1.2f;
-		sum.y *= 1.2f;
-		//sum.mult(maxspeed);
-		v2 steer = sum - _dodgers[index].velocity;
-		//clamp(&sum, v2(0, 0), v2(100, 100));// steer.limit(maxforce);
-		return steer;
-	}
-	else {
-		return v2(0, 0);
-	}
-}
-
-v2 TestMe::separate(int index) {
-	float desiredseparation = 25.0f;
-	v2 steer(0, 0);
-	float dist = 40.0f;
-	int count = 0;
-	// For every boid in the system, check if it's too close
-	for (size_t i = 0; i < _dodgers.size(); ++i) {
-		if (i != index) {
-			Dodger& d = _dodgers[i];
-			v2 diff = _dodgers[index].position - d.position;
-			if (sqr_length(diff) < (dist * dist)) {
-				float d = length(diff);
-				normalize(diff);
-				diff.x /= d;
-				diff.y /= d;
-				steer += diff;
-				++count;
-			}
-		}
-	}
-	// Average -- divide by how many
-	if (count > 0) {
-		steer.x /= count;
-		steer.y /= count;
-	}
-
-	// As long as the vector is greater than 0
-	if (sqr_length(steer) > 0.0f ) {
-		// Implement Reynolds: Steering = Desired - Velocity
-		normalize(steer);
-		steer.x *= 200.0f;
-		steer.y *= 200.0f;
-		steer -= _dodgers[index].velocity;
-	}
-	return steer;
-}
-
-// -------------------------------------------------------
-// Draw
-// -------------------------------------------------------
 void TestMe::render() {
-	//_borderLines->draw();
-	
-	//drawCircle(v2(512, 384), 12, 100.0f, 15.0f,ds::math::buildTexture(100.0f, 0.0f, 40.0f, 15.0f),m_GameTime.totalTime);
-	//for (size_t i = 0; i < _dodgers.size(); ++i) {
-		//ds::sprites::draw(_dodgers[i].position, _texture, _dodgers[i].angle);
-	//}
-	//renderAsteroid(_asteroid);
-	//settings::showDialog(&_gameSettings,_states);
-	
-	//ds::sprites::drawTemplate("player");
-	//ds::renderer::getSpriteTemplates()->showDialog();
-	_context->renderer->renderWorld();
-}
 
+}
 // -------------------------------------------------------
 // OnChar
 // -------------------------------------------------------

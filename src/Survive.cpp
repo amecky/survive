@@ -41,14 +41,14 @@ bool Survive::loadContent() {
 	_showSettings = false;
 	activateMonitoring(12.0f);
 	_settingPos = v2(900, 710);
-	_context->hud = gui.get("HUD");
+	_context->hud = gui->get("HUD");
 	_context->settings->load();
 	_context->renderer = new GameRenderer(_context);
 	addGameState(new TestMe(_context));
 	addGameState(new Worms(_context));
 	addGameState(new MainGameState(_context));
-	addGameState(new GameOverState(_context, &gui));
-	addGameState(new ds::BasicMenuGameState("MainMenuState", "MainMenu", &gui));
+	addGameState(new GameOverState(_context, gui));
+	addGameState(new ds::BasicMenuGameState("MainMenuState", "MainMenu", gui));
 	connectGameStates("MainGameState", 1, "GameOverState");
 	connectGameStates("GameOverState", 1, "MainGameState");
 	connectGameStates("MainMenuState", 2, "TestState");
@@ -57,7 +57,7 @@ bool Survive::loadContent() {
 }
 
 void Survive::init() {
-	activate("TestState");
+	activate("MainGameState");
 	//ds::repository::list();
 }
 
