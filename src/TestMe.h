@@ -50,6 +50,7 @@ private:
 	void drawCircle(const v2& pos, int segments, float radius, float thickness, const ds::Texture& t, float angleOffset = 0.0f);
 	void drawSegment(const v2& pos, float alpha, float ra, float beta, float rb,float thickness,const ds::Texture& t);
 	void testMem();
+	void stringTest();
 	ds::Texture _texture;
 	Dodgers _dodgers;
 	ds::Shape _shape;

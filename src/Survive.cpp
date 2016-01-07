@@ -13,8 +13,7 @@
 ds::BaseApp *app = new Survive(); 
 
 Survive::Survive() : ds::BaseApp() {
-	//_CrtSetBreakAlloc(79);
-	// 720p	
+	//_CrtSetBreakAlloc(7391);
 }
 
 Survive::~Survive() {
@@ -57,7 +56,7 @@ bool Survive::loadContent() {
 }
 
 void Survive::init() {
-	activate("MainGameState");
+	activate("TestState");
 	//ds::repository::list();
 }
 

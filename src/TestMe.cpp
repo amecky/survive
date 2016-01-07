@@ -64,6 +64,7 @@ void TestMe::init() {
 }
 
 void TestMe::activate() {
+	/*
 	LOG << "------------------------------------------------------------";
 	ds::Array<Tester> arr;
 	ds::Array<Tester> ar(4);
@@ -128,6 +129,16 @@ void TestMe::activate() {
 	LOG << b.c_str();
 	//messages::fadingMessage(_context, "get_ready", _context->settings->warmUpTime * 2.0f);
 	//testMem();
+	*/
+	stringTest();
+	ds::gDefaultMemory->debug();
+}
+
+void TestMe::stringTest() {
+	ds::Array <const char*> str;
+	str.push_back("Hello");
+	str.push_back("World");
+	str.push_back("!");
 	ds::gDefaultMemory->debug();
 }
 
