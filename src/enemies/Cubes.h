@@ -24,6 +24,7 @@ public:
 		return true;
 	}
 	bool loadData(JSONReader& reader);
+	bool loadData(ds::SimpleJSONReader& reader);
 	const char* getFileName() const {
 		return "resources\\cube_definitions.json";
 	}
@@ -32,6 +33,9 @@ public:
 	}
 	const CubeDefinition& get(size_t index) const {
 		return _definitions[index];
+	}
+	virtual bool useSimplified() {
+		return true;
 	}
 private:
 	ds::Array<CubeDefinition> _definitions;
@@ -53,6 +57,7 @@ public:
 		return true;
 	}
 	bool loadData(JSONReader& reader);
+	bool loadData(ds::SimpleJSONReader& reader);
 	const char* getFileName() const {
 		return "resources\\wave_definitions.json";
 	}
@@ -61,6 +66,9 @@ public:
 	}
 	const WaveDefinition& get(size_t index) const {
 		return _definitions[index];
+	}
+	virtual bool useSimplified() {
+		return true;
 	}
 private:
 	ds::Array<WaveDefinition> _definitions;

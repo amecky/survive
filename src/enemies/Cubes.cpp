@@ -22,6 +22,26 @@ bool CubeDefinitions::loadData(JSONReader& reader) {
 	return true;
 }
 
+bool CubeDefinitions::loadData(ds::SimpleJSONReader& reader) {
+	int cats[32];
+	int num = reader.get_categories(cats, 32);
+	for (int i = 0; i < num; ++i) {
+		CubeDefinition def;
+		reader.get_int(cats[i],"type", &def.type);
+		const char* t = reader.get_string(cats[i], "name");
+		sprintf_s(def.name, 20, "%s", t);
+		reader.get_float(cats[i], "velocity", &def.velocity);
+		reader.get_float(cats[i], "velocity_variance", &def.velocityVariance);
+		reader.get_int(cats[i], "num_stars", &def.numStars);
+		reader.get_int(cats[i], "behavior_bits", &def.behaviorBits);
+		reader.get_float(cats[i], "grow_ttl", &def.growTTL);
+		reader.get_int(cats[i], "energy", &def.energy);
+		reader.get_int(cats[i], "next_type", &def.nextType);
+		_definitions.push_back(def);
+	}
+	return true;
+}
+
 bool WaveDefinitions::loadData(JSONReader& reader) {
 	const ds::Array<Category*>& all = reader.getCategories();
 	for (size_t i = 0; i < all.size(); ++i) {
@@ -34,6 +54,20 @@ bool WaveDefinitions::loadData(JSONReader& reader) {
 			def.spawnTTL = c->getFloat("spawn_ttl", 1.0f);
 			_definitions.push_back(def);
 		}
+	}
+	return true;
+}
+
+bool WaveDefinitions::loadData(ds::SimpleJSONReader& reader) {
+	int cats[32];
+	int num = reader.get_categories(cats, 32);
+	for (int i = 0; i < num; ++i) {
+		WaveDefinition def;
+		reader.get_int(cats[i], "cube_type", &def.cubeType);
+		reader.get_int(cats[i], "max_concurrent", &def.maxConcurrent);
+		reader.get_int(cats[i], "num_spawn", &def.numSpawn);
+		reader.get_float(cats[i], "spawn_ttl", &def.spawnTTL);
+		_definitions.push_back(def);
 	}
 	return true;
 }

@@ -130,8 +130,8 @@ void TestMe::activate() {
 	//messages::fadingMessage(_context, "get_ready", _context->settings->warmUpTime * 2.0f);
 	//testMem();
 	*/
-	stringTest();
-	ds::gDefaultMemory->debug();
+	//stringTest();
+	//ds::gDefaultMemory->debug();
 }
 
 void TestMe::stringTest() {

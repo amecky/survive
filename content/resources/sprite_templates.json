@@ -1,136 +1,150 @@
-"sprite" { 
-    "name" : "background" , 
-    "texture_id" : "0" , 
-    "position" : "512.00,384.00" , 
-    "rect" : "0,512,512,384" , 
-    "scale" : "2.00,2.00" , 
-    "rotation" : "0.00" , 
-    "color" : "32,32,32,255" , 
-    "type" : "-1"
-}"sprite" { 
-    "name" : "player" , 
-    "texture_id" : "0" , 
-    "position" : "200.00,384.00" , 
-    "rect" : "40,0,40,40" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "237,195,154,255" , 
-    "type" : "3"
-}"sprite" { 
-    "name" : "bullet" , 
-    "texture_id" : "0" , 
-    "position" : "640.00,360.00" , 
-    "rect" : "80,0,12,12" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,253,190,255" , 
-    "type" : "1"
-}"sprite" { 
-    "name" : "enemy" , 
-    "texture_id" : "0" , 
-    "position" : "200.00,384.00" , 
-    "rect" : "50,0,40,40" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,255,255,255" , 
-    "type" : "2"
-}"sprite" { 
-    "name" : "snake_head" , 
-    "texture_id" : "0" , 
-    "position" : "200.00,384.00" , 
-    "rect" : "50,280,48,48" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,255,255,255" , 
-    "type" : "8"
-}"sprite" { 
-    "name" : "snake_shield" , 
-    "texture_id" : "0" , 
-    "position" : "200.00,384.00" , 
-    "rect" : "50,328,65,65" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,255,255,255" , 
-    "type" : "10"
-}"sprite" { 
-    "name" : "snake_tail" , 
-    "texture_id" : "0" , 
-    "position" : "200.00,384.00" , 
-    "rect" : "50,200,32,32" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,255,255,255" , 
-    "type" : "9"
-}"sprite" { 
-    "name" : "dodger" , 
-    "texture_id" : "0" , 
-    "position" : "200.00,384.00" , 
-    "rect" : "515,80,64,64" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,255,255,255" , 
-    "type" : "9"
-}"sprite" { 
-    "name" : "lightning" , 
-    "texture_id" : "0" , 
-    "position" : "640.00,360.00" , 
-    "rect" : "440,0,152,152" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "0,255,0,255" , 
-    "type" : "20"
-}"sprite" { 
-    "name" : "bullet_light" , 
-    "texture_id" : "0" , 
-    "position" : "200.00,384.00" , 
-    "rect" : "870,0,140,140" , 
-    "scale" : "0.00,0.00" , 
-    "rotation" : "0.00" , 
-    "color" : "128,192,192,255" , 
-    "type" : "1"
-}"sprite" { 
-    "name" : "get_ready" , 
-    "texture_id" : "0" , 
-    "position" : "512.00,384.00" , 
-    "rect" : "542,512,398,60" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,255,255,255" , 
-    "type" : "200"
-}"sprite" { 
-    "name" : "get_ready_light" , 
-    "texture_id" : "0" , 
-    "position" : "512.00,384.00" , 
-    "rect" : "600,512,420,82" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "255,255,255,255" , 
-    "type" : "200"
-}"sprite" { 
-    "name" : "Follower" , 
-    "texture_id" : "0" , 
-    "position" : "640.00,360.00" , 
-    "rect" : "80,160,25,25" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "90,184,196,255" , 
-    "type" : "100"
-}"sprite" { 
-    "name" : "BigCube" , 
-    "texture_id" : "0" , 
-    "position" : "640.00,360.00" , 
-    "rect" : "80,40,40,40" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "253,138,81,255" , 
-    "type" : "100"
-}"sprite" { 
-    "name" : "HugeCube" , 
-    "texture_id" : "0" , 
-    "position" : "640.00,360.00" , 
-    "rect" : "0,200,60,60" , 
-    "scale" : "1.00,1.00" , 
-    "rotation" : "0.00" , 
-    "color" : "181,17,68,255" , 
-    "type" : "100"
+sprite { 
+    name : "background"
+    texture_id : 0
+    position : 512.00,384.00
+    rect : 0,512,512,384
+    scale : 2.00,2.00
+    rotation : 0.00
+    color : 32,32,32,255
+    type : -1
+}
+sprite { 
+    name : "player"
+    texture_id : 0
+    position : 200.00,384.00
+    rect : 40,0,40,40
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 237,195,154,255
+    type : 3
+}
+sprite { 
+    name : "bullet"
+    texture_id : 0
+    position : 640.00,360.00
+    rect : 80,0,12,12
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,253,190,255
+    type : 1
+}
+sprite { 
+    name : "enemy"
+    texture_id : 0
+    position : 200.00,384.00
+    rect : 50,0,40,40
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,255,255,255
+    type : 2
+}
+sprite { 
+    name : "snake_head"
+    texture_id : 0
+    position : 200.00,384.00
+    rect : 50,280,48,48
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,255,255,255
+    type : 8
+}
+sprite { 
+    name : "snake_shield"
+    texture_id : 0
+    position : 200.00,384.00
+    rect : 50,328,65,65
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,255,255,255
+    type : 10
+}
+sprite { 
+    name : "snake_tail"
+    texture_id : 0
+    position : 200.00,384.00
+    rect : 50,200,32,32
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,255,255,255
+    type : 9
+}
+sprite { 
+    name : "dodger"
+    texture_id : 0
+    position : 200.00,384.00
+    rect : 515,80,64,64
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,255,255,255
+    type : 9
+}
+sprite { 
+    name : "lightning"
+    texture_id : 0
+    position : 640.00,360.00
+    rect : 440,0,152,152
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 0,255,0,255
+    type : 20
+}
+sprite { 
+    name : "bullet_light"
+    texture_id : 0
+    position : 200.00,384.00
+    rect : 870,0,140,140
+    scale : 0.00,0.00
+    rotation : 0.00
+    color : 128,192,192,255
+    type : 1
+}
+sprite { 
+    name : "get_ready"
+    texture_id : 0
+    position : 512.00,384.00
+    rect : 542,512,398,60
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,255,255,255
+    type : 200
+}
+sprite { 
+    name : "get_ready_light"
+    texture_id : 0
+    position : 512.00,384.00
+    rect : 600,512,420,82
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 255,255,255,255
+    type : 200
+}
+sprite { 
+    name : "Follower"
+    texture_id : 0
+    position : 640.00,360.00
+    rect : 80,160,25,25
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 90,184,196,255
+    type : 100
+}
+sprite { 
+    name : "BigCube"
+    texture_id : 0
+    position : 640.00,360.00
+    rect : 80,40,40,40
+    scale : 1.00,1.00
+    rotation : 0.00
+    color : 253,138,81,255
+    type : 100
+}
+sprite { 
+    name : "HugeCube"
+    texture_id : 0
+    position : 123.00,456.00
+    rect : 0,200,60,60
+    scale : 1.23,4.56
+    rotation : 0.00
+    color : 181,17,68,255
+    type : 100
 }
