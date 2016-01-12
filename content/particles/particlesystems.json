@@ -1,52 +1,52 @@
-"explosion" {
-	"file" : "explosion" ,
-	"id" : "0"
+explosion {
+	file : "explosion" 
+	id : 0
 }
-"bullet_explosion" {
-	"file" : "bullet_explosion" ,
-	"id" : "1"
+bullet_explosion {
+	file : "bullet_explosion" 
+	id : 1
 }
-"stride_explosion" {
-	"file" : "stride_explosion",
-	"id" : "2"
-}
-"player_trail" {
-	"file" : "player_trail" ,
-	"id" : "3"
-}
-"bullet_trail" {
-	"file" : "bullet_trail" ,
-	"id" : "4"
-}
-"enemy_trail" {
-	"file" : "enemy_trail" ,
-	"id" : "5"
-}
-"head_stride_explosion" {
-	"file" : "head_ring_explosion",
-	"id" : "6"
-}
-"head_stride_explosion" {
-	"file" : "head_stride_explosion",
-	"id" : "7"
-}
-"head_stride_explosion" {
-	"file" : "head_main_explosion",
-	"id" : "8"
-}
-"ring" {
-	"file" : "ring",
-	"id" : "9"
-}
-"enemy_start_dots" {
-	"file" : "enemy_start_dots",
-	"id" : "10"
-}
-"dodger_trail" {
-	"file" : "dodger_trail",
-	"id" : "11"
-}
-"bouncer_trail" {
-	"file" : "bouncer_trail",
-	"id" : "12"
-}
+//stride_explosion {
+	//file : "stride_explosion"
+	//id : 2
+//}
+//player_trail {
+	//file : "player_trail"
+	//id : 3
+//}
+//bullet_trail {
+	//file : "bullet_trail" 
+	//id : 4
+//}
+//enemy_trail {
+	//file : "enemy_trail"
+	//id : 5
+//}
+//head_stride_explosion {
+	//file : "head_ring_explosion"
+	//id : 6
+//}
+//head_stride_explosion {
+	//file : "head_stride_explosion"
+	//id : 7
+//}
+//head_stride_explosion {
+	//file : "head_main_explosion"
+	//id : 8
+//}
+//ring {
+	//file : "ring"
+	//id : 9
+//}
+//enemy_start_dots {
+	//file : "enemy_start_dots"
+	//id : 10
+//}
+//dodger_trail {
+	//file : "dodger_trail"
+	//id : 11
+//}
+//bouncer_trail {
+	//file : "bouncer_trail"
+	//id : 12
+//}

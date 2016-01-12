@@ -1,16 +1,16 @@
-"GameOver" {
-	"id" : "0" ,
-	"file" : "GameOver" 
+GameOver {
+	id : 0 
+	file : "GameOver"
 }
-"MainMenu" {
-	"id" : "1" ,
-	"file" : "MainMenu" 
+MainMenu {
+	id : 1 
+	file : "MainMenu" 
 }
-"Credits" {
-	"id" : "2" ,
-	"file" : "Credits" 
+Credits {
+	id : 2 
+	file : "Credits" 
 }
-"Highscores" {
-	"id" : "3" ,
-	"file" : "Highscores" 
+Highscores {
+	id : 3 
+	file : "Highscores" 
 }
