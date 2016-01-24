@@ -3,8 +3,6 @@
 #include <renderer\shader.h>
 #include <renderer\BitmapFont.h>
 #include <base\GameStateMachine.h>
-#include "TestMe.h"
-#include "Worms.h"
 #include "gamestates\GameOverState.h"
 #include "gamestates\MainGameState.h"
 #include "GameRenderer.h"
@@ -19,7 +17,6 @@ Survive::Survive() : ds::BaseApp() {
 Survive::~Survive() {
 	delete _context->settings;
 	delete _context->trails;
-	delete _context->world;
 	delete _context->renderer;
 	delete _context;
 }
@@ -29,7 +26,8 @@ Survive::~Survive() {
 bool Survive::loadContent() {	
 	_context = new GameContext;
 	_context->settings = new GameSettings;
-	_context->world = new ds::World;
+	_context->settings->load();
+	_context->world = world;
 	_context->trails = new Trail(_context, 512);
 	_context->particles = particles;
 	_context->playerSpeed = 300.0f;
@@ -43,20 +41,17 @@ bool Survive::loadContent() {
 	_context->hud = gui->get("HUD");
 	_context->settings->load();
 	_context->renderer = new GameRenderer(_context);
-	addGameState(new TestMe(_context));
-	addGameState(new Worms(_context));
 	addGameState(new MainGameState(_context));
 	addGameState(new GameOverState(_context, gui));
 	addGameState(new ds::BasicMenuGameState("MainMenuState", "MainMenu", gui));
 	connectGameStates("MainGameState", 1, "GameOverState");
 	connectGameStates("GameOverState", 1, "MainGameState");
-	connectGameStates("MainMenuState", 2, "TestState");
 	connectGameStates("MainMenuState", 1, "MainGameState");
 	return true;
 }
 
 void Survive::init() {
-	activate("TestState");
+	activate("MainGameState");
 	//ds::repository::list();
 }
 
@@ -81,6 +76,9 @@ void Survive::draw() {
 void Survive::OnChar( char ascii,unsigned int keyState ) {
 	if (ascii == '2') {
 		_showSettings = !_showSettings;
+	}
+	if (ascii == '1') {
+		_context->world->debug();
 	}
 	
 }

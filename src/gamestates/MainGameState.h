@@ -4,7 +4,7 @@
 #include <ui\IMGUI.h>
 #include "..\utils\GameContext.h"
 #include "..\Player.h"
-#include "..\enemies\EnergyBalls.h"
+#include "..\enemies\Cubes.h"
 
 class MainGameState : public ds::GameState {
 
@@ -23,7 +23,9 @@ private:
 	void drawBorder(const v2& pos, const v2& center,const ds::Color& color,float descale);
 	GameContext* _context;
 	Player* _player;
-	EnergyBalls* _balls;
+	Cubes* _balls;
 	v2 _cursor_pos;
+	bool _dying;
+	float _dying_timer;
 };
 

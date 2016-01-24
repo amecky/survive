@@ -10,13 +10,17 @@
 MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"), _context(ctx) {
 	_player = new Player(_context);
 	
-	_balls = new EnergyBalls(_context);
+	_balls = new Cubes(_context);
 	_context->world->setBoundingRect(ds::Rect(40, 40, 1520, 820));
 	_context->world->create(v2(800, 450), ds::math::buildTexture(840, 360, 120, 120), OBJECT_LAYER);
-	_context->world->ignoreCollisions(BULLET_TYPE, PLAYER_TYPE);
-	_context->world->ignoreCollisions(ENEMY_TYPE, ENEMY_TYPE);
-
-	
+	_context->world->ignoreCollisions(OT_PLAYER, OT_BULLET);
+	_context->world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
+	_context->world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
+	_context->world->ignoreCollisions(OT_FOLLOWER, OT_HUGE_CUBE);
+	_context->world->ignoreCollisions(OT_BIG_CUBE, OT_BIG_CUBE);
+	_context->world->ignoreCollisions(OT_BIG_CUBE, OT_HUGE_CUBE);
+	_context->world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
+	_context->world->ignoreLayer(LIGHT_LAYER);
 }
 
 MainGameState::~MainGameState() {
@@ -41,16 +45,19 @@ void MainGameState::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID ene
 }
 
 bool MainGameState::handleCollisions() {
-	PR_START("MainGameState:tick:collision");
+	//PR_START("MainGameState:tick:collision");
+	bool ret = false;
 	int numCollisions = _context->world->getNumCollisions();
 	if (numCollisions > 0) {
+		TIMER("HandleCollisions")
 		//LOG << "collisions: " << numCollisions;
 		for (int i = 0; i < numCollisions; ++i) {
-			PR_START("MainGameState:tick:innerCollision");
+			//PR_START("MainGameState:tick:innerCollision");
 			const ds::Collision& c = _context->world->getCollision(i);
-			if (c.containsType(BULLET_TYPE)) {
+			//LOG << i << " first: " << c.firstType << " second: " << c.secondType;
+			if (c.containsType(OT_BULLET)) {
 				//if (c.containsType(ENEMY_TYPE)) {
-					if (c.firstType == BULLET_TYPE) {
+					if (c.firstType == OT_BULLET) {
 						killEnemy(c.firstSID, c.firstPos, c.secondSID, c.secondPos, c.secondType);
 					}
 					else {
@@ -58,56 +65,75 @@ bool MainGameState::handleCollisions() {
 					}
 				//}
 			}
-			else if (c.containsType(PLAYER_TYPE)) {
+			else if (c.containsType(OT_PLAYER)) {
+				
 				_player->kill();
-				LOG << "player hit!!!!";
+				//LOG << "player hit!!!!";
 				//_state = IS_DYING;
 				//_warm_up_timer = 0.0f;
 				// FIXME: remove all
 				//m_Context.lights->clear();
-				_balls->killAll();
-				return true;
+				_balls->killAll();		
+				ret = true;								
 			}
-			PR_END("MainGameState:tick:innerCollision");
+			//PR_END("MainGameState:tick:innerCollision");
 		}
 	}
-	PR_END("MainGameState:tick:collision");
-	return false;
+	//PR_END("MainGameState:tick:collision");
+	return ret;
 }
 // -------------------------------------------------------
 // update
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
-	_cursor_pos = ds::renderer::getMousePosition();
-	_player->move(dt);
-	_player->shootBullets(dt);
-	_balls->tick(dt);
+	PR_START("MainGameState:update");
+	//PR_START("MainGameState:update:move");
+	if (!_dying) {
+		_cursor_pos = ds::renderer::getMousePosition();
+		_player->move(dt);
+		_player->shootBullets(dt);
+
+		_balls->move(dt);
+		_balls->spawn(dt);
+	}
 	//_context->playerPos = ds::renderer::getMousePosition();
 	//_context->world->setPosition(_context->playerID, _context->playerPos);
 	_context->world->tick(dt);
-
-	if (handleCollisions()) {
-		return 1;
-	}
+	//PR_END("MainGameState:update:move");
+	
 
 	_context->particles->update(dt);
-	_context->trails->tick(dt);
+	//_context->trails->tick(dt);
+	if (!_dying) {
+		//PR_START("MainGameState:commonTickAEB");
+		const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 
-	PR_START("MainGameState:commonTickAEB");
-	const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
-	if (buffer.num > 0) {
-		for (int i = 0; i < buffer.num; ++i) {
-			if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == BULLET_TYPE) {
-				_context->particles->start(BULLET_EXPLOSION, _context->world->getPosition(buffer.events[i].sid));
-				_context->world->remove(buffer.events[i].sid);
+		_balls->handleEvents(buffer);
+
+		if (buffer.events.size() > 0) {
+			for (int i = 0; i < buffer.events.size(); ++i) {
+				if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
+					_context->particles->start(BULLET_EXPLOSION, _context->world->getPosition(buffer.events[i].sid));
+					_context->world->remove(buffer.events[i].sid);
+				}
 			}
 		}
-	}
-	PR_END("MainGameState:commonTickAEB");
+		//PR_END("MainGameState:commonTickAEB");
 
-	//_snake->tick(dt);
-	//_snake->handleEvents(buffer);
-	//_snake->move(dt);
+		//_snake->tick(dt);
+		//_snake->handleEvents(buffer);
+		//_snake->move(dt);		
+		if (handleCollisions()) {
+			_dying = true;
+		}
+	}
+	if (_dying) {
+		_dying_timer -= dt;
+		if (_dying_timer <= 0.0f) {
+			return 1;
+		}
+	}
+	PR_END("MainGameState:update");
 	return 0;
 }
 
@@ -137,6 +163,8 @@ void MainGameState::activate() {
 	_balls->activate();
 	_player->create();
 	_player->setShooting(SM_IDLE);
+	_dying = false;
+	_dying_timer = 4.0f;
 }
 
 // -------------------------------------------------------

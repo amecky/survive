@@ -20,13 +20,14 @@ struct GameSettings : public ds::DynamicGameSettings {
 	// border line settings
 	float borderAmplitude;
 	float borderShakeRadius;
+	ds::Vector2fPath starScalePath;	
 
 	GameSettings() {
 		addFloat("borderAmplitude", &borderAmplitude, 4.0f);
 		addFloat("borderShakeRadius", &borderShakeRadius, 10.0f);
 		addFloat("bulletTrailDistance", &bulletTrailDistance, 20.0f);
 		addFloat("bulletVelocity", &bulletVelocity, 800.0f);
-		addFloat("playerFireRate", &playerFireRate, 0.4f);
+		addFloat("playerFireRate", &playerFireRate, 0.1f);
 		addFloat("warmUpTime", &warmUpTime, 3.0f);
 		addFloat("dyingTime", &dyingTime, 4.0f);
 		addFloat("getReadyAmplitude", &getReadyAmplitude, 4.0f);
@@ -35,10 +36,11 @@ struct GameSettings : public ds::DynamicGameSettings {
 		addFloat("snakeVelocity", &snakeVelocity, 100.0f);
 		addFloat("snakeFollowVelocity", &snakeFollowVelocity, 2.0f);
 		addFloat("spawnTimer", &spawnTimer, 1.0f);
+		addPath("star_scale_path", &starScalePath);
 	}
 
-	const char* getName() const {
-		return "game_settings";
+	const char* getFileName() const {
+		return "game_settings.json";
 	}
 
 };

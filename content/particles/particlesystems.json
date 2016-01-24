@@ -22,18 +22,18 @@ bullet_explosion {
 	//file : "enemy_trail"
 	//id : 5
 //}
-//head_stride_explosion {
-	//file : "head_ring_explosion"
-	//id : 6
-//}
-//head_stride_explosion {
-	//file : "head_stride_explosion"
-	//id : 7
-//}
-//head_stride_explosion {
-	//file : "head_main_explosion"
-	//id : 8
-//}
+head_stride_explosion {
+	file : "head_ring_explosion"
+	id : 6
+}
+head_stride_explosion {
+	file : "head_stride_explosion"
+	id : 7
+}
+head_stride_explosion {
+	file : "head_main_explosion"
+	id : 8
+}
 //ring {
 	//file : "ring"
 	//id : 9
