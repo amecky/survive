@@ -50,7 +50,6 @@ bool MainGameState::handleCollisions() {
 	bool ret = false;
 	int numCollisions = _context->world->getNumCollisions();
 	if (numCollisions > 0) {
-		TIMER("HandleCollisions")
 		//LOG << "collisions: " << numCollisions;
 		for (int i = 0; i < numCollisions; ++i) {
 			ZoneTracker z1("MainGameState:tick:innerCollision");
@@ -94,7 +93,7 @@ int MainGameState::update(float dt) {
 		_player->move(dt);
 		_player->shootBullets(dt);
 
-		_balls->move(dt);
+		//_balls->move(dt);
 		_balls->spawn(dt);
 	}
 	//_context->playerPos = ds::renderer::getMousePosition();

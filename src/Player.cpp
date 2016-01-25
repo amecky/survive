@@ -93,13 +93,15 @@ void Player::setShooting(ShootingMode mode) {
 }
 
 void Player::kill() {
-	_context->particles->start(6, _position);
-	_context->particles->start(8, _position);
-	_context->world->remove(_id);
-	//_context->world->remove(_lightIndex);
-	_context->playerID = ds::INVALID_SID;
-	_shootingMode = SM_IDLE;
-	_alive = false;
+	if (_alive) {
+		_context->particles->start(6, _position);
+		_context->particles->start(8, _position);
+		_context->world->remove(_id);
+		//_context->world->remove(_lightIndex);
+		_context->playerID = ds::INVALID_SID;
+		_shootingMode = SM_IDLE;
+		_alive = false;
+	}
 }
 
 // --------------------------------------------------------------------------

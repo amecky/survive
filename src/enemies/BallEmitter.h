@@ -84,7 +84,7 @@ public:
 	}
 
 	const SpawnPoint& random() {
-		int o = ds::math::random(0, _total);
+		int o = ds::math::random(0, _total - 1);
 		return _points[o];
 	}
 	const int size() const {

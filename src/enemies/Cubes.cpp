@@ -107,7 +107,7 @@ void Cubes::handleEvents(const ds::ActionEventBuffer& buffer) {
 		const ds::ActionEvent& event = buffer.events[i];
 		if (_world->contains(event.sid)) {
 			int t = _world->getType(event.sid);
-			if (t == OT_BIG_CUBE || t == OT_HUGE_CUBE) {
+			if (t == OT_BIG_CUBE || t == OT_HUGE_CUBE || t == OT_FOLLOWER) {
 				if (event.type == ds::AT_SCALE_BY_PATH) {
 					Ball* data = (Ball*)_world->get_data(event.sid);
 					assert(data != 0);
@@ -252,6 +252,17 @@ int Cubes::killBalls(const v2& bombPos, KilledBall* killedBalls) {
 
 int Cubes::kill(ds::SID sid) {
 	int ret = -1;
+	if (_world->contains(sid)) {
+		int type = _world->getType(sid);
+		if (type == OT_FOLLOWER || type == OT_BIG_CUBE || type == OT_HUGE_CUBE) {
+			ret = type;
+			// FIXME: split into two
+			v2 p = _world->getPosition(sid);
+			_context->particles->start(BALL_EXPLOSION, p);
+			_world->remove(sid);
+		}
+	}
+	/*
 	int types[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE };
 	ds::SID sids[256];
 	int num = _world->find_by_types(types, 3, sids, 256);
@@ -263,6 +274,7 @@ int Cubes::kill(ds::SID sid) {
 			_world->remove(sids[i]);
 		}
 	}
+	*/
 	return ret;
 }
 // ---------------------------------------
