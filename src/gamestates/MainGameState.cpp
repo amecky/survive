@@ -20,7 +20,7 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_context->world->ignoreCollisions(OT_BIG_CUBE, OT_BIG_CUBE);
 	_context->world->ignoreCollisions(OT_BIG_CUBE, OT_HUGE_CUBE);
 	_context->world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
-	_context->world->ignoreLayer(LIGHT_LAYER);
+	//_context->world->ignoreLayer(LIGHT_LAYER);
 }
 
 MainGameState::~MainGameState() {
@@ -32,7 +32,8 @@ MainGameState::~MainGameState() {
 // kill enemy and bullet
 // --------------------------------------------------------------------------
 void MainGameState::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType) {
-	PR_START("Worms:killEnemy");
+	ZoneTracker z("MainGameState::killEnemy");
+	//PR_START("Worms:killEnemy");
 	if (_context->world->contains(bulletID)) {
 		_context->particles->start(BULLET_EXPLOSION, bulletPos);
 		_context->world->remove(bulletID);
@@ -41,18 +42,18 @@ void MainGameState::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID ene
 	if (type >= 0) {
 		_context->particles->start(ENEMY_EXPLOSION, enemyPos);
 	}
-	PR_END("Worms:killEnemy");
+	//PR_END("Worms:killEnemy");
 }
 
 bool MainGameState::handleCollisions() {
-	//PR_START("MainGameState:tick:collision");
+	ZoneTracker z("MainGameState:tick:collision");
 	bool ret = false;
 	int numCollisions = _context->world->getNumCollisions();
 	if (numCollisions > 0) {
 		TIMER("HandleCollisions")
 		//LOG << "collisions: " << numCollisions;
 		for (int i = 0; i < numCollisions; ++i) {
-			//PR_START("MainGameState:tick:innerCollision");
+			ZoneTracker z1("MainGameState:tick:innerCollision");
 			const ds::Collision& c = _context->world->getCollision(i);
 			//LOG << i << " first: " << c.firstType << " second: " << c.secondType;
 			if (c.containsType(OT_BULLET)) {
@@ -86,9 +87,9 @@ bool MainGameState::handleCollisions() {
 // update
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
-	PR_START("MainGameState:update");
-	//PR_START("MainGameState:update:move");
+	ZoneTracker z("MainGameState:update");	
 	if (!_dying) {
+		ZoneTracker z2("MainGameState:update:move");
 		_cursor_pos = ds::renderer::getMousePosition();
 		_player->move(dt);
 		_player->shootBullets(dt);
@@ -105,7 +106,7 @@ int MainGameState::update(float dt) {
 	_context->particles->update(dt);
 	//_context->trails->tick(dt);
 	if (!_dying) {
-		//PR_START("MainGameState:commonTickAEB");
+		ZoneTracker z3("MainGameState:commonTickAEB");
 		const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 
 		_balls->handleEvents(buffer);
@@ -133,7 +134,7 @@ int MainGameState::update(float dt) {
 			return 1;
 		}
 	}
-	PR_END("MainGameState:update");
+	//PR_END("MainGameState:update");
 	return 0;
 }
 

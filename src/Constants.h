@@ -11,7 +11,7 @@ const int MAX_SNAKE_TAILS = 10;
 const int MAX_DODGERS = 32;
 
 const int BG_LAYER      = 0;
-const int LIGHT_LAYER   = 1;
+//const int LIGHT_LAYER   = 1;
 const int MESSAGE_LAYER = 2;
 const int OBJECT_LAYER  = 3;
 

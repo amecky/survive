@@ -21,10 +21,10 @@ namespace messages {
 
 	void fadingMessage(GameContext* context, const ds::Texture& texture) {
 		// create light behind get ready message
-		ds::SID grid = context->world->create(Vector2f(512, 384), ds::math::buildTexture(600, 512, 440, 102), -1, LIGHT_LAYER);
-		context->world->setColor(grid, ds::Color(192, 0, 0, 255));
-		context->world->removeAfter(grid, context->settings->warmUpTime);
-		context->world->fadeAlphaTo(grid, 1.0f, 0.0f, context->settings->warmUpTime);
+		//ds::SID grid = context->world->create(Vector2f(512, 384), ds::math::buildTexture(600, 512, 440, 102), -1, LIGHT_LAYER);
+		//context->world->setColor(grid, ds::Color(192, 0, 0, 255));
+		//context->world->removeAfter(grid, context->settings->warmUpTime);
+		//context->world->fadeAlphaTo(grid, 1.0f, 0.0f, context->settings->warmUpTime);
 		// create get ready message
 		ds::SID gid = context->world->create(Vector2f(512, 384), texture, MESSAGE_LAYER);
 		context->world->removeAfter(gid, context->settings->warmUpTime);

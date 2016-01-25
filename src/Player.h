@@ -23,7 +23,7 @@ private:
 	ds::SID _id;
 	float _angle;
 	Vector2f _position;
-	ds::SID _lightIndex;
+	//ds::SID _lightIndex;
 	ShootingMode _shootingMode;
 	float _shootTimer;
 	bool _alive;

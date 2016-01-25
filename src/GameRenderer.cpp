@@ -56,7 +56,7 @@ void GameRenderer::drawBorder() {
 }
 
 void GameRenderer::renderWorld() {
-	PR_START("GameRenderer:render");
+	ZoneTracker z("GameRenderer:render");
 	ds::renderer::selectViewport(_context->viewport_id);
 	drawBorder();
 	_context->world->renderSingleLayer(MESSAGE_LAYER);
@@ -81,5 +81,5 @@ void GameRenderer::renderWorld() {
 	ds::renderer::draw_render_target(_rt1);
 	*/
 	ds::renderer::selectViewport(0);
-	PR_END("GameRenderer:render");
+	
 }
