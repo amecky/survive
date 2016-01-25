@@ -12,7 +12,7 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	
 	_balls = new Cubes(_context);
 	_context->world->setBoundingRect(ds::Rect(40, 40, 1520, 820));
-	_context->world->create(v2(800, 450), ds::math::buildTexture(840, 360, 120, 120), OBJECT_LAYER);
+	//_context->world->create(v2(800, 450), ds::math::buildTexture(840, 360, 120, 120), OBJECT_LAYER);
 	_context->world->ignoreCollisions(OT_PLAYER, OT_BULLET);
 	_context->world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
 	_context->world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
