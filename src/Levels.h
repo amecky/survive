@@ -15,6 +15,9 @@ class Levels : public ds::DataFile {
 public:
 	Levels();
 	~Levels();
+	bool saveData(ds::JSONWriter& writer) {
+		return true;
+	}
 	bool loadData(const ds::JSONReader& reader);
 	const char* getFileName() const {
 		return "resources\\waves.json";
