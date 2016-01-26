@@ -16,9 +16,12 @@ struct CubeDefinition {
 	float velocity;
 	float velocityVariance;
 	int numStars;
-	int behaviorBits;
 	float growTTL;
 	int type;
+	int energy;
+	int nextType;
+	float trailDistance;
+	int trailSystem;
 };
 
 // ---------------------------------------
@@ -97,8 +100,9 @@ struct Ball {
 	v2 force;
 	int def_index;
 	int wave_index;
+	int energy;
 
-	Ball() : velocity(0, 0), force(0, 0) , def_index(0) , wave_index(0) {}
+	Ball() : velocity(0, 0), force(0, 0) , def_index(0) , wave_index(0) , energy(0) {}
 
 };
 

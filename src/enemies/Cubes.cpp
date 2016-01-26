@@ -1,6 +1,6 @@
 #include "Cubes.h"
 #include "..\Constants.h"
-
+#include <utils\Log.h>
 
 const int ALL_TYPES[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE };
 
@@ -17,8 +17,11 @@ bool CubeDefinitions::loadData(const ds::JSONReader& reader) {
 		reader.get_float(cats[i], "velocity", &def.velocity);
 		reader.get_float(cats[i], "velocity_variance", &def.velocityVariance);
 		reader.get_int(cats[i], "num_stars", &def.numStars);
-		reader.get_int(cats[i], "behavior_bits", &def.behaviorBits);
+		reader.get_int(cats[i], "energy", &def.energy);
+		reader.get_int(cats[i], "next_type", &def.nextType);
 		reader.get_float(cats[i], "grow_ttl", &def.growTTL);
+		reader.get_int(cats[i], "trail_system", &def.trailSystem);
+		reader.get_float(cats[i], "trail_distance", &def.trailDistance);
 		_definitions.push_back(def);
 	}
 	return true;
@@ -83,7 +86,7 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 	const CubeDefinition cubeDefinition = _cubeDefintions.get(waveDefinition.cubeType);
 	if (total > 1) {
 		float ra = static_cast<float>(current) / static_cast<float>(total)* TWO_PI;
-		float rd = ds::math::random(10.0f, 25.0f);
+		float rd = ds::math::random(40.0f, 60.0f);
 		v2 pp = v2(rd * cos(ra), rd * sin(ra));
 		position += pp;
 	}
@@ -97,6 +100,10 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 	data->force = v2(0, 0);
 	data->def_index = waveDefinition.cubeType;
 	data->wave_index = waveDefinitionIndex;
+	data->energy = cubeDefinition.energy;
+	if (cubeDefinition.trailSystem != -1) {
+		_context->trails->add(sid, cubeDefinition.trailDistance, cubeDefinition.trailSystem);
+	}
 }
 
 // ---------------------------------------
@@ -250,31 +257,30 @@ int Cubes::killBalls(const v2& bombPos, KilledBall* killedBalls) {
 	return count;
 }
 
+// ---------------------------------------
+// kill cube
+// ---------------------------------------
 int Cubes::kill(ds::SID sid) {
 	int ret = -1;
 	if (_world->contains(sid)) {
 		int type = _world->getType(sid);
 		if (type == OT_FOLLOWER || type == OT_BIG_CUBE || type == OT_HUGE_CUBE) {
-			ret = type;
-			// FIXME: split into two
-			v2 p = _world->getPosition(sid);
-			_context->particles->start(BALL_EXPLOSION, p);
-			_world->remove(sid);
+			Ball* data = (Ball*)_world->get_data(sid);
+			--data->energy;
+			if (data->energy <= 0) {
+				ret = type;
+				v2 p = _world->getPosition(sid);
+				_context->particles->start(BALL_EXPLOSION, p);
+				_world->remove(sid);
+				const CubeDefinition& def = _cubeDefintions.get(data->def_index);				
+				if (def.nextType != -1) {
+					for (int i = 0; i < 2; ++i) {
+						createBall(p, i, 2, def.nextType);
+					}
+				}
+			}
 		}
 	}
-	/*
-	int types[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE };
-	ds::SID sids[256];
-	int num = _world->find_by_types(types, 3, sids, 256);
-	for (int i = 0; i < num; ++i) {
-		if (sids[i] == sid) {
-			ret = _world->getType(sid);
-			v2 p = _world->getPosition(sids[i]);
-			_context->particles->start(BALL_EXPLOSION, p);
-			_world->remove(sids[i]);
-		}
-	}
-	*/
 	return ret;
 }
 // ---------------------------------------

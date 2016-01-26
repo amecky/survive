@@ -52,7 +52,6 @@ bool Survive::loadContent() {
 
 void Survive::init() {
 	activate("MainGameState");
-	//ds::repository::list();
 }
 
 // -------------------------------------------------------
@@ -65,22 +64,12 @@ void Survive::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void Survive::draw() {	
-	if (_showSettings) {
-		_context->settings->showDialog(&_settingPos);
-	}
 }
 
 // -------------------------------------------------------
 // OnChar
 // -------------------------------------------------------
 void Survive::OnChar( char ascii,unsigned int keyState ) {
-	if (ascii == '2') {
-		_showSettings = !_showSettings;
-	}
-	if (ascii == '1') {
-		_context->world->debug();
-	}
-	
 }
 
 // -------------------------------------------------------

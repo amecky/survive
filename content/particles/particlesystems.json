@@ -10,18 +10,18 @@ bullet_explosion {
 	//file : "stride_explosion"
 	//id : 2
 //}
-//player_trail {
-	//file : "player_trail"
-	//id : 3
-//}
+player_trail {
+	file : "player_trail"
+	id : 3
+}
 //bullet_trail {
 	//file : "bullet_trail" 
 	//id : 4
 //}
-//enemy_trail {
-	//file : "enemy_trail"
-	//id : 5
-//}
+enemy_trail {
+	file : "enemy_trail"
+	id : 5
+}
 head_stride_explosion {
 	file : "head_ring_explosion"
 	id : 6
