@@ -5,6 +5,8 @@
 #include "..\utils\GameContext.h"
 #include "..\Player.h"
 #include "..\enemies\Cubes.h"
+#include "..\EventBuffer.h"
+#include "..\Levels.h"
 
 class MainGameState : public ds::GameState {
 
@@ -28,5 +30,7 @@ private:
 	v2 _cursor_pos;
 	bool _dying;
 	float _dying_timer;
+	Levels _levels;
+	EventBuffer _eventBuffer;
 };
 

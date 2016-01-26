@@ -21,6 +21,7 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_context->world->ignoreCollisions(OT_BIG_CUBE, OT_HUGE_CUBE);
 	_context->world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
 	//_context->world->ignoreLayer(LIGHT_LAYER);
+	_levels.load();
 }
 
 MainGameState::~MainGameState() {
@@ -78,6 +79,7 @@ bool MainGameState::handleCollisions() {
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
 	ZoneTracker z("MainGameState:update");	
+	//_eventBuffer.reset();
 	if (!_dying) {
 		ZoneTracker z2("MainGameState:update:move");
 		_cursor_pos = ds::renderer::getMousePosition();
@@ -103,6 +105,11 @@ int MainGameState::update(float dt) {
 		if (handleCollisions()) {
 			_dying = true;
 		}
+
+		
+		_levels.tick(_eventBuffer, dt);
+
+
 	}
 	if (_dying) {
 		_dying_timer -= dt;
@@ -141,6 +148,7 @@ void MainGameState::activate() {
 	_player->setShooting(SM_IDLE);
 	_dying = false;
 	_dying_timer = 4.0f;
+	_levels.prepare(0);
 }
 
 // -------------------------------------------------------
