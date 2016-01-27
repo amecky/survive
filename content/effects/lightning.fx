@@ -2,7 +2,7 @@ uniform extern float4x4 gWVP;
 uniform extern texture gBackTex;
 uniform extern texture gTex;
 float4 min_color = float4(0.8,0.8,0.8,1.0);
-float4 ambient_color = float4(0.2,0.2,0.2,1.0);
+float4 ambient_color = float4(0.4,0.4,0.4,1.0);
 
 sampler TexS = sampler_state {
 	Texture = <gTex>;

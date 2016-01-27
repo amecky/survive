@@ -2,7 +2,7 @@
 #include "..\Constants.h"
 #include <utils\Log.h>
 
-const int ALL_TYPES[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE };
+const int ALL_TYPES[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE, OT_MEGA_CUBE };
 
 // ---------------------------------------
 // load cube definitions
@@ -101,8 +101,8 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 	data->def_index = waveDefinition.cubeType;
 	data->wave_index = waveDefinitionIndex;
 	data->energy = cubeDefinition.energy;
-	data->lightIndex = _world->create(position, "hl_light");
-	_world->scaleByPath(data->lightIndex, &_context->settings->starScalePath, 0.4f);
+	//data->lightIndex = _world->create(position, "hc_light");
+	//_world->scaleByPath(data->lightIndex, &_context->settings->starScalePath, 0.4f);
 	//if (cubeDefinition.trailSystem != -1) {
 		//_context->trails->add(sid, cubeDefinition.trailDistance, cubeDefinition.trailSystem);
 	//}
@@ -116,12 +116,13 @@ void Cubes::handleEvents(const ds::ActionEventBuffer& buffer) {
 		const ds::ActionEvent& event = buffer.events[i];
 		if (_world->contains(event.sid)) {
 			int t = _world->getType(event.sid);
-			if (t == OT_BIG_CUBE || t == OT_HUGE_CUBE || t == OT_FOLLOWER) {
+			if (t == OT_BIG_CUBE || t == OT_HUGE_CUBE || t == OT_FOLLOWER|| t == OT_MEGA_CUBE) {
 				if (event.type == ds::AT_SCALE_BY_PATH) {
 					Ball* data = (Ball*)_world->get_data(event.sid);
 					assert(data != 0);
 					_world->moveBy(event.sid, data->velocity, true);
-					_world->moveBy(data->lightIndex, data->velocity, true);
+					_world->rotate(event.sid, 180.0f, 0.8f, -1);
+					//_world->moveBy(data->lightIndex, data->velocity, true);
 				}
 			}
 		}
@@ -239,7 +240,7 @@ void Cubes::move(float dt) {
 // ---------------------------------------
 int Cubes::killBalls(const v2& bombPos, KilledBall* killedBalls) {
 	int count = 0;
-	int types[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE };
+	int types[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE, OT_MEGA_CUBE};
 	ds::SID sids[256];
 	int num = _world->find_by_types(types, 3, sids, 256);
 	for (int i = 0; i < num; ++i) {
@@ -267,7 +268,7 @@ int Cubes::kill(ds::SID sid) {
 	int ret = -1;
 	if (_world->contains(sid)) {
 		int type = _world->getType(sid);
-		if (type == OT_FOLLOWER || type == OT_BIG_CUBE || type == OT_HUGE_CUBE) {
+		if (type == OT_FOLLOWER || type == OT_BIG_CUBE || type == OT_HUGE_CUBE || type == OT_MEGA_CUBE) {
 			Ball* data = (Ball*)_world->get_data(sid);
 			--data->energy;
 			if (data->energy <= 0) {
@@ -290,9 +291,9 @@ int Cubes::kill(ds::SID sid) {
 // kill all
 // ---------------------------------------
 void Cubes::killAll(bool explode) {
-	int types[] = { 4, 5, 6 };
+	int types[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE, OT_MEGA_CUBE };
 	ds::SID sids[256];
-	int num = _world->find_by_types(types, 3, sids, 256);
+	int num = _world->find_by_types(types, 4, sids, 256);
 	for ( int i = 0; i < num; ++i) {
 		if (explode) {
 			v2 p = _world->getPosition(sids[i]);

@@ -16,3 +16,9 @@ wave {
 	num_spawn : 1
 	spawn_ttl : 4.0
 }
+wave {
+	cube_type : 3
+	max_concurrent : 60
+	num_spawn : 1
+	spawn_ttl : 4.0
+}
