@@ -101,8 +101,9 @@ struct Ball {
 	int def_index;
 	int wave_index;
 	int energy;
+	ds::SID lightIndex;
 
-	Ball() : velocity(0, 0), force(0, 0) , def_index(0) , wave_index(0) , energy(0) {}
+	Ball() : velocity(0, 0), force(0, 0) , def_index(0) , wave_index(0) , energy(0) , lightIndex(ds::INVALID_SID) {}
 
 };
 

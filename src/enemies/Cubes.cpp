@@ -101,9 +101,11 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 	data->def_index = waveDefinition.cubeType;
 	data->wave_index = waveDefinitionIndex;
 	data->energy = cubeDefinition.energy;
-	if (cubeDefinition.trailSystem != -1) {
-		_context->trails->add(sid, cubeDefinition.trailDistance, cubeDefinition.trailSystem);
-	}
+	data->lightIndex = _world->create(position, "hl_light");
+	_world->scaleByPath(data->lightIndex, &_context->settings->starScalePath, 0.4f);
+	//if (cubeDefinition.trailSystem != -1) {
+		//_context->trails->add(sid, cubeDefinition.trailDistance, cubeDefinition.trailSystem);
+	//}
 }
 
 // ---------------------------------------
@@ -119,6 +121,7 @@ void Cubes::handleEvents(const ds::ActionEventBuffer& buffer) {
 					Ball* data = (Ball*)_world->get_data(event.sid);
 					assert(data != 0);
 					_world->moveBy(event.sid, data->velocity, true);
+					_world->moveBy(data->lightIndex, data->velocity, true);
 				}
 			}
 		}

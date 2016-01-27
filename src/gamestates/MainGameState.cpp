@@ -78,7 +78,7 @@ bool MainGameState::handleCollisions() {
 // update
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
-	ZoneTracker z("MainGameState:update");	
+	ZoneTracker z("MainGameState:update");
 	//_eventBuffer.reset();
 	if (!_dying) {
 		ZoneTracker z2("MainGameState:update:move");
@@ -91,7 +91,7 @@ int MainGameState::update(float dt) {
 	_context->particles->update(dt);
 	_context->trails->tick(dt);
 	if (!_dying) {
-		ZoneTracker z3("MainGameState:commonTickAEB");
+		ZoneTracker z1("MainGameState:commonTickAEB");
 		const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
 		_balls->handleEvents(buffer);
 		if (buffer.events.size() > 0) {

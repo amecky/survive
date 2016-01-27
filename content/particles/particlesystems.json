@@ -46,7 +46,7 @@ head_stride_explosion {
 	//file : "dodger_trail"
 	//id : 11
 //}
-//bouncer_trail {
-	//file : "bouncer_trail"
-	//id : 12
-//}
+huge_cube_trail {
+	file : "huge_cube_trail"
+	id : 12
+}

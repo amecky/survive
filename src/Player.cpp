@@ -21,8 +21,8 @@ void Player::create() {
 	_angle = 0.0f;
 	_position = Vector2f(100, 384);
 	_context->trails->add(_id, 5.0f, 3);
-	//_lightIndex = _context->world->create(_position, "lightning", LIGHT_LAYER);// _context->lights->add_permanent(_position, ds::Color(0, 255, 0, 255));
-	//_context->world->setColor(_lightIndex, ds::Color(0, 255, 0, 255));
+	_lightIndex = _context->world->create(_position, "lightning", LIGHT_LAYER);// _context->lights->add_permanent(_position, ds::Color(0, 255, 0, 255));
+	_context->world->setColor(_lightIndex, ds::Color(0, 255, 0, 255));
 	_shootingMode = SM_IDLE;
 	_shootTimer = _context->fireRate;
 	_alive = true;
@@ -82,7 +82,7 @@ void Player::move(float dt) {
 		_context->world->setPosition(_id, pp);
 		_position = pp;
 		_context->playerPos = pp;
-		//_context->world->setPosition(_lightIndex, _position);
+		_context->world->setPosition(_lightIndex, _position);
 		_context->world_pos = pp;
 		ds::renderer::setViewportPosition(_context->viewport_id, pp);
 	}

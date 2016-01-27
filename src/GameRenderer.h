@@ -9,6 +9,7 @@ public:
 	void renderWorld();
 private:
 	void drawBorder();
+	void createBorder();
 	ds::Color _border_color;
 	GameContext* _context;
 	int m_AddBS;
@@ -18,5 +19,6 @@ private:
 	bool m_Shaking;
 	float m_ShakeTimer;
 	int _light_desc;
+	ds::Shader* _shader;
 };
 

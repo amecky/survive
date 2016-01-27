@@ -82,10 +82,10 @@ sprite {
     name : "lightning"
     texture_id : 0
     position : 640,360
-    rect : 440,0,152,152
+    rect : 490,190,160,160
     scale : 1,1
     rotation : 0
-    color : 0,255,0,255
+    color : 0,255,0,32
     type : 20
 }
 sprite { 
@@ -147,4 +147,14 @@ sprite {
     rotation : 0
     color : 181,17,68,255
     type : 6
+}
+sprite { 
+    name : "hc_light"
+    texture_id : 0
+    position : 640,360
+    rect : 650,160,125,125
+    scale : 1,1
+    rotation : 0
+    color : 255,255,255,255
+    type : 0
 }
