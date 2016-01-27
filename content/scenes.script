@@ -1,0 +1,28 @@
+// full game
+define scene(0) {
+	set_render_target(0);
+	world_render_layer(0);
+	set_render_target(0);
+	world_render_layer(1);
+	restore_backbuffer();
+	select_shader(1);
+	draw_screen_quad();
+	world_render_layer(2);
+	render_particles();
+	world_render_layer(2);
+	select_viewport(0);
+}
+// no lightning
+define scene(1) {
+	world_render_layer(0);
+	world_render_layer(2);
+	render_particles();
+	world_render_layer(2);
+	select_viewport(0);
+	render_dialog(1);
+}
+// game over
+define scene(2) {
+	world_render_layer(0);
+	render_dialog(2);
+}

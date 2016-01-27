@@ -7,6 +7,7 @@
 #include "gamestates\MainGameState.h"
 #include "GameRenderer.h"
 #include <io\FileRepository.h>
+#include <renderer\Scenes.h>
 
 ds::BaseApp *app = new Survive(); 
 
@@ -47,6 +48,9 @@ bool Survive::loadContent() {
 	connectGameStates("MainGameState", 1, "GameOverState");
 	connectGameStates("GameOverState", 1, "MainGameState");
 	connectGameStates("MainMenuState", 1, "MainGameState");
+
+	ds::Scenes s;
+	s.load();
 	return true;
 }
 
