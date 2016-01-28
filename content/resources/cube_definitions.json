@@ -17,7 +17,7 @@ cube {
 	velocity_variance : 20
 	num_stars : 2
 	grow_ttl : 0.4
-	energy : 4
+	energy : 6
 	next_type : 0
 	trail_system : 5
 	trail_distance : 25
@@ -29,7 +29,7 @@ cube {
 	velocity_variance : 20
 	num_stars : 4
 	grow_ttl : 0.6
-	energy : 10
+	energy : 8
 	next_type : 1
 	trail_system : 12
 	trail_distance : 20
@@ -41,8 +41,20 @@ cube {
 	velocity_variance : 20
 	num_stars : 4
 	grow_ttl : 0.6
-	energy : 16
+	energy : 12
 	next_type : 2
+	trail_system : 12
+	trail_distance : 20
+}
+cube {
+	type : 7
+	name : "SuperCube"
+	velocity : 140
+	velocity_variance : 20
+	num_stars : 4
+	grow_ttl : 0.6
+	energy : 16
+	next_type : 3
 	trail_system : 12
 	trail_distance : 20
 }

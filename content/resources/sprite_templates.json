@@ -168,3 +168,23 @@ sprite {
     color : 251,230,128,255
     type : 7
 }
+sprite { 
+    name : "SuperCube"
+    texture_id : 0
+    position : 640,360
+    rect : 220,800,180,180
+    scale : 1,1
+    rotation : 0
+    color : 0,255,255,255
+    type : 8
+}
+sprite { 
+    name : "Star"
+    texture_id : 0
+    position : 640,360
+    rect : 0,40,24,24
+    scale : 1,1
+    rotation : 0
+    color : 255,255,0,255
+    type : 9
+}

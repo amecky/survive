@@ -20,7 +20,12 @@ struct GameSettings : public ds::DynamicGameSettings {
 	// border line settings
 	float borderAmplitude;
 	float borderShakeRadius;
-	ds::Vector2fPath starScalePath;	
+	// star
+	float starTTL;
+	float starFlashTTL;
+	float starMagnetRadius;
+	float starSeekVelocity;
+	ds::Vector2fPath starScalePath;
 
 	GameSettings() {
 		addFloat("borderAmplitude", &borderAmplitude, 4.0f);
@@ -37,6 +42,10 @@ struct GameSettings : public ds::DynamicGameSettings {
 		addFloat("snakeFollowVelocity", &snakeFollowVelocity, 2.0f);
 		addFloat("spawnTimer", &spawnTimer, 1.0f);
 		addPath("star_scale_path", &starScalePath);
+		addFloat("star_ttl", &starTTL, 3.0f);
+		addFloat("star_flash_ttl", &starFlashTTL, 0.6f);
+		addFloat("star_magnet_radius", &starMagnetRadius, 250.0f);
+		addFloat("star_seek_velocity", &starSeekVelocity, 400.0f);
 	}
 
 	const char* getFileName() const {

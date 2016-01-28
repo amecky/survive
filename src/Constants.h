@@ -47,6 +47,8 @@ enum ObjectTypes {
 	OT_BIG_CUBE,
 	OT_HUGE_CUBE,
 	OT_MEGA_CUBE,
+	OT_SUPER_CUBE,
+	OT_STAR,
 	OT_RING,
 	OT_EOL
 };

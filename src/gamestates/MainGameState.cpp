@@ -7,7 +7,7 @@
 #include "..\GameRenderer.h"
 #include "..\Constants.h"
 
-MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"), _context(ctx) {
+MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"), _context(ctx), _world(ctx->world) {
 	_player = new Player(_context);
 	
 	_balls = new Cubes(_context);
@@ -41,6 +41,9 @@ void MainGameState::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID ene
 	int type = _balls->kill(enemyID);
 	if (type >= 0) {
 		_context->particles->start(ENEMY_EXPLOSION, enemyPos);
+		// FIXME: get from cube definition
+		// FIXME: get radius from cube definition
+		addStar(enemyPos, 4, 20.0f);
 	}
 }
 
@@ -54,7 +57,7 @@ bool MainGameState::handleCollisions() {
 	if (numCollisions > 0) {
 		for (int i = 0; i < numCollisions; ++i) {
 			ZoneTracker z1("MainGameState:tick:innerCollision");
-			const ds::Collision& c = _context->world->getCollision(i);
+			const ds::Collision& c = _context->world->getCollision(i);			
 			if (c.containsType(OT_BULLET)) {
 					if (c.firstType == OT_BULLET) {
 						killEnemy(c.firstSID, c.firstPos, c.secondSID, c.secondPos, c.secondType);
@@ -65,10 +68,17 @@ bool MainGameState::handleCollisions() {
 				//}
 			}
 			else if (c.containsType(OT_PLAYER)) {
-				
-				_player->kill();
-				_balls->killAll();		
-				ret = true;								
+				if (c.containsType(OT_STAR)) {
+					LOG << "picked up star";
+					ds::SID sid = c.getSIDByType(OT_STAR);
+					_world->remove(sid);
+					//++picked;
+				}
+				else {
+					_player->kill();
+					_balls->killAll();
+					ret = true;
+				}
 			}
 		}
 	}
@@ -109,7 +119,7 @@ int MainGameState::update(float dt) {
 		
 		_levels.tick(_eventBuffer, dt);
 
-
+		moveStars(_context->world_pos, dt);
 	}
 	if (_dying) {
 		_dying_timer -= dt;
@@ -167,6 +177,54 @@ int MainGameState::onButtonUp(int button, int x, int y) {
 	return 0;
 }
 
+// ---------------------------------------
+// move towards player if in range
+// ---------------------------------------
+void MainGameState::moveStars(const v2& target, float dt) {
+	ds::SID ids[64];
+	int num = _world->find_by_type(OT_STAR, ids, 64);
+	for (int i = 0; i < num; ++i) {
+		v2 p = _world->getPosition(ids[i]);
+		v2 diff = target - p;
+		if (sqr_length(diff) <  _context->settings->starMagnetRadius * _context->settings->starMagnetRadius) {
+			v2 n = normalize(diff);
+			n *= _context->settings->starSeekVelocity;
+			p += n * dt;
+			_world->setPosition(ids[i], p);
+		}
+	}
+}
+
+// ---------------------------------------
+// create star
+// ---------------------------------------
+void MainGameState::createStar(const v2& pos) {
+	ds::SID sid = _world->create(pos, "Star");
+	_world->scaleByPath(sid, &_context->settings->starScalePath, _context->settings->starFlashTTL);
+	_world->attachCollider(sid, OT_STAR, 0);
+	_world->removeAfter(sid, _context->settings->starTTL);
+}
+// ---------------------------------------
+// add new star
+// ---------------------------------------
+void MainGameState::addStar(const v2& pos, int count,float radius) {
+	int num = _world->get_count(OT_STAR);
+	if (num + count < 128) {
+		if (count == 1) {
+			createStar(pos);
+		}
+		else {
+			// spread out with radius = 20
+			float step = TWO_PI / static_cast<float>(count);
+			for (int i = 0; i < count; ++i) {
+				v2 position;
+				position.x = pos.x + radius * cos(step * static_cast<float>(i));
+				position.y = pos.y + radius * sin(step * static_cast<float>(i));
+				createStar(position);
+			}
+		}
+	}
+}
 // -------------------------------------------------------
 // on char
 // -------------------------------------------------------
@@ -188,6 +246,9 @@ int MainGameState::onChar(int ascii) {
 	}
 	if (ascii == '4') {
 		_balls->emitt(3);
+	}
+	if (ascii == '5') {
+		_balls->emitt(4);
 	}
 	if (ascii == '6') {
 		_context->particles->startGroup(1, v3(512, 384, 0));

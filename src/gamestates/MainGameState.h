@@ -24,7 +24,12 @@ private:
 	bool handleCollisions();
 	void killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType);
 	void drawBorder(const v2& pos, const v2& center,const ds::Color& color,float descale);
+	void moveStars(const v2& target, float dt);
+	void createStar(const v2& pos);
+	void addStar(const v2& pos, int count,float radius = 20.0f);
+
 	GameContext* _context;
+	ds::World* _world;
 	Player* _player;
 	Cubes* _balls;
 	v2 _cursor_pos;

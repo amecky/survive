@@ -8,7 +8,7 @@ GameRenderer::GameRenderer(GameContext* context) : _context(context) {
 	_context->world->attachViewport(BG_LAYER, _context->viewport_id);
 	_context->world->attachViewport(LIGHT_LAYER, _context->viewport_id);
 	_context->world->attachViewport(OBJECT_LAYER, _context->viewport_id);
-
+	/*
 	m_AddBS = ds::renderer::createBlendState("alpha_blend_state", ds::BL_ONE, ds::BL_ONE, true);
 	
 	_rt1 = ds::renderer::createRenderTarget(ds::Color(0, 0, 0, 0));
@@ -25,7 +25,7 @@ GameRenderer::GameRenderer(GameContext* context) : _context(context) {
 	_shader = ds::renderer::getShader(light_desc.shader);
 	_shader->setTexture("gTex", _rt2.textureID);
 	_shader->setTexture("gBackTex", _rt1.textureID);
-
+	*/
 	createBorder();
 }
 
