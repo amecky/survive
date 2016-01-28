@@ -188,3 +188,13 @@ sprite {
     color : 255,255,0,255
     type : 9
 }
+sprite { 
+    name : "CubeEmitter"
+    texture_id : 0
+    position : 640,360
+    rect : 0,680,57,52
+    scale : 1,1
+    rotation : 0
+    color : 255,255,255,255
+    type : 10
+}

@@ -31,7 +31,7 @@ private:
 	GameContext* _context;
 	ds::World* _world;
 	Player* _player;
-	Cubes* _balls;
+	Cubes* _cubes;
 	v2 _cursor_pos;
 	bool _dying;
 	float _dying_timer;

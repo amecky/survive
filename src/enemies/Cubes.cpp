@@ -61,6 +61,8 @@ Cubes::Cubes(GameContext* context) : _context(context) , _world(context->world) 
 
 	_cubeDefintions.load();
 	_waveDefinitions.load();
+	_cubeEmitterSettings.load();
+
 	for (size_t i = 0; i < _waveDefinitions.size(); ++i) {
 		WaveRuntime rt;
 		rt.current = 0;
@@ -235,9 +237,8 @@ void Cubes::move(float dt) {
 // ---------------------------------------
 int Cubes::killBalls(const v2& bombPos, KilledBall* killedBalls) {
 	int count = 0;
-	int types[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE, OT_MEGA_CUBE, OT_SUPER_CUBE };
 	ds::SID sids[256];
-	int num = _world->find_by_types(types, 3, sids, 256);
+	int num = _world->find_by_types(ALL_TYPES, 4, sids, 256);
 	for (int i = 0; i < num; ++i) {
 		v2 p = _world->getPosition(sids[i]);
 		Ball* data = (Ball*)_world->get_data(sids[i]);
@@ -287,9 +288,8 @@ int Cubes::kill(ds::SID sid) {
 // kill all
 // ---------------------------------------
 void Cubes::killAll(bool explode) {
-	int types[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE, OT_MEGA_CUBE, OT_SUPER_CUBE };
 	ds::SID sids[256];
-	int num = _world->find_by_types(types, 4, sids, 256);
+	int num = _world->find_by_types(ALL_TYPES, 4, sids, 256);
 	for ( int i = 0; i < num; ++i) {
 		if (explode) {
 			v2 p = _world->getPosition(sids[i]);
@@ -304,16 +304,29 @@ void Cubes::killAll(bool explode) {
 // ------------------------------------------------
 void Cubes::emitt(int type) {
 	const SpawnPoint& spawn = _emitter->random();
+	/*	
 	const WaveDefinition& waveDef = _waveDefinitions.get(type);
 	for (int i = 0; i < waveDef.numSpawn; ++i) {
 		createBall(spawn.position, i, waveDef.numSpawn, type);
 	}
+	*/
+	ds::SID sid = _world->create(spawn.position, "CubeEmitter", OBJECT_LAYER);
+	CubeEmitter* emitter = (CubeEmitter*)_world->attach_data(sid, sizeof(CubeEmitter));
+	emitter->timer = 0.0;
+	emitter->cube_type = type;
+	// FIXME: take values from settings
+	emitter->spawnTTL = _cubeEmitterSettings.spawnTTL;
+	emitter->ttl = _cubeEmitterSettings.ttl;
+	emitter->dead = false;
+	_world->scaleByPath(sid, &_cubeEmitterSettings.scalePath, _cubeEmitterSettings.scaleTTL);
+	_world->flashColor(sid, _cubeEmitterSettings.startFlash, _cubeEmitterSettings.endFlash, _cubeEmitterSettings.flashAmplitude, -1);
 }
 
 // ------------------------------------------------
 // tick and create new cubes
 // ------------------------------------------------
 void Cubes::spawn(float dt) {
+	/*
 	for (size_t i = 0; i < _waveDefinitions.size(); ++i) {
 		const WaveDefinition& waveDef = _waveDefinitions.get(i);
 		WaveRuntime& runtime = _waveRuntimes[i];
@@ -332,6 +345,23 @@ void Cubes::spawn(float dt) {
 		}
 
 	}
+	*/
+	ds::SID emitters[128];
+	int num = _world->find_by_type(OT_CUBE_EMITTER, emitters, 128);
+	for (int i = 0; i < num; ++i) {
+		CubeEmitter* data = (CubeEmitter*)_world->get_data(emitters[i]);
+		if (data != 0) {
+			data->timer += dt;
+			if (data->timer > data->spawnTTL && !data->dead) {
+				createBall(_world->getPosition(emitters[i]), 1, 1, data->cube_type);
+				data->dead = true;
+			}
+			if ( data->timer > data->ttl ) {
+				_context->particles->start(EMITTER_EXPLOSION, _world->getPosition(emitters[i]));
+				_world->remove(emitters[i]);
+			}
+		}
+	}
 }
 
 // ------------------------------------------------
@@ -349,4 +379,11 @@ void Cubes::activate() {
 		rt.timer = 0.0f;
 		rt.total = 0;
 	}
+}
+
+// ------------------------------------------------
+// reload
+// ------------------------------------------------
+void Cubes::reload() {
+	_cubeEmitterSettings.load();
 }

@@ -50,3 +50,7 @@ huge_cube_trail {
 	file : "huge_cube_trail"
 	id : 12
 }
+emitter_explosion {
+	file : "emitter_explosion" 
+	id : 13
+}

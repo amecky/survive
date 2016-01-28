@@ -6,6 +6,7 @@
 #include "..\utils\GameContext.h"
 #include <lib\DataArray.h>
 #include "BallEmitter.h"
+#include "..\utils\CubeEmitterSettings.h"
 
 // ---------------------------------------
 // Cube definition
@@ -119,6 +120,16 @@ struct WaveRuntime {
 
 typedef ds::Array<WaveRuntime> WaveRuntimes;
 
+struct CubeEmitter {
+
+	float timer;
+	float ttl;
+	float spawnTTL;
+	int cube_type;
+	bool dead;
+
+};
+
 // ---------------------------------------
 // Cubes
 // ---------------------------------------
@@ -135,6 +146,7 @@ public:
 	void handleEvents(const ds::ActionEventBuffer& buffer);
 	void move(float dt);
 	int kill(ds::SID sid);
+	void reload();
 private:	
 	void createBall(const v2& pos, int current, int total, int waveDefinitionIndex);
 	void seek(const v2& target, float velocity);
@@ -151,4 +163,5 @@ private:
 	BallEmitter* _emitter;
 	int _killed;
 	int _emitted;
+	CubeEmitterSettings _cubeEmitterSettings;
 };

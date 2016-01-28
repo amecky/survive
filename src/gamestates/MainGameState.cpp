@@ -10,22 +10,22 @@
 MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"), _context(ctx), _world(ctx->world) {
 	_player = new Player(_context);
 	
-	_balls = new Cubes(_context);
-	_context->world->setBoundingRect(ds::Rect(40, 40, 1520, 820));
-	//_context->world->create(v2(800, 450), ds::math::buildTexture(840, 360, 120, 120), OBJECT_LAYER);
-	_context->world->ignoreCollisions(OT_PLAYER, OT_BULLET);
-	_context->world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
-	_context->world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
-	_context->world->ignoreCollisions(OT_FOLLOWER, OT_HUGE_CUBE);
-	_context->world->ignoreCollisions(OT_BIG_CUBE, OT_BIG_CUBE);
-	_context->world->ignoreCollisions(OT_BIG_CUBE, OT_HUGE_CUBE);
-	_context->world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
-	//_context->world->ignoreLayer(LIGHT_LAYER);
+	_cubes = new Cubes(_context);
+	_world->setBoundingRect(ds::Rect(40, 40, 1520, 820));
+	//_world->create(v2(800, 450), ds::math::buildTexture(840, 360, 120, 120), OBJECT_LAYER);
+	_world->ignoreCollisions(OT_PLAYER, OT_BULLET);
+	_world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
+	_world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
+	_world->ignoreCollisions(OT_FOLLOWER, OT_HUGE_CUBE);
+	_world->ignoreCollisions(OT_BIG_CUBE, OT_BIG_CUBE);
+	_world->ignoreCollisions(OT_BIG_CUBE, OT_HUGE_CUBE);
+	_world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
+	//_world->ignoreLayer(LIGHT_LAYER);
 	_levels.load();
 }
 
 MainGameState::~MainGameState() {
-	delete _balls;
+	delete _cubes;
 	delete _player;
 }
 
@@ -34,11 +34,11 @@ MainGameState::~MainGameState() {
 // --------------------------------------------------------------------------
 void MainGameState::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType) {
 	ZoneTracker z("MainGameState::killEnemy");
-	if (_context->world->contains(bulletID)) {
+	if (_world->contains(bulletID)) {
 		_context->particles->start(BULLET_EXPLOSION, bulletPos);
-		_context->world->remove(bulletID);
+		_world->remove(bulletID);
 	}
-	int type = _balls->kill(enemyID);
+	int type = _cubes->kill(enemyID);
 	if (type >= 0) {
 		_context->particles->start(ENEMY_EXPLOSION, enemyPos);
 		// FIXME: get from cube definition
@@ -53,11 +53,11 @@ void MainGameState::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID ene
 bool MainGameState::handleCollisions() {
 	ZoneTracker z("MainGameState:tick:collision");
 	bool ret = false;
-	int numCollisions = _context->world->getNumCollisions();
+	int numCollisions = _world->getNumCollisions();
 	if (numCollisions > 0) {
 		for (int i = 0; i < numCollisions; ++i) {
 			ZoneTracker z1("MainGameState:tick:innerCollision");
-			const ds::Collision& c = _context->world->getCollision(i);			
+			const ds::Collision& c = _world->getCollision(i);			
 			if (c.containsType(OT_BULLET)) {
 					if (c.firstType == OT_BULLET) {
 						killEnemy(c.firstSID, c.firstPos, c.secondSID, c.secondPos, c.secondType);
@@ -69,14 +69,13 @@ bool MainGameState::handleCollisions() {
 			}
 			else if (c.containsType(OT_PLAYER)) {
 				if (c.containsType(OT_STAR)) {
-					LOG << "picked up star";
 					ds::SID sid = c.getSIDByType(OT_STAR);
 					_world->remove(sid);
 					//++picked;
 				}
 				else {
 					_player->kill();
-					_balls->killAll();
+					_cubes->killAll();
 					ret = true;
 				}
 			}
@@ -95,20 +94,20 @@ int MainGameState::update(float dt) {
 		_cursor_pos = ds::renderer::getMousePosition();
 		_player->move(dt);
 		_player->shootBullets(dt);
-		//_balls->spawn(dt);
+		_cubes->spawn(dt);
 	}
-	_context->world->tick(dt);
+	_world->tick(dt);
 	_context->particles->update(dt);
 	_context->trails->tick(dt);
 	if (!_dying) {
 		ZoneTracker z1("MainGameState:commonTickAEB");
-		const ds::ActionEventBuffer& buffer = _context->world->getEventBuffer();
-		_balls->handleEvents(buffer);
+		const ds::ActionEventBuffer& buffer = _world->getEventBuffer();
+		_cubes->handleEvents(buffer);
 		if (buffer.events.size() > 0) {
 			for (int i = 0; i < buffer.events.size(); ++i) {
 				if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
-					_context->particles->start(BULLET_EXPLOSION, _context->world->getPosition(buffer.events[i].sid));
-					_context->world->remove(buffer.events[i].sid);
+					_context->particles->start(BULLET_EXPLOSION, _world->getPosition(buffer.events[i].sid));
+					_world->remove(buffer.events[i].sid);
 				}
 			}
 		}
@@ -153,7 +152,7 @@ void MainGameState::drawBorder(const v2& pos, const v2& center, const ds::Color&
 // activate
 // -------------------------------------------------------
 void MainGameState::activate() {
-	_balls->activate();
+	_cubes->activate();
 	_player->create();
 	_player->setShooting(SM_IDLE);
 	_dying = false;
@@ -233,25 +232,28 @@ int MainGameState::onChar(int ascii) {
 		return 1;
 	}
 	if (ascii == 'x') {
-		_balls->killAll();
+		_cubes->killAll();
 	}
 	if (ascii == '1') {
-		_balls->emitt(0);
+		_cubes->emitt(0);
 	}
 	if (ascii == '2') {
-		_balls->emitt(1);
+		_cubes->emitt(1);
 	}
 	if (ascii == '3') {
-		_balls->emitt(2);
+		_cubes->emitt(2);
 	}
 	if (ascii == '4') {
-		_balls->emitt(3);
+		_cubes->emitt(3);
 	}
 	if (ascii == '5') {
-		_balls->emitt(4);
+		_cubes->emitt(4);
 	}
 	if (ascii == '6') {
 		_context->particles->startGroup(1, v3(512, 384, 0));
+	}
+	if (ascii == 'r') {
+		_cubes->reload();
 	}
 	return 0;
 }

@@ -36,7 +36,7 @@ const int BALL_EXPLOSION = 7;
 const int BOMB_STARTUP = 5;
 const int BIG_CUBE_EXPLOSION = 6;
 const int HUGE_CUBE_EXPLOSION = 6;
-
+const int EMITTER_EXPLOSION = 13;
 // objects types
 enum ObjectTypes {
 	OT_UNKNOWN,
@@ -49,6 +49,7 @@ enum ObjectTypes {
 	OT_MEGA_CUBE,
 	OT_SUPER_CUBE,
 	OT_STAR,
+	OT_CUBE_EMITTER,
 	OT_RING,
 	OT_EOL
 };
