@@ -37,7 +37,7 @@ bool Survive::loadContent() {
 	_context->tripleShot = false;
 	_context->world_pos = v2(960, 540);
 	_showSettings = false;
-	activateMonitoring(12.0f);
+	//activateMonitoring(12.0f);
 	_settingPos = v2(900, 710);
 	_context->hud = gui->get("HUD");
 	_context->settings->load();
@@ -49,8 +49,8 @@ bool Survive::loadContent() {
 	connectGameStates("GameOverState", 1, "MainGameState");
 	connectGameStates("MainMenuState", 1, "MainGameState");
 
-	ds::Scenes s;
-	s.load();
+	//ds::Scenes s;
+	//s.load();
 	return true;
 }
 

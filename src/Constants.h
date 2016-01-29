@@ -14,6 +14,7 @@ const int BG_LAYER      = 0;
 const int LIGHT_LAYER   = 1;
 const int MESSAGE_LAYER = 2;
 const int OBJECT_LAYER  = 3;
+const int EFFECT_LAYER  = 4;
 
 const int MAX_BALLS = 256;
 

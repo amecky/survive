@@ -125,7 +125,7 @@ sprite {
     rect : 140,440,100,100
     scale : 1,1
     rotation : 0
-    color : 90,184,196,255
+    color : 90,32,196,255
     type : 4
 }
 sprite { 

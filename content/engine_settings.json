@@ -31,3 +31,26 @@ init_actions {
 	load_sprite_templates : true
 	initialize_editor : true
 }
+shaders {
+	background {
+		file : "background"
+		tech : "BackgroundTech"
+	}
+}
+descriptors {
+	background_gradient {
+		texture : "TextureArray" 
+		blend_state : "default"
+		shader : "background"
+	}
+}
+viewports {
+	default {
+		screen_size : 1280,720
+		world_size : 1280,720
+	}
+	main {
+		screen_size : 1280,720
+		world_size : 1600,900
+	}
+}
