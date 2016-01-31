@@ -122,7 +122,7 @@ sprite {
     name : "Follower"
     texture_id : 0
     position : 640,360
-    rect : 140,440,100,100
+    rect : 80,440,40,40
     scale : 1,1
     rotation : 0
     color : 90,32,196,255
@@ -132,7 +132,7 @@ sprite {
     name : "BigCube"
     texture_id : 0
     position : 640,360
-    rect : 40,560,120,120
+    rect : 80,440,40,40
     scale : 1,1
     rotation : 0
     color : 253,138,81,255
@@ -142,7 +142,7 @@ sprite {
     name : "HugeCube"
     texture_id : 0
     position : 640,360
-    rect : 80,740,140,140
+    rect : 260,620,100,100
     scale : 1,1
     rotation : 0
     color : 181,17,68,255

@@ -1,33 +1,44 @@
-dialog { 
-	name : "MainMenu" 
-}
-image {
-	id : 10
- 	pos : 200,702
- 	rect : 0,420,600,90 
-}
-button { 
-	id : 0
-	 pos : 400,520
- 	text : "New Game"
- 	rect : 710,0,400,60 
+image { 
+    id : 10
+    pos : 200,702
+    color : 255,255,255,255
+    centered : true
+    scale : 1
+    rect : 0,420,600,90
 }
 button { 
-	id : 1
- 	pos : 400,180
- 	text : "Exit"
- 	rect : 640,0,400,60 
+    id : 0
+    pos : 400,520
+    color : 255,255,255,255
+    centered : true
+    scale : 1
+    rect : 370,0,340,60
+    text : "New Game"
 }
 button { 
-	id : 2
- 	pos : 400,420
- 	text : "Highscores"
- 	rect : 710,0,400,60 
+    id : 1
+    pos : 400,180
+    color : 255,255,255,255
+    centered : true
+    scale : 1
+    rect : 370,0,340,60
+    text : "Exit"
 }
 button { 
-	id : 3
- 	pos : 400,320
- 	text : "Credits"
- 	rect : 710,0,400,60 
+    id : 2
+    pos : 400,420
+    color : 255,255,255,255
+    centered : true
+    scale : 1
+    rect : 370,0,340,60
+    text : "Highscores"
 }
-
+button { 
+    id : 3
+    pos : 400,320
+    color : 255,255,255,255
+    centered : true
+    scale : 1
+    rect : 370,0,340,60
+    text : "Credits"
+}

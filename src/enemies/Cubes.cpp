@@ -118,7 +118,7 @@ void Cubes::handleEvents(const ds::ActionEventBuffer& buffer) {
 					Ball* data = (Ball*)_world->get_data(event.sid);
 					assert(data != 0);
 					_world->moveBy(event.sid, data->velocity, true);
-					_world->rotate(event.sid, 180.0f, 0.8f, -1);
+					//_world->rotate(event.sid, 180.0f, 0.8f, -1);
 					//_world->moveBy(data->lightIndex, data->velocity, true);
 				}
 			}

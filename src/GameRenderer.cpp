@@ -86,15 +86,15 @@ void GameRenderer::renderWorld() {
 	_context->world->renderSingleLayer(EFFECT_LAYER);
 	//ds::renderer::draw_screen_quad(_shader);
 	//ds::renderer::setRenderTarget(_rt1);	
-	//_context->world->renderSingleLayer(BG_LAYER);
+	_context->world->renderSingleLayer(BG_LAYER);
 	//ds::renderer::setRenderTarget(_rt2);
 	//_context->world->renderSingleLayer(LIGHT_LAYER);
 	//ds::renderer::restoreBackBuffer();
 	//ds::sprites::flush();
 	
-	//_context->world->renderSingleLayer(MESSAGE_LAYER);	
-	//ds::renderer::selectViewport(_context->viewport_id);
-	//_context->particles->render();
-	//_context->world->renderSingleLayer(OBJECT_LAYER);
+	_context->world->renderSingleLayer(MESSAGE_LAYER);	
+	ds::renderer::selectViewport(_context->viewport_id);
+	_context->particles->render();
+	_context->world->renderSingleLayer(OBJECT_LAYER);
 	ds::renderer::selectViewport(0);
 }
