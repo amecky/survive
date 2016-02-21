@@ -22,9 +22,12 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
 	//_world->ignoreLayer(LIGHT_LAYER);
 	_levels.load();
+
+	_worm = new Worm(ctx);
 }
 
 MainGameState::~MainGameState() {
+	delete _worm;
 	delete _cubes;
 	delete _player;
 }
@@ -99,6 +102,7 @@ int MainGameState::update(float dt) {
 	_world->tick(dt);
 	_context->particles->update(dt);
 	_context->trails->tick(dt);
+	_worm->tick(dt);
 	if (!_dying) {
 		ZoneTracker z1("MainGameState:commonTickAEB");
 		const ds::ActionEventBuffer& buffer = _world->getEventBuffer();
@@ -251,6 +255,9 @@ int MainGameState::onChar(int ascii) {
 	}
 	if (ascii == '6') {
 		_context->particles->startGroup(1, v3(512, 384, 0));
+	}
+	if (ascii == '7') {
+		_worm->start(v2(512, 384));
 	}
 	if (ascii == 'r') {
 		_cubes->reload();

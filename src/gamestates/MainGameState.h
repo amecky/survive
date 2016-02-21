@@ -7,6 +7,7 @@
 #include "..\enemies\Cubes.h"
 #include "..\EventBuffer.h"
 #include "..\Levels.h"
+#include "..\enemies\Worm.h"
 
 class MainGameState : public ds::GameState {
 
@@ -37,5 +38,6 @@ private:
 	float _dying_timer;
 	Levels _levels;
 	EventBuffer _eventBuffer;
+	Worm* _worm;
 };
 

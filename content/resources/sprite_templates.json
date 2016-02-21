@@ -198,3 +198,23 @@ sprite {
     color : 255,255,255,255
     type : 10
 }
+sprite { 
+    name : "worm_head"
+    texture_id : 0
+    position : 640,360
+    rect : 0,520,34,34
+    scale : 1,1
+    rotation : 0
+    color : 255,255,255,255
+    type : 11
+}
+sprite { 
+    name : "worm_tail"
+    texture_id : 0
+    position : 640,360
+    rect : 40,520,34,34
+    scale : 1,1
+    rotation : 0
+    color : 255,255,255,255
+    type : 12
+}

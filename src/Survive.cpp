@@ -36,6 +36,7 @@ bool Survive::loadContent() {
 	_context->fireRate = 0.4f;
 	_context->tripleShot = false;
 	_context->world_pos = v2(960, 540);
+	_context->world->setBoundingRect(ds::Rect(0, 0, 1600, 1200));
 	_showSettings = false;
 	//activateMonitoring(12.0f);
 	_settingPos = v2(900, 710);
