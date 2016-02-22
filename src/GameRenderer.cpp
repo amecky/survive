@@ -90,10 +90,12 @@ void GameRenderer::renderWorld() {
 	//_context->world->renderSingleLayer(LIGHT_LAYER);
 	//ds::renderer::restoreBackBuffer();
 	//ds::sprites::flush();
-	
+	ds::sprites::flush();
 	_context->world->renderSingleLayer(MESSAGE_LAYER);	
+	ds::sprites::flush();
 	ds::renderer::selectViewport(_context->viewport_id);
 	_context->particles->render();
+	ds::renderer::selectViewport(_context->viewport_id);
 	_context->world->renderSingleLayer(OBJECT_LAYER);
 	ds::renderer::selectViewport(0);
 }

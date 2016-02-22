@@ -15,6 +15,7 @@ private:
 	float _timer;
 	v2 _prev_pos;
 	int _count;
-	ds::FixedSizeStack<v2> _positions;
+	ds::Array<v2> _positions;
+	ds::Array<ds::SID> _tails;
 };
 

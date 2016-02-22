@@ -12,7 +12,13 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	
 	_cubes = new Cubes(_context);
 	_world->setBoundingRect(ds::Rect(40, 40, 1520, 820));
-	//_world->create(v2(800, 450), ds::math::buildTexture(840, 360, 120, 120), OBJECT_LAYER);
+	_world->create(v2(800, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	_world->create(v2(60, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	_world->create(v2(400, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	_world->create(v2(1200, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	_world->create(v2(1540, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	_world->create(v2(800, 60), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	_world->create(v2(800, 840), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
 	_world->ignoreCollisions(OT_PLAYER, OT_BULLET);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
@@ -254,7 +260,7 @@ int MainGameState::onChar(int ascii) {
 		_cubes->emitt(4);
 	}
 	if (ascii == '6') {
-		_context->particles->startGroup(1, v3(512, 384, 0));
+		_context->particles->startGroup(1, v3(800, 450, 0));
 	}
 	if (ascii == '7') {
 		_worm->start(v2(512, 384));

@@ -54,3 +54,9 @@ emitter_explosion {
 	file : "emitter_explosion" 
 	id : 13
 }
+groups {
+	bomb_explosion {
+		id : 1
+		systems : 6,7,8
+	}
+}
