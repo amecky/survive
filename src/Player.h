@@ -18,11 +18,11 @@ public:
 	void setShooting(ShootingMode mode);
 private:
 	void fireBullet();
-	void fireBullet(const Vector2f& pos, const Vector2f& direction);
+	void fireBullet(const Vector2f& pos);
 	GameContext* _context;
 	ds::SID _id;
 	float _angle;
-	Vector2f _position;
+	v2 _position;
 	//ds::SID _lightIndex;
 	ShootingMode _shootingMode;
 	float _shootTimer;

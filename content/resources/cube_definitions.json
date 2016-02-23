@@ -1,8 +1,8 @@
 cube {
 	type : 4
 	name : "Follower"
-	velocity : 220
-	velocity_variance : 30
+	velocity : 140
+	velocity_variance : 40
 	num_stars : 1
 	grow_ttl : 0.2
 	energy : 2

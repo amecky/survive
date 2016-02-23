@@ -12,13 +12,13 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	
 	_cubes = new Cubes(_context);
 	_world->setBoundingRect(ds::Rect(40, 40, 1520, 820));
-	_world->create(v2(800, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	_world->create(v2(60, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	_world->create(v2(400, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	_world->create(v2(1200, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	_world->create(v2(1540, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	_world->create(v2(800, 60), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	_world->create(v2(800, 840), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	//_world->create(v2(800, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	//_world->create(v2(60, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	//_world->create(v2(400, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	//_world->create(v2(1200, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	//_world->create(v2(1540, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	//_world->create(v2(800, 60), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
+	//_world->create(v2(800, 840), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
 	_world->ignoreCollisions(OT_PLAYER, OT_BULLET);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
@@ -26,6 +26,7 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_world->ignoreCollisions(OT_BIG_CUBE, OT_BIG_CUBE);
 	_world->ignoreCollisions(OT_BIG_CUBE, OT_HUGE_CUBE);
 	_world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
+	
 	//_world->ignoreLayer(LIGHT_LAYER);
 	_levels.load();
 

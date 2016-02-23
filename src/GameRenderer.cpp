@@ -5,9 +5,6 @@ GameRenderer::GameRenderer(GameContext* context) : _context(context) {
 	_context->viewport_id = ds::renderer::createViewport(1280, 720, 1600, 900);
 	ds::renderer::setViewportPosition(_context->viewport_id, v2(800, 450));
 
-	_context->world->attachViewport(BG_LAYER, _context->viewport_id);
-	_context->world->attachViewport(LIGHT_LAYER, _context->viewport_id);
-	_context->world->attachViewport(OBJECT_LAYER, _context->viewport_id);
 	//_context->world->attach_descriptor(EFFECT_LAYER, "background_gradient");
 	//_context->world->create(v2(640, 360), ds::math::buildTexture(0, 0, 1280, 720), 0.0f, 1.0f, 1.0f, ds::Color::WHITE, 33, EFFECT_LAYER);
 	/*
@@ -82,6 +79,7 @@ void GameRenderer::drawBorder() {
 
 void GameRenderer::renderWorld() {
 	ZoneTracker z("GameRenderer:render");
+	ds::renderer::selectViewport(_context->viewport_id);
 	//_context->world->renderSingleLayer(EFFECT_LAYER);
 	//ds::renderer::draw_screen_quad(_shader);
 	//ds::renderer::setRenderTarget(_rt1);	
@@ -90,12 +88,13 @@ void GameRenderer::renderWorld() {
 	//_context->world->renderSingleLayer(LIGHT_LAYER);
 	//ds::renderer::restoreBackBuffer();
 	//ds::sprites::flush();
-	ds::sprites::flush();
-	_context->world->renderSingleLayer(MESSAGE_LAYER);	
-	ds::sprites::flush();
-	ds::renderer::selectViewport(_context->viewport_id);
+//	ds::sprites::flush();
+	//_context->world->renderSingleLayer(MESSAGE_LAYER);	
+	//ds::sprites::flush();
+	//ds::renderer::selectViewport(_context->viewport_id);
 	_context->particles->render();
-	ds::renderer::selectViewport(_context->viewport_id);
+	//ds::renderer::selectViewport(_context->viewport_id);
 	_context->world->renderSingleLayer(OBJECT_LAYER);
+	ds::sprites::flush();
 	ds::renderer::selectViewport(0);
 }

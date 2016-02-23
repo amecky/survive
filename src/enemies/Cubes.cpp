@@ -1,6 +1,7 @@
 #include "Cubes.h"
 #include "..\Constants.h"
 #include <utils\Log.h>
+#include <io\FileRepository.h>
 
 const int ALL_TYPES[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE, OT_MEGA_CUBE, OT_SUPER_CUBE };
 
@@ -8,6 +9,7 @@ const int ALL_TYPES[] = { OT_FOLLOWER, OT_BIG_CUBE, OT_HUGE_CUBE, OT_MEGA_CUBE, 
 // load cube definitions
 // ---------------------------------------
 bool CubeDefinitions::loadData(const ds::JSONReader& reader) {
+	_definitions.clear();
 	int cats[32];
 	int num = reader.get_categories(cats, 32);
 	for (int i = 0; i < num; ++i) {
@@ -31,6 +33,7 @@ bool CubeDefinitions::loadData(const ds::JSONReader& reader) {
 // load wave definitions
 // ---------------------------------------
 bool WaveDefinitions::loadData(const ds::JSONReader& reader) {
+	_definitions.clear();
 	int cats[32];
 	int num = reader.get_categories(cats, 32);
 	for (int i = 0; i < num; ++i) {
@@ -59,9 +62,12 @@ Cubes::Cubes(GameContext* context) : _context(context) , _world(context->world) 
 	_spawnData.world_size = v2(1600, 900);
 	_emitter = new BallEmitter(_spawnData);
 
-	_cubeDefintions.load();
-	_waveDefinitions.load();
-	_cubeEmitterSettings.load();
+	//_cubeDefintions.load();
+	ds::repository::load(&_cubeDefintions);
+	//_waveDefinitions.load();
+	ds::repository::load(&_waveDefinitions);
+	//_cubeEmitterSettings.load();
+	ds::repository::load(&_cubeEmitterSettings);
 
 	for (size_t i = 0; i < _waveDefinitions.size(); ++i) {
 		WaveRuntime rt;
