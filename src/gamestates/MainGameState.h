@@ -39,5 +39,7 @@ private:
 	Levels _levels;
 	EventBuffer _eventBuffer;
 	Worm* _worm;
+	RingSpawner* _spawner;
+	ds::Array<EmitterEvent> _events;
 };
 

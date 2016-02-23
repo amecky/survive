@@ -3,6 +3,8 @@
 #include <math\GameMath.h>
 #include <renderer\graphics.h>
 #include <lib\collection_types.h>
+#include "..\utils\GameContext.h"
+
 // --------------------------------------
 // spawn point
 // --------------------------------------
@@ -100,4 +102,49 @@ protected:
 	int _total;
 	SpawnerData _data;
 	
+};
+
+struct EmitterEvent {
+	enum EventType {
+		EMITT,STOP,EOL
+	};
+	EventType type;
+	v2 position;
+	v2 normal;
+};
+
+class CubeSpawner {
+
+public:
+	CubeSpawner(GameContext* context) : _context(context) , _active(false) {}
+	virtual ~CubeSpawner() {}
+	virtual void tick(float dt, ds::Array<EmitterEvent>& buffer) = 0;
+protected:
+	GameContext* _context;
+	bool _active;
+};
+
+class RingSpawner : public CubeSpawner {
+
+public:
+	RingSpawner(GameContext* context,int emitts,int pieces) : CubeSpawner(context) , _pieces(pieces) , _emitts(emitts) {
+		_step = TWO_PI / static_cast<float>(pieces);
+		_emittStep = TWO_PI / static_cast<float>(emitts);
+		LOG << "step: " << RADTODEG(_step) << " emitt step: " << RADTODEG(_emittStep);
+	}
+	virtual ~RingSpawner() {}
+	void start(const v2& pos);
+	void tick(float dt, ds::Array<EmitterEvent>& buffer);
+private:
+	int _pieces;
+	v2 _position;
+	float _timer;
+	float _emittTimer;
+	float _step;
+	float _current;
+
+	int _emitts;
+	float _emittStep;
+	float _currentEmitts;
+
 };

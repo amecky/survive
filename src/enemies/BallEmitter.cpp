@@ -1,5 +1,45 @@
 #include "BallEmitter.h"
 #include <math\Bitset.h>
+
+
+
+void RingSpawner::start(const v2& pos) {
+	_timer = 0.0f;
+	_position = pos;
+	_current = 0.0f;
+	_currentEmitts = 0.0f;
+	_active = true;
+	_emittTimer = 0.0f;
+}
+
+void RingSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {	
+	float frequency = 5.0f;
+	if (_active) {
+		float dx = _position.x + cos(_timer) * 40.0f;
+		float dy = _position.y + sin(_timer) * 40.0f;
+		if (_timer >= _current) {
+			_current += _step;
+			_context->particles->start(3, v3(dx,dy,0.0f));
+		}
+		if (_timer >= _currentEmitts) {
+			_currentEmitts += _emittStep;
+			EmitterEvent e;
+			e.type = EmitterEvent::EMITT;
+			e.position = v2(dx, dy);
+			e.normal = ds::vector::getRadialVelocity(_timer, 1.0f);
+			buffer.push_back(e);
+		}
+		_timer += dt * frequency;
+		if (_timer >= TWO_PI) {
+			EmitterEvent e;
+			e.type = EmitterEvent::STOP;
+			e.position = _position;
+			buffer.push_back(e);
+			_active = false;
+		}
+	}
+}
+
 // --------------------------------------
 // edges spawner
 // --------------------------------------

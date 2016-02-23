@@ -54,6 +54,10 @@ emitter_explosion {
 	file : "emitter_explosion" 
 	id : 13
 }
+green_emitter_exp {
+	file : "green_emitter_exp" 
+	id : 14
+}
 groups {
 	bomb_explosion {
 		id : 1

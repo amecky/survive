@@ -31,9 +31,11 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_levels.load();
 
 	_worm = new Worm(ctx);
+	_spawner = new RingSpawner(ctx, 10, 64);
 }
 
 MainGameState::~MainGameState() {
+	delete _spawner;
 	delete _worm;
 	delete _cubes;
 	delete _player;
@@ -106,29 +108,40 @@ int MainGameState::update(float dt) {
 		_player->shootBullets(dt);
 		_cubes->spawn(dt);
 	}
-	_world->tick(dt);
-	_context->particles->update(dt);
-	_context->trails->tick(dt);
-	_worm->tick(dt);
+	//_world->tick(dt);
 	if (!_dying) {
 		ZoneTracker z1("MainGameState:commonTickAEB");
-		const ds::ActionEventBuffer& buffer = _world->getEventBuffer();
-		_cubes->handleEvents(buffer);
-		if (buffer.events.size() > 0) {
-			for (int i = 0; i < buffer.events.size(); ++i) {
-				if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
-					_context->particles->start(BULLET_EXPLOSION, _world->getPosition(buffer.events[i].sid));
-					_world->remove(buffer.events[i].sid);
+		if (_world->hasEvents()) {
+			const ds::ActionEventBuffer& buffer = _world->getEventBuffer();
+			_cubes->handleEvents(buffer);
+			if (buffer.events.size() > 0) {
+				for (int i = 0; i < buffer.events.size(); ++i) {
+					if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
+						_context->particles->start(BULLET_EXPLOSION, _world->getPosition(buffer.events[i].sid));
+						_world->remove(buffer.events[i].sid);
+					}
 				}
 			}
 		}
+	}
+	_context->particles->update(dt);
+	_context->trails->tick(dt);
+	_worm->tick(dt);
+	_events.clear();
+	_spawner->tick(dt, _events);
+	if (_events.size() > 0) {
+		for (int i = 0; i < _events.size(); ++i) {
+			const EmitterEvent& event = _events[i];
+			if (event.type == EmitterEvent::EMITT) {
+				_cubes->emitt(0, event.position, event.normal);
+			}
+		}
+	}
+	if (!_dying) {
 		if (handleCollisions()) {
 			_dying = true;
 		}
-
-		
 		_levels.tick(_eventBuffer, dt);
-
 		moveStars(_context->world_pos, dt);
 	}
 	if (_dying) {
@@ -265,6 +278,12 @@ int MainGameState::onChar(int ascii) {
 	}
 	if (ascii == '7') {
 		_worm->start(v2(512, 384));
+	}
+	if (ascii == '8') {
+		_context->particles->start(14, v3(800, 450, 0));
+	}
+	if (ascii == '9') {
+		_spawner->start(v2(800, 450));
 	}
 	if (ascii == 'r') {
 		_cubes->reload();

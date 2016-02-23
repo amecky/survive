@@ -104,7 +104,8 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 	assert(data != 0);
 	float angle = ds::math::random(0.0f, TWO_PI);
 	data->velocity = ds::vector::getRadialVelocity(angle, ds::math::random(cubeDefinition.velocity - cubeDefinition.velocityVariance, cubeDefinition.velocity + cubeDefinition.velocityVariance));
-	_world->scaleByPath(sid, &_context->settings->starScalePath,0.4f);
+	//_world->scaleByPath(sid, &_context->settings->starScalePath,0.4f);
+	_world->scaleTo(sid, v2(0.1f,0.1f),v2(1,1), 0.8f);
 	data->force = v2(0, 0);
 	data->def_index = waveDefinition.cubeType;
 	data->wave_index = waveDefinitionIndex;
@@ -119,8 +120,15 @@ void Cubes::handleEvents(const ds::ActionEventBuffer& buffer) {
 		const ds::ActionEvent& event = buffer.events[i];
 		if (_world->contains(event.sid)) {
 			int t = _world->getType(event.sid);
-			if (t == OT_BIG_CUBE || t == OT_HUGE_CUBE || t == OT_FOLLOWER || t == OT_MEGA_CUBE || t == OT_SUPER_CUBE) {
+			if (t == OT_BIG_CUBE || t == OT_HUGE_CUBE || t == OT_FOLLOWER || t == OT_MEGA_CUBE || t == OT_SUPER_CUBE || t == OT_FOLLOWER) {
 				if (event.type == ds::AT_SCALE_BY_PATH) {
+					Ball* data = (Ball*)_world->get_data(event.sid);
+					assert(data != 0);
+					_world->moveBy(event.sid, data->velocity, true);
+					//_world->rotate(event.sid, 180.0f, 0.8f, -1);
+					//_world->moveBy(data->lightIndex, data->velocity, true);
+				}
+				if (event.type == ds::AT_SCALE) {
 					Ball* data = (Ball*)_world->get_data(event.sid);
 					assert(data != 0);
 					_world->moveBy(event.sid, data->velocity, true);
@@ -305,6 +313,9 @@ void Cubes::killAll(bool explode) {
 	}
 }
 
+void Cubes::emitt(int type, const v2& pos, const v2& normal) {
+	createBall(pos, 0, 0, type);
+}
 // ------------------------------------------------
 // emitt
 // ------------------------------------------------

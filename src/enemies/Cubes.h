@@ -143,6 +143,7 @@ public:
 	int killBalls(const v2& bombPos, KilledBall* positions);
 	void killAll(bool explode = true);
 	void emitt(int type);
+	void emitt(int type,const v2& pos,const v2& normal);
 	void handleEvents(const ds::ActionEventBuffer& buffer);
 	void move(float dt);
 	int kill(ds::SID sid);
