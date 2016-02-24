@@ -104,8 +104,7 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 	assert(data != 0);
 	float angle = ds::math::random(0.0f, TWO_PI);
 	data->velocity = ds::vector::getRadialVelocity(angle, ds::math::random(cubeDefinition.velocity - cubeDefinition.velocityVariance, cubeDefinition.velocity + cubeDefinition.velocityVariance));
-	//_world->scaleByPath(sid, &_context->settings->starScalePath,0.4f);
-	_world->scaleTo(sid, v2(0.1f,0.1f),v2(1,1), 0.8f);
+	_world->startBehavior(sid, "wiggle_scale");
 	data->force = v2(0, 0);
 	data->def_index = waveDefinition.cubeType;
 	data->wave_index = waveDefinitionIndex;
@@ -403,4 +402,26 @@ void Cubes::activate() {
 // ------------------------------------------------
 void Cubes::reload() {
 	_cubeEmitterSettings.load();
+}
+
+// ------------------------------------------------
+// pick spawn point
+// ------------------------------------------------
+v2 Cubes::pickSpawnPoint() {
+	// convert player position to grid
+	v2 pp = _world->getPosition(_context->playerID);
+	int px = (pp.x - 80.0f) / 80.0f;
+	int py = (pp.y - 45.0f) / 90.0f;
+	// the board is divided into cells 18x9 (80x90 pixel)
+	int x = 0;
+	int y = 0;		
+	bool match = true;
+	while (match) {
+		x = 80 + ds::math::random(0, 18) * 80;
+		y = 45 + ds::math::random(0, 9) * 90;
+		if (x != px || y != py) {
+			match = false;
+		}
+	}
+	return v2(x, y);
 }

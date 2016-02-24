@@ -283,7 +283,8 @@ int MainGameState::onChar(int ascii) {
 		_context->particles->start(14, v3(800, 450, 0));
 	}
 	if (ascii == '9') {
-		_spawner->start(v2(800, 450));
+		v2 p = _cubes->pickSpawnPoint();
+		_spawner->start(p);
 	}
 	if (ascii == 'r') {
 		_cubes->reload();

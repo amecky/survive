@@ -4,7 +4,7 @@ particlesystem {
 	texture_rect : 80, 200, 30, 30
 	texture_id : 0
 	emitter {
-		count : 16
+		count : 8
 		ejection_period : 0
 		ejection_variance : 0
 		ejection_counter : 0

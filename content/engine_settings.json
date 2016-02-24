@@ -30,6 +30,7 @@ init_actions {
 	load_particles : true
 	load_sprite_templates : true
 	initialize_editor : true
+	load_behaviors : true
 }
 shaders {
 	background {
@@ -46,10 +47,12 @@ descriptors {
 }
 viewports {
 	default {
+		id : 0
 		screen_size : 1280,720
 		world_size : 1280,720
 	}
 	main {
+		id : 1
 		screen_size : 1280,720
 		world_size : 1600,900
 	}
