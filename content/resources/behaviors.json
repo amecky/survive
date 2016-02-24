@@ -1,0 +1,56 @@
+wiggle_scale {
+	scale_by_path {
+		path : 0.0,1.0,1.0,0.4,0.4,0.4,1.0,1.0,1.0
+		ttl : 0.4
+		mode : 0
+	}
+}
+wiggle_death_ball {
+	scale_by_path {
+		path : 0.0,1.0,0.1,0.4,1.2,1.2,0.8,0.8,0.8,1.0,1.0,1.0
+		ttl : 0.4
+		mode : 0
+	}
+}
+wall_impact {
+	flash_color {
+		start_color : 64,64,64,255
+		end_color : 192,0,0,255
+		tweening : 1
+		ttl : 0.4
+		mode : 0
+	}
+	scale_by_path {
+		path : 0.0,1.0,1.0,0.4,0.4,1.0,0.8,1.8,1.0,1.0,1.0,1.0
+		ttl : 0.4
+		mode : 0
+	}
+}
+top_wall_impact {
+	flash_color {
+		start_color : 64,64,64,255
+		end_color : 192,0,0,255
+		tweening : 1
+		ttl : 0.4
+		mode : 0
+	}
+	scale_by_path {
+		path : 0.0,1.0,1.0,0.4,1.0,0.4,0.8,1.0,1.8,1.0,1.0,1.0
+		ttl : 0.4
+		mode : 0
+	}
+}
+ball_impact {
+	flash_color {
+		start_color : 255,0,0,255
+		end_color : 0,0,255,255
+		tweening : 1
+		ttl : 1.4
+		mode : 0
+	}
+	scale_by_path {
+		path : 0.0,1.0,1.0,0.4,0.7,0.7,0.8,1.4,1.4,1.0,1.0,1.0
+		ttl : 0.4
+		mode : 0
+	}
+}

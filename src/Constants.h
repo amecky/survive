@@ -52,5 +52,6 @@ enum ObjectTypes {
 	OT_STAR,
 	OT_CUBE_EMITTER,
 	OT_RING,
+	OT_DEATHBALL,
 	OT_EOL
 };

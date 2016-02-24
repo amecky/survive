@@ -6,6 +6,7 @@
 #include <utils\Profiler.h>
 #include "..\GameRenderer.h"
 #include "..\Constants.h"
+#include "..\utils\util.h"
 
 MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"), _context(ctx), _world(ctx->world) {
 	_player = new Player(_context);
@@ -32,9 +33,11 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 
 	_worm = new Worm(ctx);
 	_spawner = new RingSpawner(ctx, 10, 64);
+	_deathBalls = new DeathBalls(ctx);
 }
 
 MainGameState::~MainGameState() {
+	delete _deathBalls;
 	delete _spawner;
 	delete _worm;
 	delete _cubes;
@@ -114,6 +117,7 @@ int MainGameState::update(float dt) {
 		if (_world->hasEvents()) {
 			const ds::ActionEventBuffer& buffer = _world->getEventBuffer();
 			_cubes->handleEvents(buffer);
+			_deathBalls->handleEvents(buffer);
 			if (buffer.events.size() > 0) {
 				for (int i = 0; i < buffer.events.size(); ++i) {
 					if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
@@ -259,7 +263,8 @@ int MainGameState::onChar(int ascii) {
 		_cubes->killAll();
 	}
 	if (ascii == '1') {
-		_cubes->emitt(0);
+		//_cubes->emitt(0);
+		_deathBalls->start();
 	}
 	if (ascii == '2') {
 		_cubes->emitt(1);
@@ -283,7 +288,8 @@ int MainGameState::onChar(int ascii) {
 		_context->particles->start(14, v3(800, 450, 0));
 	}
 	if (ascii == '9') {
-		v2 p = _cubes->pickSpawnPoint();
+		v2 pp = _world->getPosition(_context->playerID);
+		v2 p = util::pickSpawnPoint(pp);
 		_spawner->start(p);
 	}
 	if (ascii == 'r') {

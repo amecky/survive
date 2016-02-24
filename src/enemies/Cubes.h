@@ -148,7 +148,6 @@ public:
 	void move(float dt);
 	int kill(ds::SID sid);
 	void reload();
-	v2 pickSpawnPoint();
 private:	
 	void createBall(const v2& pos, int current, int total, int waveDefinitionIndex);
 	void seek(const v2& target, float velocity);

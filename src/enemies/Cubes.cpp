@@ -403,25 +403,3 @@ void Cubes::activate() {
 void Cubes::reload() {
 	_cubeEmitterSettings.load();
 }
-
-// ------------------------------------------------
-// pick spawn point
-// ------------------------------------------------
-v2 Cubes::pickSpawnPoint() {
-	// convert player position to grid
-	v2 pp = _world->getPosition(_context->playerID);
-	int px = (pp.x - 80.0f) / 80.0f;
-	int py = (pp.y - 45.0f) / 90.0f;
-	// the board is divided into cells 18x9 (80x90 pixel)
-	int x = 0;
-	int y = 0;		
-	bool match = true;
-	while (match) {
-		x = 80 + ds::math::random(0, 18) * 80;
-		y = 45 + ds::math::random(0, 9) * 90;
-		if (x != px || y != py) {
-			match = false;
-		}
-	}
-	return v2(x, y);
-}

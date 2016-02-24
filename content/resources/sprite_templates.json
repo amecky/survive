@@ -228,3 +228,13 @@ sprite {
     color : 255,255,255,255
     type : 2
 }
+sprite { 
+    name : "death_ball"
+    texture_id : 0
+    position : 640,360
+    rect : 40,880,48,48
+    scale : 1,1
+    rotation : 0
+    color : 192,0,0,255
+    type : 12
+}

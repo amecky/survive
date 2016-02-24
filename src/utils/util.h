@@ -28,4 +28,6 @@ namespace util {
 	int buildSingleCurve(const v2& start, const v2& end, ds::CubicBezierPath* path, float amplitude = 140.0f, bool append = true);
 
 	void drawCurve(ds::CubicBezierPath& path, const ds::Texture& dotTex);
+
+	v2 pickSpawnPoint(const v2& playerPos);
 }

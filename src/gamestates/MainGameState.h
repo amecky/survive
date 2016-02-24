@@ -8,6 +8,7 @@
 #include "..\EventBuffer.h"
 #include "..\Levels.h"
 #include "..\enemies\Worm.h"
+#include "..\enemies\DeathBalls.h"
 
 class MainGameState : public ds::GameState {
 
@@ -40,6 +41,7 @@ private:
 	EventBuffer _eventBuffer;
 	Worm* _worm;
 	RingSpawner* _spawner;
+	DeathBalls* _deathBalls;
 	ds::Array<EmitterEvent> _events;
 };
 

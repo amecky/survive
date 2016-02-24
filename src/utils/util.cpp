@@ -236,4 +236,22 @@ namespace util {
 			ds::sprites::draw(e.p3, dotTex, 0.0f, 1.0f, 1.0f, ds::Color(0, 0, 192, 255));
 		}
 	}
+
+	v2 pickSpawnPoint(const v2& playerPos) {
+		// convert player position to grid
+		int px = (playerPos.x - 80.0f) / 80.0f;
+		int py = (playerPos.y - 45.0f) / 90.0f;
+		// the board is divided into cells 18x9 (80x90 pixel)
+		int x = 0;
+		int y = 0;
+		bool match = true;
+		while (match) {
+			x = 80 + ds::math::random(0, 18) * 80;
+			y = 45 + ds::math::random(0, 9) * 90;
+			if (x != px || y != py) {
+				match = false;
+			}
+		}
+		return v2(x, y);
+	}
 }
