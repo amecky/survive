@@ -1,7 +1,7 @@
 #include "BallEmitter.h"
 #include <math\Bitset.h>
-
-
+#include "..\Constants.h"
+#include "..\utils\util.h"
 
 void RingSpawner::start(const v2& pos) {
 	_timer = 0.0f;
@@ -19,7 +19,7 @@ void RingSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 		float dy = _position.y + sin(_timer) * 40.0f;
 		if (_timer >= _current) {
 			_current += _step;
-			_context->particles->start(3, v3(dx,dy,0.0f));
+			_context->particles->start(ENEMY_TRAIL, v3(dx, dy, 0.0f));
 		}
 		if (_timer >= _currentEmitts) {
 			_currentEmitts += _emittStep;
@@ -40,67 +40,80 @@ void RingSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 	}
 }
 
-// --------------------------------------
-// edges spawner
-// --------------------------------------
-//
-//    2
-//  1   3
-//    4
-//
-// --------------------------------------
-BallEmitter::BallEmitter(const SpawnerData& data) : _data(data) , _points(0), _total(0), _index(0) {
-	_total = 0;
-	if (ds::bit::is_set(_data.sides, 0)) {
-		_total += _data.count_y;
-	}
-	if (ds::bit::is_set(_data.sides, 1)) {
-		_total += _data.count_x;
-	}
-	if (ds::bit::is_set(_data.sides, 2)) {
-		_total += _data.count_y;
-	}
-	if (ds::bit::is_set(_data.sides, 3)) {
-		_total += _data.count_x;
-	}
-	_points = new SpawnPoint[_total];
+void LineSpawner::start(const v2& start,const v2& end,int pieces) {
+	_position = start;
+	_end = end;
+	_angle = ds::vector::getAngle(start, end);
+	_velocity = ds::vector::getRadialVelocity(_angle, 500.0f);
+	_prev = start;
+	_active = true;
+	_emittPos = start;
+	float l = distance(start, end);
+	_emittDistance = l / pieces;
 }
 
-void BallEmitter::rebuild() {
-	float stepX = (_data.world_size.x - _data.border.x * 2.0f) / static_cast<float>(_data.count_x - 1);
-	float stepY = (_data.world_size.y - _data.border.y * 2.0f) / static_cast<float>(_data.count_y + 1);
-	v2 steps(stepX, stepY);
-	int cnt = 0;
-	// bottom
-	if (ds::bit::is_set(_data.sides, 3)) {
-		for (int i = 0; i < _data.count_x; ++i) {
-			SpawnPoint& sp = _points[cnt++];
-			from_grid(i, 0, steps, sp.position);
-			sp.normal = v2(0, 1);
+void LineSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
+	if (_active) {
+		_position += _velocity * dt;
+		float d = distance(_position, _prev);
+		if (d > 5.0f) {
+			_context->particles->start(ENEMY_TRAIL, _prev);
+			_prev = _position;
+		}
+		if (distance(_position, _emittPos) > _emittDistance) {
+			EmitterEvent e;
+			e.type = EmitterEvent::EMITT;
+			e.position = _emittPos;
+			e.normal = ds::vector::getRadialVelocity(_angle, 1.0f);
+			buffer.push_back(e);
+			_emittPos = _position;
+		}
+		if (distance(_position, _end) < 10.0f) {
+			EmitterEvent e;
+			e.type = EmitterEvent::STOP;
+			e.position = _position;
+			buffer.push_back(e);
+			_active = false;
 		}
 	}
-	// top
-	if (ds::bit::is_set(_data.sides, 1)) {
-		for (int i = 0; i < _data.count_x; ++i) {
-			SpawnPoint& sp = _points[cnt++];
-			from_grid(_data.count_x - 1 - i, _data.count_y + 1, steps, sp.position);
-			sp.normal = v2(0, -1);
+}
+
+void CurveSpawner::start(const v2& start, const v2& end, int pieces) {
+	_position = start;
+	_end = end;
+	util::buildSingleCurve(start, end, &_path,240.0f,false);
+	_path.build();
+	_prev = start;
+	_active = true;
+	_emittPos = start;
+	float l = distance(start, end);
+	_emittDistance = l / pieces;
+	_timer = 0.0f;
+}
+
+void CurveSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
+	if (_active) {
+		_path.get(_timer, &_position);
+		_timer += dt * 0.25f;
+		float d = distance(_position, _prev);
+		if (d > 5.0f) {
+			_context->particles->start(ENEMY_TRAIL, _prev);
+			_prev = _position;
 		}
-	}
-	// left
-	if (ds::bit::is_set(_data.sides, 0)) {
-		for (int i = 0; i < _data.count_y; ++i) {
-			SpawnPoint& sp = _points[cnt++];
-			from_grid(0, i + 1, steps, sp.position);
-			sp.normal = v2(1, 0);
+		if (distance(_position, _emittPos) > _emittDistance) {
+			EmitterEvent e;
+			e.type = EmitterEvent::EMITT;
+			e.position = _emittPos;
+			e.normal = ds::vector::getRadialVelocity(0.0f, 1.0f);
+			buffer.push_back(e);
+			_emittPos = _position;
 		}
-	}
-	// right
-	if (ds::bit::is_set(_data.sides, 2)) {
-		for (int i = 0; i < _data.count_y; ++i) {
-			SpawnPoint& sp = _points[cnt++];
-			from_grid(_data.count_x - 1, _data.count_y - i, steps, sp.position);
-			sp.normal = v2(-1, 0);
+		if (_timer >= 1.0f) {
+			EmitterEvent e;
+			e.type = EmitterEvent::STOP;
+			e.position = _position;
+			buffer.push_back(e);
+			_active = false;
 		}
 	}
 }

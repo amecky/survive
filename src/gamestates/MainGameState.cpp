@@ -33,11 +33,15 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 
 	_worm = new Worm(ctx);
 	_spawner = new RingSpawner(ctx, 10, 64);
+	_lineSpawner = new LineSpawner(ctx);
+	_curveSpawner = new CurveSpawner(ctx);
 	_deathBalls = new DeathBalls(ctx);
 }
 
 MainGameState::~MainGameState() {
 	delete _deathBalls;
+	delete _curveSpawner;
+	delete _lineSpawner;
 	delete _spawner;
 	delete _worm;
 	delete _cubes;
@@ -133,6 +137,8 @@ int MainGameState::update(float dt) {
 	_worm->tick(dt);
 	_events.clear();
 	_spawner->tick(dt, _events);
+	_lineSpawner->tick(dt, _events);
+	_curveSpawner->tick(dt, _events);
 	if (_events.size() > 0) {
 		for (int i = 0; i < _events.size(); ++i) {
 			const EmitterEvent& event = _events[i];
@@ -267,10 +273,16 @@ int MainGameState::onChar(int ascii) {
 		_deathBalls->start();
 	}
 	if (ascii == '2') {
-		_cubes->emitt(1);
+		v2 p = _world->getPosition(_context->playerID);
+		v2 start = util::pickSpawnPoint(p, GE_LEFT);
+		v2 end = util::pickSpawnPoint(p, GE_RIGHT);
+		_lineSpawner->start(start,end, 20);
 	}
 	if (ascii == '3') {
-		_cubes->emitt(2);
+		v2 p = _world->getPosition(_context->playerID);
+		v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
+		v2 end = util::pickSpawnPoint(p, GE_TOP);
+		_curveSpawner->start(start, end, 10);
 	}
 	if (ascii == '4') {
 		_cubes->emitt(3);

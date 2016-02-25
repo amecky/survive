@@ -30,6 +30,7 @@ const int SEPARATE_BIT = 2;
 const int ALIGN_BIT = 3;
 const int SIMPLE_MOVE_BIT = 4;
 
+const int ENEMY_TRAIL = 5;
 const int BULLET_EXPLOSION = 1;
 const int PLAYER_EXPLOSION = 5;
 const int ENEMY_EXPLOSION = 14;
@@ -54,4 +55,12 @@ enum ObjectTypes {
 	OT_RING,
 	OT_DEATHBALL,
 	OT_EOL
+};
+
+enum GridEdge {
+	GE_TOP,
+	GE_RIGHT,
+	GE_BOTTOM,
+	GE_LEFT,
+	GE_EOL
 };

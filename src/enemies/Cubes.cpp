@@ -51,17 +51,6 @@ bool WaveDefinitions::loadData(const ds::JSONReader& reader) {
 // Cubes
 // ---------------------------------------
 Cubes::Cubes(GameContext* context) : _context(context) , _world(context->world) {
-
-	_spawnData.count_x = 10;
-	_spawnData.count_y = 5;
-	_spawnData.border = v2(120, 120);
-	_spawnData.sides = 10;
-	_spawnData.delay = 0.5f;
-	_spawnData.type = SPT_PARTIAL_EDGES;
-	_spawnData.emitter_type = SET_DELAYED;
-	_spawnData.world_size = v2(1600, 900);
-	_emitter = new BallEmitter(_spawnData);
-
 	//_cubeDefintions.load();
 	ds::repository::load(&_cubeDefintions);
 	//_waveDefinitions.load();
@@ -81,8 +70,6 @@ Cubes::Cubes(GameContext* context) : _context(context) , _world(context->world) 
 }
 
 Cubes::~Cubes() {
-	delete _emitter;
-
 }
 
 // ---------------------------------------
@@ -319,13 +306,16 @@ void Cubes::emitt(int type, const v2& pos, const v2& normal) {
 // emitt
 // ------------------------------------------------
 void Cubes::emitt(int type) {
+	/*
 	const SpawnPoint& spawn = _emitter->random();
+	*/
 	/*	
 	const WaveDefinition& waveDef = _waveDefinitions.get(type);
 	for (int i = 0; i < waveDef.numSpawn; ++i) {
 		createBall(spawn.position, i, waveDef.numSpawn, type);
 	}
 	*/
+	/*
 	ds::SID sid = _world->create(spawn.position, "CubeEmitter", OBJECT_LAYER);
 	CubeEmitter* emitter = (CubeEmitter*)_world->attach_data(sid, sizeof(CubeEmitter));
 	emitter->timer = 0.0;
@@ -336,6 +326,7 @@ void Cubes::emitt(int type) {
 	emitter->dead = false;
 	_world->scaleByPath(sid, &_cubeEmitterSettings.scalePath, _cubeEmitterSettings.scaleTTL);
 	_world->flashColor(sid, _cubeEmitterSettings.startFlash, _cubeEmitterSettings.endFlash, _cubeEmitterSettings.flashAmplitude, -1);
+	*/
 }
 
 // ------------------------------------------------
@@ -387,8 +378,8 @@ void Cubes::activate() {
 	_emitted = 0;
 	// FIXME:
 	killAll(false);
-	_emitter->rebuild();
-	_spawner_position = v2(200, 200);
+	//_emitter->rebuild();
+	//_spawner_position = v2(200, 200);
 	for (size_t i = 0; i < _waveRuntimes.size(); ++i) {
 		WaveRuntime& rt = _waveRuntimes[i];
 		rt.current = 0;

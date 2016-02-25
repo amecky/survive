@@ -4,7 +4,7 @@
 typedef void(*MoveFunc)(Vector2f&, float*, float);
 
 void WormMove(v2& p, float* angle, float time) {
-	p.x = 512.0f + 300.0f * cos(time * TWO_PI) + 120.0f * sin(-time * 4.0f * TWO_PI);
+	p.x = 800.0f + 300.0f * cos(time * TWO_PI) + 120.0f * sin(-time * 4.0f * TWO_PI);
 	p.y = 420.0f + 300.0f * sin(time * TWO_PI) - 128 * cos(time * 0.25f * TWO_PI);
 	v2 d = p - v2(800, 450);
 	*angle = ds::vector::calculateRotation(d) + DEGTORAD(90.0f);
@@ -32,7 +32,7 @@ void Worm::tick(float dt) {
 		v2 pos = _world->getPosition(_head_id);
 		v2 diff = pos - _prev_pos;
 		if (sqr_length(diff) > (40.0f * 40.0f)) {
-			if (_count < 5) {
+			if (_count < 10) {
 				ds::SID sid = _world->create(_prev_pos, "worm_tail");
 				++_count;
 				_tails.push_back(sid);
@@ -62,13 +62,15 @@ void Worm::tick(float dt) {
 					float l = length(d);
 					total += l;
 					if (total >= dist) {
+						v2 hp = start - tp;
 						ds::math::follow(start, tp, &angle, 1.0f, 2.0f * dt);
+						//float p = length(hp) / l;
 						float p = dist / total;
 						v2 np = start + d * p * dt;
 						//LOG << i << " / " << j << " = " << DBG_V2(start) << " d: " << DBG_V2(d) << " p: " << p;
 						//_world->setPosition(id, tp);
 						_world->setPosition(id, np);
-						_world->setRotation(id, angle);
+						//_world->setRotation(id, angle);
 						break;
 					}
 					start = end;

@@ -155,13 +155,9 @@ private:
 	void align(const v2& target, float desiredDistance);
 	GameContext* _context;
 	ds::World* _world;
-	v2 _spawner_position;
-	SpawnerData _spawnData;
 	CubeDefinitions _cubeDefintions;
 	WaveDefinitions _waveDefinitions;
 	WaveRuntimes _waveRuntimes;
-	StartPoints _startPoints;
-	BallEmitter* _emitter;
 	int _killed;
 	int _emitted;
 	CubeEmitterSettings _cubeEmitterSettings;

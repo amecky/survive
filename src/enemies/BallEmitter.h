@@ -6,104 +6,8 @@
 #include "..\utils\GameContext.h"
 
 // --------------------------------------
-// spawn point
+// emitter event
 // --------------------------------------
-struct SpawnPoint {
-
-	v2 position;
-	v2 normal;
-
-};
-
-// --------------------------------------
-// spawner type
-// --------------------------------------
-enum SpawnerType {
-	SPT_EDGES,
-	SPT_PARTIAL_EDGES,
-	SPT_EOL
-};
-
-// --------------------------------------
-// start point
-// --------------------------------------
-struct StartPoint {
-	v2 position;
-	float timer;
-	v2 normal;
-};
-
-// --------------------------------------
-// start points
-// --------------------------------------
-typedef ds::Array<StartPoint> StartPoints;
-
-// --------------------------------------
-// spawner emitter type
-// --------------------------------------
-enum SpawnEmitterType {
-	SET_DELAYED,
-	SET_IMMEDIATE,
-	SET_EOL
-};
-
-// --------------------------------------
-// spawner data
-// --------------------------------------
-struct SpawnerData {
-	int count_x;
-	int count_y;
-	v2 border;
-	v2 random_offset;
-	int sides;
-	SpawnerType type;
-	SpawnEmitterType emitter_type;
-	float delay;
-	v2 world_size;
-
-	SpawnerData() : count_x(0), count_y(0), border(0, 0), random_offset(0, 0), sides(0), type(SPT_EOL), emitter_type(SET_DELAYED), delay(0.0f) , world_size(100,100) {}
-};
-
-
-// --------------------------------------
-// enemy spawner
-// --------------------------------------
-class BallEmitter {
-
-public:
-	BallEmitter(const SpawnerData& data);
-	virtual ~BallEmitter() {
-		if (_points != 0) {
-			delete[] _points;
-		}
-	}
-	void rebuild();
-	const SpawnPoint& next() {
-		if ((_index + 1) > _total) {
-			_index = 0;
-		}
-		return _points[_index++];
-	}
-
-	const SpawnPoint& random() {
-		int o = ds::math::random(0, _total - 1);
-		return _points[o];
-	}
-	const int size() const {
-		return _total;
-	}
-	void from_grid(int x, int y, const v2& steps, v2& p) {
-		p.x = _data.border.x + static_cast<float>(x)* steps.x;
-		p.y = _data.border.y + static_cast<float>(y)* steps.y;
-	}
-protected:
-	int _index;
-	SpawnPoint* _points;
-	int _total;
-	SpawnerData _data;
-	
-};
-
 struct EmitterEvent {
 	enum EventType {
 		EMITT,STOP,EOL
@@ -113,6 +17,9 @@ struct EmitterEvent {
 	v2 normal;
 };
 
+// --------------------------------------
+// basic cube spawner
+// --------------------------------------
 class CubeSpawner {
 
 public:
@@ -124,6 +31,9 @@ protected:
 	bool _active;
 };
 
+// --------------------------------------
+// ring spawner
+// --------------------------------------
 class RingSpawner : public CubeSpawner {
 
 public:
@@ -147,4 +57,47 @@ private:
 	float _emittStep;
 	float _currentEmitts;
 
+};
+
+// --------------------------------------
+// line spawner
+// --------------------------------------
+class LineSpawner : public CubeSpawner {
+
+public:
+	LineSpawner(GameContext* context) : CubeSpawner(context) {}
+	virtual ~LineSpawner() {}
+	void start(const v2& start,const v2& end,int pieces);
+	void tick(float dt, ds::Array<EmitterEvent>& buffer);
+private:
+	int _pieces;
+	v2 _position;
+	v2 _end;
+	v2 _velocity;
+	v2 _prev;
+	v2 _emittPos;
+	float _emittDistance;
+	float _angle;
+};
+
+// --------------------------------------
+// curve spawner
+// --------------------------------------
+class CurveSpawner : public CubeSpawner {
+
+public:
+	CurveSpawner(GameContext* context) : CubeSpawner(context) {}
+	virtual ~CurveSpawner() {}
+	void start(const v2& start, const v2& end, int pieces);
+	void tick(float dt, ds::Array<EmitterEvent>& buffer);
+private:
+	int _pieces;
+	v2 _position;
+	v2 _end;
+	ds::CubicBezierPath _path;
+	float _timer;
+
+	v2 _prev;
+	v2 _emittPos;
+	float _emittDistance;
 };

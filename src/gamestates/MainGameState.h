@@ -41,6 +41,8 @@ private:
 	EventBuffer _eventBuffer;
 	Worm* _worm;
 	RingSpawner* _spawner;
+	LineSpawner* _lineSpawner;
+	CurveSpawner* _curveSpawner;
 	DeathBalls* _deathBalls;
 	ds::Array<EmitterEvent> _events;
 };

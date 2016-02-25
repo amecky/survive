@@ -237,21 +237,53 @@ namespace util {
 		}
 	}
 
+	// -------------------------------------------------------
+	// pick spawn point from grid exclude player grid position
+	// -------------------------------------------------------
 	v2 pickSpawnPoint(const v2& playerPos) {
 		// convert player position to grid
 		int px = (playerPos.x - 80.0f) / 80.0f;
 		int py = (playerPos.y - 45.0f) / 90.0f;
 		// the board is divided into cells 18x9 (80x90 pixel)
-		int x = 0;
-		int y = 0;
+		int gx = 0;
+		int gy = 0;
 		bool match = true;
 		while (match) {
-			x = 80 + ds::math::random(0, 18) * 80;
-			y = 45 + ds::math::random(0, 9) * 90;
-			if (x != px || y != py) {
+			gx = ds::math::random(0, 18);
+			gy = ds::math::random(0, 9);
+			if (gx != px || gy != py) {
 				match = false;
 			}
 		}
+		int x = 80 + gx * 80;
+		int y = 45 + gy * 90;
+		return v2(x, y);
+	}
+
+	// --------------------------------------------------------------------------
+	// pick spawn point from grid for defined edge exclude player grid position
+	// --------------------------------------------------------------------------
+	v2 pickSpawnPoint(const v2& playerPos,GridEdge edge) {
+		// convert player position to grid
+		int px = (playerPos.x - 80.0f) / 80.0f;
+		int py = (playerPos.y - 45.0f) / 90.0f;
+		// the board is divided into cells 18x9 (80x90 pixel)
+		int gx = 0;
+		int gy = 0;
+		bool match = true;
+		while (match) {
+			switch (edge) {
+				case GE_TOP: gy = 9; gx = ds::math::random(0, 18); break;
+				case GE_RIGHT: gx = 18; gy = ds::math::random(0, 9); break;
+				case GE_BOTTOM: gy = 0; gx = ds::math::random(0, 18); break;
+				case GE_LEFT: gx = 0; gy = ds::math::random(0, 9); break;
+			}
+			if (gx != px || gy != py) {
+				match = false;
+			}
+		}
+		int x = 80 + gx * 80;
+		int y = 45 + gy * 90;
 		return v2(x, y);
 	}
 }

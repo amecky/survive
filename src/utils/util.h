@@ -2,6 +2,7 @@
 #include <Vector.h>
 #include <math\CubicBezierPath.h>
 #include <renderer\render_types.h>
+#include "..\Constants.h"
 
 namespace util {
 
@@ -30,4 +31,6 @@ namespace util {
 	void drawCurve(ds::CubicBezierPath& path, const ds::Texture& dotTex);
 
 	v2 pickSpawnPoint(const v2& playerPos);
+
+	v2 pickSpawnPoint(const v2& playerPos,GridEdge edge);
 }
