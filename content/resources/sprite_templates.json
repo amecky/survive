@@ -238,3 +238,13 @@ sprite {
     color : 192,0,0,255
     type : 12
 }
+sprite { 
+    name : "inner_death_ball"
+    texture_id : 0
+    position : 640,360
+    rect : 60,760,50,50
+    scale : 1,1
+    rotation : 0
+    color : 255,128,0,255
+    type : 12
+}

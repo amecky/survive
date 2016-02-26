@@ -242,21 +242,21 @@ namespace util {
 	// -------------------------------------------------------
 	v2 pickSpawnPoint(const v2& playerPos) {
 		// convert player position to grid
-		int px = (playerPos.x - 80.0f) / 80.0f;
-		int py = (playerPos.y - 45.0f) / 90.0f;
-		// the board is divided into cells 18x9 (80x90 pixel)
+		int px = (playerPos.x - 40.0f) / 60.0f;
+		int py = (playerPos.y - 40.0f) / 60.0f;
+		// the board is divided into cells 20x10 (60x60 pixel)
 		int gx = 0;
 		int gy = 0;
 		bool match = true;
 		while (match) {
-			gx = ds::math::random(0, 18);
-			gy = ds::math::random(0, 9);
+			gx = ds::math::random(0, 20);
+			gy = ds::math::random(0, 10);
 			if (gx != px || gy != py) {
 				match = false;
 			}
 		}
-		int x = 80 + gx * 80;
-		int y = 45 + gy * 90;
+		int x = 40 + gx * 60;
+		int y = 40 + gy * 60;
 		return v2(x, y);
 	}
 
@@ -265,25 +265,25 @@ namespace util {
 	// --------------------------------------------------------------------------
 	v2 pickSpawnPoint(const v2& playerPos,GridEdge edge) {
 		// convert player position to grid
-		int px = (playerPos.x - 80.0f) / 80.0f;
-		int py = (playerPos.y - 45.0f) / 90.0f;
-		// the board is divided into cells 18x9 (80x90 pixel)
+		int px = (playerPos.x - 40.0f) / 60.0f;
+		int py = (playerPos.y - 40.0f) / 60.0f;
+		// the board is divided into cells 20x10 (60x60 pixel)
 		int gx = 0;
 		int gy = 0;
 		bool match = true;
 		while (match) {
 			switch (edge) {
-				case GE_TOP: gy = 9; gx = ds::math::random(0, 18); break;
-				case GE_RIGHT: gx = 18; gy = ds::math::random(0, 9); break;
-				case GE_BOTTOM: gy = 0; gx = ds::math::random(0, 18); break;
-				case GE_LEFT: gx = 0; gy = ds::math::random(0, 9); break;
+				case GE_TOP: gy = 10; gx = ds::math::random(0, 20); break;
+				case GE_RIGHT: gx = 20; gy = ds::math::random(0, 10); break;
+				case GE_BOTTOM: gy = 0; gx = ds::math::random(0, 20); break;
+				case GE_LEFT: gx = 0; gy = ds::math::random(0, 10); break;
 			}
 			if (gx != px || gy != py) {
 				match = false;
 			}
 		}
-		int x = 80 + gx * 80;
-		int y = 45 + gy * 90;
+		int x = 40 + gx * 60;
+		int y = 40 + gy * 60;
 		return v2(x, y);
 	}
 }

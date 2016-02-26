@@ -12,7 +12,7 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_player = new Player(_context);
 	
 	_cubes = new Cubes(_context);
-	_world->setBoundingRect(ds::Rect(40, 40, 1520, 820));
+	_world->setBoundingRect(ds::Rect(30, 30, 1220, 620));
 	//_world->create(v2(800, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
 	//_world->create(v2(60, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
 	//_world->create(v2(400, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
@@ -125,6 +125,7 @@ int MainGameState::update(float dt) {
 			if (buffer.events.size() > 0) {
 				for (int i = 0; i < buffer.events.size(); ++i) {
 					if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
+						_context->renderer->hitBorder(_world->getPosition(buffer.events[i].sid));
 						_context->particles->start(BULLET_EXPLOSION, _world->getPosition(buffer.events[i].sid));
 						_world->remove(buffer.events[i].sid);
 					}

@@ -26,7 +26,7 @@ void Player::create() {
 	//_context->world->setColor(_lightIndex, ds::Color(0, 255, 0, 255));
 	_shootingMode = SM_IDLE;
 	_shootTimer = _context->fireRate;
-	ds::renderer::setViewportPosition(_context->viewport_id, _position);
+	//ds::renderer::setViewportPosition(_context->viewport_id, _position);
 	_alive = true;
 }
 
@@ -51,8 +51,9 @@ void Player::move(float dt) {
 		}		
 
 		v2 cursor_pos = ds::renderer::getMousePosition();
-		const ds::Viewport& vw = ds::renderer::getViewport(_context->viewport_id);
-		v2 wp = vw.convertToWorld(cursor_pos);
+		//const ds::Viewport& vw = ds::renderer::getViewport(_context->viewport_id);
+		//v2 wp = vw.convertToWorld(cursor_pos);
+		v2 wp = cursor_pos;
 		_position += v * dt * _context->playerSpeed;
 		Vector2f diff = wp - _position;
 		_angle = ds::vector::calculateRotation(diff);
@@ -63,7 +64,7 @@ void Player::move(float dt) {
 		_context->playerPos = _position;
 		_context->world_pos = _position;
 		//LOG << "wp: " << DBG_V2(wp) << " world_pos: " << DBG_V2(rwp);
-		ds::renderer::setViewportPosition(_context->viewport_id, _position);
+		//ds::renderer::setViewportPosition(_context->viewport_id, _position);
 	}
 }
 

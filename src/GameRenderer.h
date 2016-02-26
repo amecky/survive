@@ -3,10 +3,16 @@
 
 class GameRenderer {
 
+	struct BorderTile {
+		ds::SID sid;
+		v2 position;
+	};
+
 public:
 	GameRenderer(GameContext* context);
 	~GameRenderer();
 	void renderWorld();
+	void hitBorder(const v2& pos);
 private:
 	void drawBorder();
 	void createBorder();
@@ -20,5 +26,6 @@ private:
 	float m_ShakeTimer;
 	int _light_desc;
 	ds::Shader* _shader;
+	ds::Array<BorderTile> _borderTiles;
 };
 

@@ -16,6 +16,8 @@ void DeathBalls::start() {
 	float a = ds::math::random(0.0f, TWO_PI);
 	_world->setRotation(sid, a);
 	_world->rotateBy(sid, TWO_PI, 3.0f);
+	ds::SID id = _world->create(p, "inner_death_ball", OBJECT_LAYER);
+	_world->flashColor(id, ds::Color(255, 108, 0, 255), ds::Color(192, 63, 0, 255), 0.5f, -1);
 }
 
 void DeathBalls::handleEvents(const ds::ActionEventBuffer& buffer) {
