@@ -4,6 +4,25 @@
 #include <renderer\render_types.h>
 #include "GameContext.h"
 
+class Border {
+
+	struct BorderTile {
+		ds::SID sid;
+		v2 position;
+	};
+
+public:
+	Border(GameContext* context);
+	~Border() {}
+	void hitBorder(const v2& pos);
+private:
+	void create();
+	GameContext* _context;
+	ds::World* _world;
+	ds::Array<BorderTile> _borderTiles;
+	ds::Color _border_color;
+};
+
 class BorderLines  {
 
 enum LineOrientation {

@@ -37,13 +37,9 @@ protected:
 class RingSpawner : public CubeSpawner {
 
 public:
-	RingSpawner(GameContext* context,int emitts,int pieces) : CubeSpawner(context) , _pieces(pieces) , _emitts(emitts) {
-		_step = TWO_PI / static_cast<float>(pieces);
-		_emittStep = TWO_PI / static_cast<float>(emitts);
-		LOG << "step: " << RADTODEG(_step) << " emitt step: " << RADTODEG(_emittStep);
-	}
+	RingSpawner(GameContext* context) : CubeSpawner(context) {}
 	virtual ~RingSpawner() {}
-	void start(const v2& pos);
+	void start(const v2& pos, int emitts, int pieces);
 	void tick(float dt, ds::Array<EmitterEvent>& buffer);
 private:
 	int _pieces;

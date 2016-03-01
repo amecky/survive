@@ -11,7 +11,7 @@ const int MAX_SNAKE_TAILS = 10;
 const int MAX_DODGERS = 32;
 
 const int BG_LAYER      = 0;
-const int LIGHT_LAYER   = 1;
+const int BORDER_LAYER  = 1;
 const int MESSAGE_LAYER = 2;
 const int OBJECT_LAYER  = 3;
 const int EFFECT_LAYER  = 4;
@@ -39,6 +39,7 @@ const int BOMB_STARTUP = 5;
 const int BIG_CUBE_EXPLOSION = 6;
 const int HUGE_CUBE_EXPLOSION = 6;
 const int EMITTER_EXPLOSION = 13;
+const int DEATHBALL_EXPLOSION = 15;
 // objects types
 enum ObjectTypes {
 	OT_UNKNOWN,

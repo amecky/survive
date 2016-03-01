@@ -3,7 +3,11 @@
 #include "..\Constants.h"
 #include "..\utils\util.h"
 
-void RingSpawner::start(const v2& pos) {
+void RingSpawner::start(const v2& pos, int emitts, int pieces) {
+	_pieces = pieces;
+	_emitts = emitts;
+	_step = TWO_PI / static_cast<float>(pieces);
+	_emittStep = TWO_PI / static_cast<float>(emitts);
 	_timer = 0.0f;
 	_position = pos;
 	_current = 0.0f;
@@ -19,7 +23,7 @@ void RingSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 		float dy = _position.y + sin(_timer) * 40.0f;
 		if (_timer >= _current) {
 			_current += _step;
-			_context->particles->start(ENEMY_TRAIL, v3(dx, dy, 0.0f));
+			_context->particles->start(ENEMY_TRAIL, v2(dx, dy));
 		}
 		if (_timer >= _currentEmitts) {
 			_currentEmitts += _emittStep;

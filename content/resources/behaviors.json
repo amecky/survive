@@ -21,7 +21,7 @@ wall_impact {
 		mode : 0
 	}
 	scale_by_path {
-		path : 0.0,1.0,1.0,0.4,0.4,1.0,0.8,1.8,1.0,1.0,1.0,1.0
+		path : 0.0,1.0,1.0,0.4,0.8,0.8,0.8,1.2,1.2,1.0,1.0,1.0
 		ttl : 0.4
 		mode : 0
 	}
@@ -40,17 +40,12 @@ top_wall_impact {
 		mode : 0
 	}
 }
-ball_impact {
+death_ball_flashing {
 	flash_color {
-		start_color : 255,0,0,255
-		end_color : 0,0,255,255
+		start_color : 255, 108, 0, 255
+		end_color : 192, 63, 0, 0
 		tweening : 1
-		ttl : 1.4
-		mode : 0
-	}
-	scale_by_path {
-		path : 0.0,1.0,1.0,0.4,0.7,0.7,0.8,1.4,1.4,1.0,1.0,1.0
-		ttl : 0.4
-		mode : 0
+		ttl : 0.8
+		mode : -1
 	}
 }

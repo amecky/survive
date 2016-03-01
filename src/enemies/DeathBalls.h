@@ -3,6 +3,12 @@
 
 class DeathBalls {
 
+	struct DeathBall {
+
+		ds::SID innerID;
+
+	};
+
 public:
 	DeathBalls(GameContext* context);
 	~DeathBalls();

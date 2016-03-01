@@ -9,6 +9,7 @@
 #include "..\Levels.h"
 #include "..\enemies\Worm.h"
 #include "..\enemies\DeathBalls.h"
+#include "..\utils\BorderLines.h"
 
 class MainGameState : public ds::GameState {
 
@@ -29,6 +30,7 @@ private:
 	void moveStars(const v2& target, float dt);
 	void createStar(const v2& pos);
 	void addStar(const v2& pos, int count,float radius = 20.0f);
+	void spawn(float dt);
 
 	GameContext* _context;
 	ds::World* _world;
@@ -44,6 +46,10 @@ private:
 	LineSpawner* _lineSpawner;
 	CurveSpawner* _curveSpawner;
 	DeathBalls* _deathBalls;
+	Border* _border;
 	ds::Array<EmitterEvent> _events;
+	float _spawnTimer;
+	int _counter;
+	int _killed;
 };
 

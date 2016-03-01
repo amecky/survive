@@ -58,6 +58,10 @@ green_emitter_exp {
 	file : "green_emitter_exp" 
 	id : 14
 }
+deathball_exp {
+	file : "deathball_exp" 
+	id : 15
+}
 groups {
 	bomb_explosion {
 		id : 1

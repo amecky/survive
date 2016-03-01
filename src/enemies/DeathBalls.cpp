@@ -17,7 +17,11 @@ void DeathBalls::start() {
 	_world->setRotation(sid, a);
 	_world->rotateBy(sid, TWO_PI, 3.0f);
 	ds::SID id = _world->create(p, "inner_death_ball", OBJECT_LAYER);
-	_world->flashColor(id, ds::Color(255, 108, 0, 255), ds::Color(192, 63, 0, 255), 0.5f, -1);
+	_world->startBehavior(id, "death_ball_flashing");
+	_world->setRotation(id, a);
+	_world->rotateBy(id, TWO_PI, 3.0f);
+	DeathBall* data = (DeathBall*)_world->attach_data(sid, sizeof(DeathBall));
+	data->innerID = id;
 }
 
 void DeathBalls::handleEvents(const ds::ActionEventBuffer& buffer) {
@@ -28,12 +32,16 @@ void DeathBalls::handleEvents(const ds::ActionEventBuffer& buffer) {
 				float angle = _world->getRotation(event.sid);
 				v2 v = ds::vector::getRadialVelocity(angle, 500.0f);
 				_world->moveBy(event.sid, v);
+				DeathBall* data = (DeathBall*)_world->get_data(event.sid);
+				_world->moveBy(data->innerID, v);
 			}
 			else if (event.type == ds::AT_MOVE_BY) {
 				// let it explode
 				v2 p = _world->getPosition(event.sid);
-				_context->particles->start(ENEMY_EXPLOSION, p);
-				_world->remove(event.sid);
+				_context->particles->start(DEATHBALL_EXPLOSION, p);
+				DeathBall* data = (DeathBall*)_world->get_data(event.sid);
+				_world->remove(data->innerID);
+				_world->remove(event.sid);				
 			}
 		}
 	}

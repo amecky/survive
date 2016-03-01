@@ -182,7 +182,7 @@ sprite {
     name : "Star"
     texture_id : 0
     position : 640,360
-    rect : 0,40,24,24
+    rect : 40,80,20,20
     scale : 1,1
     rotation : 0
     color : 255,255,0,255
@@ -232,19 +232,19 @@ sprite {
     name : "death_ball"
     texture_id : 0
     position : 640,360
-    rect : 0,760,50,50
+    rect : 0,560,48,48
     scale : 1,1
     rotation : 0
-    color : 192,0,0,255
+    color : 255,68,68,255
     type : 12
 }
 sprite { 
     name : "inner_death_ball"
     texture_id : 0
     position : 640,360
-    rect : 60,760,50,50
+    rect : 0,620,22,22
     scale : 1,1
     rotation : 0
     color : 255,128,0,255
-    type : 12
+    type : 666
 }

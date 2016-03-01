@@ -31,8 +31,9 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	//_world->ignoreLayer(LIGHT_LAYER);
 	_levels.load();
 
+	_border = new Border(ctx);
 	_worm = new Worm(ctx);
-	_spawner = new RingSpawner(ctx, 10, 64);
+	_spawner = new RingSpawner(ctx);
 	_lineSpawner = new LineSpawner(ctx);
 	_curveSpawner = new CurveSpawner(ctx);
 	_deathBalls = new DeathBalls(ctx);
@@ -45,6 +46,7 @@ MainGameState::~MainGameState() {
 	delete _spawner;
 	delete _worm;
 	delete _cubes;
+	delete _border;
 	delete _player;
 }
 
@@ -102,6 +104,42 @@ bool MainGameState::handleCollisions() {
 	}
 	return ret;
 }
+
+
+// -------------------------------------------------------
+// spawn
+// -------------------------------------------------------
+void MainGameState::spawn(float dt) {
+	if (_counter < 100) {
+		_spawnTimer += dt;
+		if (_spawnTimer > 5.0f) {
+			_spawnTimer = 0.0f;
+			int t = ds::math::random(0, 2);
+			if (t == 0) {
+				v2 pp = _world->getPosition(_context->playerID);
+				v2 p = util::pickSpawnPoint(pp);
+				_spawner->start(p, 10, 64);
+				_counter += 10;
+			}
+			else if (t == 1) {
+				v2 p = _world->getPosition(_context->playerID);
+				v2 start = util::pickSpawnPoint(p, GE_LEFT);
+				v2 end = util::pickSpawnPoint(p, GE_RIGHT);
+				_lineSpawner->start(start, end, 20);
+				_counter += 20;
+			}
+			else {
+				v2 p = _world->getPosition(_context->playerID);
+				v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
+				v2 end = util::pickSpawnPoint(p, GE_TOP);
+				_curveSpawner->start(start, end, 15);
+				_counter += 15;
+			}
+		}
+	}
+}
+
+
 // -------------------------------------------------------
 // update
 // -------------------------------------------------------
@@ -125,7 +163,7 @@ int MainGameState::update(float dt) {
 			if (buffer.events.size() > 0) {
 				for (int i = 0; i < buffer.events.size(); ++i) {
 					if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
-						_context->renderer->hitBorder(_world->getPosition(buffer.events[i].sid));
+						_border->hitBorder(_world->getPosition(buffer.events[i].sid));
 						_context->particles->start(BULLET_EXPLOSION, _world->getPosition(buffer.events[i].sid));
 						_world->remove(buffer.events[i].sid);
 					}
@@ -292,18 +330,18 @@ int MainGameState::onChar(int ascii) {
 		_cubes->emitt(4);
 	}
 	if (ascii == '6') {
-		_context->particles->startGroup(1, v3(800, 450, 0));
+		_context->particles->startGroup(1, v2(800, 450));
 	}
 	if (ascii == '7') {
 		_worm->start(v2(512, 384));
 	}
 	if (ascii == '8') {
-		_context->particles->start(14, v3(800, 450, 0));
+		_context->particles->start(14, v2(800, 450));
 	}
 	if (ascii == '9') {
 		v2 pp = _world->getPosition(_context->playerID);
 		v2 p = util::pickSpawnPoint(pp);
-		_spawner->start(p);
+		//_spawner->start(p);
 	}
 	if (ascii == 'r') {
 		_cubes->reload();
