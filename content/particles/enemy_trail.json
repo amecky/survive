@@ -15,9 +15,9 @@ lifecycle {
     ttl : 1.5
     variance : 0.2
 }
-linear_color { 
-    start_color : 246,200,138,255
-	end_color : 246,200,138,32
+color { 
+    start : 246,200,138,255
+	end : 246,200,138,32
 }
 size { 
 	initial : 1.0,1.0

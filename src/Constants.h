@@ -30,16 +30,16 @@ const int SEPARATE_BIT = 2;
 const int ALIGN_BIT = 3;
 const int SIMPLE_MOVE_BIT = 4;
 
-const int ENEMY_TRAIL = 5;
-const int BULLET_EXPLOSION = 1;
-const int PLAYER_EXPLOSION = 5;
-const int ENEMY_EXPLOSION = 14;
-const int BALL_EXPLOSION = 7;
-const int BOMB_STARTUP = 5;
-const int BIG_CUBE_EXPLOSION = 6;
-const int HUGE_CUBE_EXPLOSION = 6;
-const int EMITTER_EXPLOSION = 13;
-const int DEATHBALL_EXPLOSION = 15;
+const int ENEMY_TRAIL         = 3;
+const int BULLET_EXPLOSION    = 2;
+const int PLAYER_EXPLOSION    = 1;
+const int ENEMY_EXPLOSION     = 1;
+const int BALL_EXPLOSION      = 1;
+const int BOMB_STARTUP        = 5;
+const int BIG_CUBE_EXPLOSION  = 1;
+const int HUGE_CUBE_EXPLOSION = 1;
+const int EMITTER_EXPLOSION   = 4;
+const int DEATHBALL_EXPLOSION = 6;
 // objects types
 enum ObjectTypes {
 	OT_UNKNOWN,
