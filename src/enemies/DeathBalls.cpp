@@ -34,6 +34,11 @@ void DeathBalls::handleEvents(const ds::ActionEventBuffer& buffer) {
 				_world->moveBy(event.sid, v);
 				DeathBall* data = (DeathBall*)_world->get_data(event.sid);
 				_world->moveBy(data->innerID, v);
+				_context->trails->add(event.sid, 4.0f, DEATHBALL_TRAIL, 20.0f);
+				_world->stopAction(event.sid, ds::AT_COLOR_FLASH);
+				_world->stopAction(data->innerID, ds::AT_COLOR_FLASH);
+				_world->setColor(event.sid, ds::Color(255, 128, 0, 255));
+				_world->setColor(data->innerID, ds::Color(255, 128, 0, 255));
 			}
 			else if (event.type == ds::AT_MOVE_BY) {
 				// let it explode

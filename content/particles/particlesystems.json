@@ -26,6 +26,10 @@ deathball_exp {
 	file : "deathball_exp" 
 	id : 6
 }
+deathball_trail {
+	file : "deathball_trail" 
+	id : 7
+}
 groups {
 	bomb_explosion {
 		id : 1
