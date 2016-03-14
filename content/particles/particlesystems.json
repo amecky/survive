@@ -30,6 +30,10 @@ deathball_trail {
 	file : "deathball_trail" 
 	id : 7
 }
+bullet_trail {
+	file : "bullet_trail" 
+	id : 8
+}
 groups {
 	bomb_explosion {
 		id : 1

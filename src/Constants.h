@@ -41,6 +41,8 @@ const int HUGE_CUBE_EXPLOSION = 1;
 const int EMITTER_EXPLOSION   = 4;
 const int DEATHBALL_EXPLOSION = 6;
 const int DEATHBALL_TRAIL     = 7;
+const int BULLET_TRAIL        = 8;
+
 // objects types
 enum ObjectTypes {
 	OT_UNKNOWN,

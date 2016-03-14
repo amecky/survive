@@ -137,4 +137,5 @@ void Player::fireBullet(const Vector2f& pos) {
 	_context->world->moveBy(sid, v);
 	_context->world->setRotation(sid, _angle);
 	_context->world->attachCollider(sid, Vector2f(10.0f, 10.0f), OT_BULLET,OBJECT_LAYER);
+	_context->trails->add(sid, 4.0f, BULLET_TRAIL, 10.0f);
 }
