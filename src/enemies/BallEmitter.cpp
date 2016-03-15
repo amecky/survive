@@ -40,6 +40,7 @@ void RingSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 			e.position = _position;
 			buffer.push_back(e);
 			_active = false;
+			_context->particles->start(EMITTER_EXPLOSION, v2(dx, dy));
 		}
 	}
 }
@@ -79,6 +80,7 @@ void LineSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 			buffer.push_back(e);
 			_active = false;
 			_context->world->remove(_id);
+			_context->particles->start(EMITTER_EXPLOSION, _end);
 		}
 	}
 }
@@ -119,6 +121,7 @@ void CurveSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 			buffer.push_back(e);
 			_active = false;
 			_context->world->remove(_id);
+			_context->particles->start(EMITTER_EXPLOSION, _position);
 		}
 	}
 }

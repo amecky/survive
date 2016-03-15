@@ -31,10 +31,11 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 
 	_effect = new ds::ScreenShakeEffect();
 
-	_buttons.push_back("ST CB1");
-	_buttons.push_back("ST CB2");
-	_buttons.push_back("ST CB3");
-	_buttons.push_back("Toggle Coll");
+	_buttons.push_back("DB");
+	_buttons.push_back("Cube1");
+	_buttons.push_back("Cube2");
+	_buttons.push_back("Toggle PC");
+	_checkCollision = true;
 	
 }
 
@@ -91,7 +92,7 @@ bool MainGameState::handleCollisions() {
 					}
 				//}
 			}
-			else if (c.containsType(OT_PLAYER)) {
+			else if (c.containsType(OT_PLAYER) && _checkCollision) {
 				if (c.containsType(OT_STAR)) {
 					ds::SID sid = c.getSIDByType(OT_STAR);
 					_world->remove(sid);
@@ -225,6 +226,25 @@ void MainGameState::render() {
 	gui::start(1, &p);
 	gui::begin();
 	int ret = gui::ButtonBar(_buttons);
+	if (ret == 0) {
+		_deathBalls->start();
+	}
+	else if (ret == 1) {
+		v2 p = _world->getPosition(_context->playerID);
+		v2 start = util::pickSpawnPoint(p, GE_LEFT);
+		v2 end = util::pickSpawnPoint(p, GE_RIGHT);
+		_lineSpawner->start(start, end, 20);
+	}
+	else if ( ret == 2 ) {
+		v2 p = _world->getPosition(_context->playerID);
+		v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
+		v2 end = util::pickSpawnPoint(p, GE_TOP);
+		_curveSpawner->start(start, end, 10);
+	}
+	else if (ret == 3) {
+		_checkCollision = !_checkCollision;
+		LOG << "Collision check: " << _checkCollision;
+	}
 	gui::end();
 }
 

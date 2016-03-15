@@ -55,5 +55,6 @@ private:
 
 	ds::ScreenShakeEffect* _effect;
 	ds::Array<const char*> _buttons;
+	bool _checkCollision;
 };
 
