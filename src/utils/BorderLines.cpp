@@ -14,7 +14,12 @@ void Border::hitBorder(const v2& pos) {
 	for (int i = 0; i < _borderTiles.size(); ++i) {
 		v2 d = _borderTiles[i].position - pos;
 		if (sqr_length(d) < 40.0f * 40.0f) {
-			_world->startBehavior(_borderTiles[i].sid, "wall_impact");
+			if (_borderTiles[i].type == OT_TOP_WALL) {
+				_world->startBehavior(_borderTiles[i].sid, "top_wall_impact");
+			}
+			else {
+				_world->startBehavior(_borderTiles[i].sid, "wall_impact");
+			}
 		}
 	}
 }
@@ -23,26 +28,30 @@ void Border::create() {
 	for (int i = 0; i < 15; ++i) {
 		BorderTile tl;
 		v2 p = v2(30, 60 + i * 40);
-		tl.sid = _world->create(p, ds::math::buildTexture(440, 20, 6, 40), 0.0f, 1.0f, 1.0f, _border_color, 32, BORDER_LAYER);
+		tl.sid = _world->create(p, ds::math::buildTexture(440, 20, 6, 40), 0.0f, 1.0f, 1.0f, _border_color, OT_LEFT_WALL, BORDER_LAYER);
 		tl.position = p;
+		tl.type = OT_LEFT_WALL;
 		_borderTiles.push_back(tl);
 		BorderTile tr;
 		p = v2(1250, 60 + i * 40);
-		tr.sid = _world->create(p, ds::math::buildTexture(440, 80, 6, 40), 0.0f, 1.0f, 1.0f, _border_color, 32, BORDER_LAYER);
+		tr.sid = _world->create(p, ds::math::buildTexture(440, 80, 6, 40), 0.0f, 1.0f, 1.0f, _border_color, OT_LEFT_WALL, BORDER_LAYER);
 		tr.position = p;
+		tr.type = OT_LEFT_WALL;
 		_borderTiles.push_back(tr);
 	}
 	// bottom and top wall
 	for (int i = 0; i < 30; ++i) {
 		BorderTile tt;
 		v2 p = v2(60 + i * 40, 650);
-		tt.sid = _world->create(p, ds::math::buildTexture(440, 40, 40, 6), 0.0f, 1.0f, 1.0f, _border_color, 32, BORDER_LAYER);
+		tt.sid = _world->create(p, ds::math::buildTexture(440, 40, 40, 6), 0.0f, 1.0f, 1.0f, _border_color, OT_TOP_WALL, BORDER_LAYER);
 		tt.position = p;
+		tt.type = OT_TOP_WALL;
 		_borderTiles.push_back(tt);
 		BorderTile tb;
 		p = v2(60 + i * 40, 30);
-		tb.sid = _world->create(p, ds::math::buildTexture(440, 40, 40, 6), 0.0f, 1.0f, 1.0f, _border_color, 32, BORDER_LAYER);
+		tb.sid = _world->create(p, ds::math::buildTexture(440, 40, 40, 6), 0.0f, 1.0f, 1.0f, _border_color, OT_TOP_WALL, BORDER_LAYER);
 		tb.position = p;
+		tb.type = OT_TOP_WALL;
 		_borderTiles.push_back(tb);
 	}
 }

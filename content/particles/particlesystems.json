@@ -8,7 +8,7 @@ bullet_explosion {
 }
 player_trail {
 	file : "player_trail"
-	id : 2
+	id : 9
 }
 enemy_trail {
 	file : "enemy_trail"

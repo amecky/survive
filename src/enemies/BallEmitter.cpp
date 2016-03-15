@@ -54,16 +54,16 @@ void LineSpawner::start(const v2& start,const v2& end,int pieces) {
 	_emittPos = start;
 	float l = distance(start, end);
 	_emittDistance = l / pieces;
+	_id = _context->world->create(start, "emitter_head");
+	_context->world->moveBy(_id, _velocity);
+	_context->world->setRotation(_id, _angle);
+	_context->trails->add(_id, 20.0f, ENEMY_TRAIL, 4.0f);
 }
 
 void LineSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 	if (_active) {
 		_position += _velocity * dt;
 		float d = distance(_position, _prev);
-		if (d > 5.0f) {
-			_context->particles->start(ENEMY_TRAIL, _prev);
-			_prev = _position;
-		}
 		if (distance(_position, _emittPos) > _emittDistance) {
 			EmitterEvent e;
 			e.type = EmitterEvent::EMITT;
@@ -78,6 +78,7 @@ void LineSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 			e.position = _position;
 			buffer.push_back(e);
 			_active = false;
+			_context->world->remove(_id);
 		}
 	}
 }
@@ -93,17 +94,16 @@ void CurveSpawner::start(const v2& start, const v2& end, int pieces) {
 	float l = distance(start, end);
 	_emittDistance = l / pieces;
 	_timer = 0.0f;
+	_id = _context->world->create(start, "emitter_head");
+	_context->world->followPath(_id, &_path, _context->settings->curveEmitterTTL);
+	_context->trails->add(_id, 10.0f, ENEMY_TRAIL, 8.0f);
 }
 
 void CurveSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 	if (_active) {
 		_path.get(_timer, &_position);
-		_timer += dt * 0.25f;
+		_timer += dt / _context->settings->curveEmitterTTL;
 		float d = distance(_position, _prev);
-		if (d > 5.0f) {
-			_context->particles->start(ENEMY_TRAIL, _prev);
-			_prev = _position;
-		}
 		if (distance(_position, _emittPos) > _emittDistance) {
 			EmitterEvent e;
 			e.type = EmitterEvent::EMITT;
@@ -118,6 +118,7 @@ void CurveSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 			e.position = _position;
 			buffer.push_back(e);
 			_active = false;
+			_context->world->remove(_id);
 		}
 	}
 }

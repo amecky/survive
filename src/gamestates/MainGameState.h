@@ -10,6 +10,7 @@
 #include "..\enemies\Worm.h"
 #include "..\enemies\DeathBalls.h"
 #include "..\utils\BorderLines.h"
+#include <effects\ScreenShakeEffect.h>
 
 class MainGameState : public ds::GameState {
 
@@ -51,5 +52,8 @@ private:
 	float _spawnTimer;
 	int _counter;
 	int _killed;
+
+	ds::ScreenShakeEffect* _effect;
+	ds::Array<const char*> _buttons;
 };
 

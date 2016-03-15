@@ -4,7 +4,6 @@
 #include <renderer\BitmapFont.h>
 #include <math\GameMath.h>
 #include <utils\Profiler.h>
-#include "..\GameRenderer.h"
 #include "..\Constants.h"
 #include "..\utils\util.h"
 
@@ -13,13 +12,6 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	
 	_cubes = new Cubes(_context);
 	_world->setBoundingRect(ds::Rect(30, 30, 1220, 620));
-	//_world->create(v2(800, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	//_world->create(v2(60, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	//_world->create(v2(400, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	//_world->create(v2(1200, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	//_world->create(v2(1540, 450), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	//_world->create(v2(800, 60), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
-	//_world->create(v2(800, 840), ds::math::buildTexture(600, 0, 120, 120), OBJECT_LAYER);
 	_world->ignoreCollisions(OT_PLAYER, OT_BULLET);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
@@ -28,7 +20,6 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_world->ignoreCollisions(OT_BIG_CUBE, OT_HUGE_CUBE);
 	_world->ignoreCollisions(OT_HUGE_CUBE, OT_HUGE_CUBE);
 	
-	//_world->ignoreLayer(LIGHT_LAYER);
 	_levels.load();
 
 	_border = new Border(ctx);
@@ -37,9 +28,18 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_lineSpawner = new LineSpawner(ctx);
 	_curveSpawner = new CurveSpawner(ctx);
 	_deathBalls = new DeathBalls(ctx);
+
+	_effect = new ds::ScreenShakeEffect();
+
+	_buttons.push_back("ST CB1");
+	_buttons.push_back("ST CB2");
+	_buttons.push_back("ST CB3");
+	_buttons.push_back("Toggle Coll");
+	
 }
 
 MainGameState::~MainGameState() {
+	delete _effect;
 	delete _deathBalls;
 	delete _curveSpawner;
 	delete _lineSpawner;
@@ -65,6 +65,9 @@ void MainGameState::killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID ene
 		// FIXME: get from cube definition
 		// FIXME: get radius from cube definition
 		addStar(enemyPos, 4, 20.0f);
+		if (!_effect->isActive()) {
+			_effect->activate();
+		}
 	}
 }
 
@@ -145,6 +148,8 @@ void MainGameState::spawn(float dt) {
 // -------------------------------------------------------
 int MainGameState::update(float dt) {
 	ZoneTracker z("MainGameState:update");
+
+	_effect->tick(dt);
 	//_eventBuffer.reset();
 	if (!_dying) {
 		ZoneTracker z2("MainGameState:update:move");
@@ -153,7 +158,6 @@ int MainGameState::update(float dt) {
 		_player->shootBullets(dt);
 		_cubes->spawn(dt);
 	}
-	//_world->tick(dt);
 	if (!_dying) {
 		ZoneTracker z1("MainGameState:commonTickAEB");
 		if (_world->hasEvents()) {
@@ -206,9 +210,22 @@ int MainGameState::update(float dt) {
 // render
 // -------------------------------------------------------
 void MainGameState::render() {
-	_context->renderer->renderWorld();
+	_effect->start();
+	_context->world->renderSingleLayer(BG_LAYER);
+	_context->world->renderSingleLayer(BORDER_LAYER);
+	_context->particles->render();
+	_context->world->renderSingleLayer(OBJECT_LAYER);
+	_effect->render();
+	//ds::sprites::flush();
 	ds::renderer::selectViewport(0);
 	ds::sprites::draw(_cursor_pos, ds::math::buildTexture(40, 160, 20, 20));
+
+	v2 p(5, 720);
+	int state = 1;	
+	gui::start(1, &p);
+	gui::begin();
+	int ret = gui::ButtonBar(_buttons);
+	gui::end();
 }
 
 // --------------------------------------------------------------------------
@@ -306,6 +323,9 @@ int MainGameState::onChar(int ascii) {
 	}
 	if (ascii == 'x') {
 		_cubes->killAll();
+	}
+	if (ascii == 'g') {
+		_effect->activate();
 	}
 	if (ascii == '1') {
 		//_cubes->emitt(0);

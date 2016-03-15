@@ -58,6 +58,8 @@ enum ObjectTypes {
 	OT_CUBE_EMITTER,
 	OT_RING,
 	OT_DEATHBALL,
+	OT_TOP_WALL,
+	OT_LEFT_WALL,
 	OT_EOL
 };
 

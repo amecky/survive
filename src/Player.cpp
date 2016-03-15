@@ -21,7 +21,7 @@ void Player::create() {
 	_context->playerID = _id;
 	_context->world->attachCollider(_id, Vector2f(46.0f, 46.0f), OT_PLAYER,OBJECT_LAYER);
 	_angle = 0.0f;
-	_context->trails->add(_id, 5.0f, 3);
+	//_context->trails->add(_id, 5.0f, 3);
 	//_lightIndex = _context->world->create(_position, "lightning", LIGHT_LAYER);// _context->lights->add_permanent(_position, ds::Color(0, 255, 0, 255));
 	//_context->world->setColor(_lightIndex, ds::Color(0, 255, 0, 255));
 	_shootingMode = SM_IDLE;
@@ -137,5 +137,5 @@ void Player::fireBullet(const Vector2f& pos) {
 	_context->world->moveBy(sid, v);
 	_context->world->setRotation(sid, _angle);
 	_context->world->attachCollider(sid, Vector2f(10.0f, 10.0f), OT_BULLET,OBJECT_LAYER);
-	_context->trails->add(sid, 4.0f, BULLET_TRAIL, 10.0f);
+	//_context->trails->add(sid, 4.0f, BULLET_TRAIL);
 }

@@ -3,6 +3,8 @@
 
 struct GameSettings : public ds::DynamicGameSettings {
 
+	float curveEmitterTTL;
+
 	float bulletTrailDistance;
 	float bulletVelocity;
 	float spawnTimer;
@@ -28,6 +30,8 @@ struct GameSettings : public ds::DynamicGameSettings {
 	ds::Vector2fPath starScalePath;
 
 	GameSettings() {
+		addFloat("curve_emitter_ttl", &curveEmitterTTL, 4.0f);
+
 		addFloat("borderAmplitude", &borderAmplitude, 4.0f);
 		addFloat("borderShakeRadius", &borderShakeRadius, 10.0f);
 		addFloat("bulletTrailDistance", &bulletTrailDistance, 20.0f);

@@ -74,6 +74,7 @@ private:
 	v2 _emittPos;
 	float _emittDistance;
 	float _angle;
+	ds::SID _id;
 };
 
 // --------------------------------------
@@ -96,4 +97,5 @@ private:
 	v2 _prev;
 	v2 _emittPos;
 	float _emittDistance;
+	ds::SID _id;
 };

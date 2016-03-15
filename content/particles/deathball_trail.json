@@ -22,6 +22,6 @@ color {
 size { 
 	initial : 1.0,1.0
 	variance : 0.0,0.0
-	min : 0.6,0.6
+	min : 0.4,0.4
     max : 0.2,0.2
 }

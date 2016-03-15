@@ -1,0 +1,6 @@
+settings {
+	ttl : 0.4
+	frequency : 2
+	amplitude : 6
+	clear_color : 16,16,16,255
+}

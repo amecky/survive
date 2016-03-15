@@ -5,7 +5,6 @@
 #include <base\GameStateMachine.h>
 #include "gamestates\GameOverState.h"
 #include "gamestates\MainGameState.h"
-#include "GameRenderer.h"
 #include <io\FileRepository.h>
 #include <renderer\Scenes.h>
 
@@ -18,7 +17,6 @@ Survive::Survive() : ds::BaseApp() {
 Survive::~Survive() {
 	delete _context->settings;
 	delete _context->trails;
-	delete _context->renderer;
 	delete _context;
 }
 // -------------------------------------------------------
@@ -42,7 +40,6 @@ bool Survive::loadContent() {
 	_settingPos = v2(900, 710);
 	_context->hud = gui->get("HUD");
 	_context->settings->load();
-	_context->renderer = new GameRenderer(_context);
 	addGameState(new MainGameState(_context));
 	addGameState(new GameOverState(_context, gui));
 	addGameState(new ds::BasicMenuGameState("MainMenuState", "MainMenu", gui));

@@ -9,6 +9,7 @@ class Border {
 	struct BorderTile {
 		ds::SID sid;
 		v2 position;
+		int type;
 	};
 
 public:

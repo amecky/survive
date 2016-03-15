@@ -1,4 +1,5 @@
 settings {
+	curve_emitter_ttl : 2.0
 	borderAmplitude : 4.0
 	borderShakeRadius : 10.0
 	bulletTrailDistance : 20.0
