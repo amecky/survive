@@ -86,7 +86,7 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 		position += pp;
 	}
 	ds::SID sid = _world->create(position, cubeDefinition.name,OBJECT_LAYER);
-	_world->attachCollider(sid, cubeDefinition.type, 0);
+	_world->attachCollider(sid);
 	Ball* data = (Ball*)_world->attach_data(sid, sizeof(Ball));
 	assert(data != 0);
 	float angle = ds::math::random(0.0f, TWO_PI);

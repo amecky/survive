@@ -82,15 +82,14 @@ bool MainGameState::handleCollisions() {
 	if (numCollisions > 0) {
 		for (int i = 0; i < numCollisions; ++i) {
 			ZoneTracker z1("MainGameState:tick:innerCollision");
-			const ds::Collision& c = _world->getCollision(i);			
+			const ds::Collision& c = _world->getCollision(i);		
 			if (c.containsType(OT_BULLET)) {
-					if (c.firstType == OT_BULLET) {
-						killEnemy(c.firstSID, c.firstPos, c.secondSID, c.secondPos, c.secondType);
-					}
-					else {
-						killEnemy(c.secondSID, c.secondPos, c.firstSID, c.firstPos, c.firstType);
-					}
-				//}
+				if (c.firstType == OT_BULLET) {
+					killEnemy(c.firstSID, c.firstPos, c.secondSID, c.secondPos, c.secondType);
+				}
+				else {
+					killEnemy(c.secondSID, c.secondPos, c.firstSID, c.firstPos, c.firstType);
+				}
 			}
 			else if (c.containsType(OT_PLAYER) && _checkCollision) {
 				if (c.containsType(OT_STAR)) {
@@ -310,7 +309,7 @@ void MainGameState::moveStars(const v2& target, float dt) {
 void MainGameState::createStar(const v2& pos) {
 	ds::SID sid = _world->create(pos, "Star");
 	_world->scaleByPath(sid, &_context->settings->starScalePath, _context->settings->starFlashTTL);
-	_world->attachCollider(sid, OT_STAR, 0);
+	_world->attachCollider(sid);
 	_world->removeAfter(sid, _context->settings->starTTL);
 }
 // ---------------------------------------

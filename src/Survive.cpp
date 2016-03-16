@@ -23,6 +23,7 @@ Survive::~Survive() {
 // Load content and prepare game
 // -------------------------------------------------------
 bool Survive::loadContent() {	
+	world->enableCollisionChecks();
 	_context = new GameContext;
 	_context->settings = new GameSettings;
 	_context->settings->load();
