@@ -25,15 +25,22 @@ void Border::hitBorder(const v2& pos) {
 }
 
 void Border::create() {
+
+	for (int x = 0; x < 5; ++x) {
+		for (int y = 0; y < 4; ++y) {
+			_world->create(v2(160 + x * 240, 140 + y * 200), ds::math::buildTexture(480, 120, 240, 200));
+		}
+	}
+
 	for (int i = 0; i < 15; ++i) {
 		BorderTile tl;
-		v2 p = v2(30, 60 + i * 40);
+		v2 p = v2(36, 60 + i * 40);
 		tl.sid = _world->create(p, ds::math::buildTexture(440, 20, 6, 40), 0.0f, 1.0f, 1.0f, _border_color, OT_LEFT_WALL, BORDER_LAYER);
 		tl.position = p;
 		tl.type = OT_LEFT_WALL;
 		_borderTiles.push_back(tl);
 		BorderTile tr;
-		p = v2(1250, 60 + i * 40);
+		p = v2(1244, 60 + i * 40);
 		tr.sid = _world->create(p, ds::math::buildTexture(440, 80, 6, 40), 0.0f, 1.0f, 1.0f, _border_color, OT_LEFT_WALL, BORDER_LAYER);
 		tr.position = p;
 		tr.type = OT_LEFT_WALL;
@@ -42,13 +49,13 @@ void Border::create() {
 	// bottom and top wall
 	for (int i = 0; i < 30; ++i) {
 		BorderTile tt;
-		v2 p = v2(60 + i * 40, 650);
+		v2 p = v2(60 + i * 40, 644);
 		tt.sid = _world->create(p, ds::math::buildTexture(440, 40, 40, 6), 0.0f, 1.0f, 1.0f, _border_color, OT_TOP_WALL, BORDER_LAYER);
 		tt.position = p;
 		tt.type = OT_TOP_WALL;
 		_borderTiles.push_back(tt);
 		BorderTile tb;
-		p = v2(60 + i * 40, 30);
+		p = v2(60 + i * 40, 36);
 		tb.sid = _world->create(p, ds::math::buildTexture(440, 40, 40, 6), 0.0f, 1.0f, 1.0f, _border_color, OT_TOP_WALL, BORDER_LAYER);
 		tb.position = p;
 		tb.type = OT_TOP_WALL;
