@@ -20,7 +20,7 @@ void DeathBalls::start() {
 	_world->startBehavior(id, "death_ball_flashing");
 	_world->setRotation(id, a);
 	_world->rotateBy(id, TWO_PI, 3.0f);
-	DeathBall* data = (DeathBall*)_world->attach_data(sid, sizeof(DeathBall));
+	DeathBall* data = (DeathBall*)_world->attach_data(sid, sizeof(DeathBall),OT_DEATHBALL);
 	data->innerID = id;
 }
 
@@ -33,6 +33,7 @@ void DeathBalls::handleEvents(const ds::ActionEventBuffer& buffer) {
 				v2 v = ds::vector::getRadialVelocity(angle, 500.0f);
 				_world->moveBy(event.sid, v);
 				DeathBall* data = (DeathBall*)_world->get_data(event.sid);
+				XASSERT(data != 0, "No Deathball data found for %d",event.sid);
 				_world->moveBy(data->innerID, v);
 				_context->trails->add(event.sid, 4.0f, DEATHBALL_TRAIL, 20.0f);
 				_world->stopAction(event.sid, ds::AT_COLOR_FLASH);

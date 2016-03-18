@@ -87,7 +87,7 @@ void Cubes::createBall(const v2& pos, int current, int total, int waveDefinition
 	}
 	ds::SID sid = _world->create(position, cubeDefinition.name,OBJECT_LAYER);
 	_world->attachCollider(sid);
-	Ball* data = (Ball*)_world->attach_data(sid, sizeof(Ball));
+	Ball* data = (Ball*)_world->attach_data(sid, sizeof(Ball),OT_FOLLOWER);
 	assert(data != 0);
 	float angle = ds::math::random(0.0f, TWO_PI);
 	data->velocity = ds::vector::getRadialVelocity(angle, ds::math::random(cubeDefinition.velocity - cubeDefinition.velocityVariance, cubeDefinition.velocity + cubeDefinition.velocityVariance));
@@ -109,14 +109,14 @@ void Cubes::handleEvents(const ds::ActionEventBuffer& buffer) {
 			if (t == OT_BIG_CUBE || t == OT_HUGE_CUBE || t == OT_FOLLOWER || t == OT_MEGA_CUBE || t == OT_SUPER_CUBE || t == OT_FOLLOWER) {
 				if (event.type == ds::AT_SCALE_BY_PATH) {
 					Ball* data = (Ball*)_world->get_data(event.sid);
-					assert(data != 0);
+					XASSERT(data != 0, "No Ball data found for %d", event.sid);
 					_world->moveBy(event.sid, data->velocity, true);
 					//_world->rotate(event.sid, 180.0f, 0.8f, -1);
 					//_world->moveBy(data->lightIndex, data->velocity, true);
 				}
 				if (event.type == ds::AT_SCALE) {
 					Ball* data = (Ball*)_world->get_data(event.sid);
-					assert(data != 0);
+					XASSERT(data != 0, "No Ball data found for %d", event.sid);
 					_world->moveBy(event.sid, data->velocity, true);
 					//_world->rotate(event.sid, 180.0f, 0.8f, -1);
 					//_world->moveBy(data->lightIndex, data->velocity, true);
@@ -134,7 +134,7 @@ void Cubes::seek(const v2& target, float velocity) {
 	int num = _world->find_by_type(OT_FOLLOWER, sids, 256);
 	for (int i = 0; i < num; ++i) {
 		Ball* data = (Ball*)_world->get_data(sids[i]);
-		assert(data != 0);
+		XASSERT(data != 0, "No Ball data found for %d", sids[i]);
 		v2 diff = target - _world->getPosition(sids[i]);
 		v2 n = normalize(diff);
 		v2 desired = n * velocity;
@@ -151,7 +151,7 @@ void Cubes::separate(const v2& target, float minDistance, float relaxation) {
 	int num = _world->find_by_type(OT_FOLLOWER, sids, 256);
 	for (int i = 0; i < num; ++i) {
 		Ball* data = (Ball*)_world->get_data(sids[i]);
-		assert(data != 0);
+		XASSERT(data != 0, "No Ball data found for %d", sids[i]);
 		int cnt = 0;
 		v2 separationForce = v2(0, 0);
 		v2 averageDirection = v2(0, 0);
@@ -184,7 +184,7 @@ void Cubes::align(const v2& target, float desiredDistance) {
 	int num = _world->find_by_type(OT_FOLLOWER, sids, 256);
 	for (int i = 0; i < num; ++i) {
 		Ball* data = (Ball*)_world->get_data(sids[i]);
-		assert(data != 0);
+		XASSERT(data != 0, "No Ball data found for %d", sids[i]);
 		int cnt = 0;
 		v2 separationForce = v2(0, 0);
 		v2 averageDirection = v2(0, 0);
@@ -214,7 +214,7 @@ void Cubes::move(float dt) {
 	int num = _world->find_by_type(OT_FOLLOWER, sids, 256);
 	for (int i = 0; i < num; ++i) {
 		Ball* data = (Ball*)_world->get_data(sids[i]);
-		assert(data != 0);
+		XASSERT(data != 0, "No Ball data found for %d", sids[i]);
 		data->force = v2(0, 0);
 	}
 	seek(_context->world_pos, 120.0f);
@@ -222,7 +222,7 @@ void Cubes::move(float dt) {
 	align(_context->world_pos, 40.0f);
 	for (int i = 0; i < num; ++i) {
 		Ball* data = (Ball*)_world->get_data(sids[i]);
-		assert(data != 0);
+		XASSERT(data != 0, "No Ball data found for %d", sids[i]);
 		v2 p = _world->getPosition(sids[i]);
 		p += data->force * dt;
 		_world->setPosition(sids[i],p);
@@ -242,7 +242,7 @@ int Cubes::killBalls(const v2& bombPos, KilledBall* killedBalls) {
 	for (int i = 0; i < num; ++i) {
 		v2 p = _world->getPosition(sids[i]);
 		Ball* data = (Ball*)_world->get_data(sids[i]);
-		assert(data != 0);
+		XASSERT(data != 0, "No Ball data found for %d", sids[i]);
 		// FIXME!!!
 		float size = 20.0f;
 		if (ds::math::checkCircleIntersection(bombPos, BOMB_EXPLOSION_RADIUS, p, size)) {
