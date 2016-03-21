@@ -103,12 +103,11 @@ void Player::fireBullet() {
 	if (_alive) {
 		if (_context->doubleFire) {
 			Vector2f p = _position;
-			ds::vector::addRadial(p, 24.0f, _angle);
-			//p.y += 7.0f;
-			//p.x += 20.0f;
+			ds::vector::addRadial(p, 24.0f, _angle + DEGTORAD(20.0f));
 			fireBullet(p);
-			//p.y -= 14.0f;
-			//fireBullet(p, V2_RIGHT);
+			p = _position;
+			ds::vector::addRadial(p, 24.0f, _angle - DEGTORAD(20.0f));
+			fireBullet(p);
 		}
 		else {
 			Vector2f p = _position;

@@ -50,6 +50,9 @@ bool Survive::loadContent() {
 
 	//ds::Scenes s;
 	//s.load();
+	//int* n = 0;
+	//*n = 100;
+	//XASSERT(n != 0, "n must be 0");
 	return true;
 }
 

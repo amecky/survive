@@ -33,6 +33,8 @@ private:
 	void addStar(const v2& pos, int count,float radius = 20.0f);
 	void spawn(float dt);
 
+	void startCubes(int type);
+
 	GameContext* _context;
 	ds::World* _world;
 	Player* _player;
@@ -52,6 +54,7 @@ private:
 	float _spawnTimer;
 	int _counter;
 	int _killed;
+	bool _running;
 
 	ds::ScreenShakeEffect* _effect;
 	ds::Array<const char*> _buttons;

@@ -13,6 +13,7 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_cubes = new Cubes(_context);
 	_world->setBoundingRect(ds::Rect(30, 30, 1220, 620));
 	_world->ignoreCollisions(OT_PLAYER, OT_BULLET);
+	_world->ignoreCollisions(OT_BULLET, OT_BULLET);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_FOLLOWER);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_BIG_CUBE);
 	_world->ignoreCollisions(OT_FOLLOWER, OT_HUGE_CUBE);
@@ -35,6 +36,8 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_buttons.push_back("Cube1");
 	_buttons.push_back("Cube2");
 	_buttons.push_back("Toggle PC");
+	_buttons.push_back("Toggle running");
+	_buttons.push_back("DBS");
 	_checkCollision = true;
 	
 }
@@ -156,7 +159,15 @@ int MainGameState::update(float dt) {
 		_cursor_pos = ds::renderer::getMousePosition();
 		_player->move(dt);
 		_player->shootBullets(dt);
-		_cubes->spawn(dt);
+		//_cubes->spawn(dt);
+		if (_running) {
+			_spawnTimer += dt;
+			if (_spawnTimer > _context->settings->spawnDelay) {
+				int type = ds::math::random(0.0f, 2.9f);
+				startCubes(type);
+				_spawnTimer = 0.0f;
+			}
+		}
 	}
 	if (!_dying) {
 		ZoneTracker z1("MainGameState:commonTickAEB");
@@ -207,6 +218,27 @@ int MainGameState::update(float dt) {
 }
 
 // -------------------------------------------------------
+// start cubes
+// -------------------------------------------------------
+void MainGameState::startCubes(int type) {
+	if (type == 0) {
+		_deathBalls->start();
+	}
+	else if (type == 1) {
+		v2 p = _world->getPosition(_context->playerID);
+		v2 start = util::pickSpawnPoint(p, GE_LEFT);
+		v2 end = util::pickSpawnPoint(p, GE_RIGHT);
+		_lineSpawner->start(start, end, 20);
+	}
+	else if (type == 2) {
+		v2 p = _world->getPosition(_context->playerID);
+		v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
+		v2 end = util::pickSpawnPoint(p, GE_TOP);
+		_curveSpawner->start(start, end, 10);
+	}
+}
+
+// -------------------------------------------------------
 // render
 // -------------------------------------------------------
 void MainGameState::render() {
@@ -225,24 +257,22 @@ void MainGameState::render() {
 	gui::start(1, &p);
 	gui::begin();
 	int ret = gui::ButtonBar(_buttons);
-	if (ret == 0) {
-		_deathBalls->start();
-	}
-	else if (ret == 1) {
-		v2 p = _world->getPosition(_context->playerID);
-		v2 start = util::pickSpawnPoint(p, GE_LEFT);
-		v2 end = util::pickSpawnPoint(p, GE_RIGHT);
-		_lineSpawner->start(start, end, 20);
-	}
-	else if ( ret == 2 ) {
-		v2 p = _world->getPosition(_context->playerID);
-		v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
-		v2 end = util::pickSpawnPoint(p, GE_TOP);
-		_curveSpawner->start(start, end, 10);
-	}
-	else if (ret == 3) {
+	if (ret != -1) {
+		startCubes(ret);
+	}	
+	if (ret == 3) {
 		_checkCollision = !_checkCollision;
 		LOG << "Collision check: " << _checkCollision;
+	}
+	if (ret == 4) {
+		_running = !_running;
+		if (_running) {
+			_spawnTimer = _context->settings->spawnDelay - _context->settings->spawnDelay / 10.0f;
+		}
+		LOG << "running: " << _running;
+	}
+	if (ret == 5) {
+		_context->doubleFire = true;
 	}
 	gui::end();
 }
@@ -267,6 +297,8 @@ void MainGameState::activate() {
 	_dying = false;
 	_dying_timer = 4.0f;
 	_levels.prepare(0);
+	_running = false;
+	_spawnTimer = 0.0f;
 }
 
 // -------------------------------------------------------

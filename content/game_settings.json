@@ -1,5 +1,7 @@
 settings {
 	curve_emitter_ttl : 2.0
+	player_fire_rate : 0.15
+	spawn_delay : 4.0
 	borderAmplitude : 4.0
 	borderShakeRadius : 10.0
 	bulletTrailDistance : 20.0
@@ -11,7 +13,7 @@ settings {
 	getReadyScale : 0.1
 	snakeVelocity : 100.0
 	snakeFollowVelocity : 2.0
-	spawnTimer : 1.0
+	spawnTimer : 1.0	
 	star_ttl : 3.0 
 	star_flash_ttl : 0.3
 	star_magnet_radius : 250 

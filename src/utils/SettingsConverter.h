@@ -4,6 +4,8 @@
 struct GameSettings : public ds::DynamicGameSettings {
 
 	float curveEmitterTTL;
+	float spawnDelay;
+
 
 	float bulletTrailDistance;
 	float bulletVelocity;
@@ -31,12 +33,14 @@ struct GameSettings : public ds::DynamicGameSettings {
 
 	GameSettings() {
 		addFloat("curve_emitter_ttl", &curveEmitterTTL, 4.0f);
+		addFloat("spawn_delay", &spawnDelay, 5.0f);
+		addFloat("player_fire_rate", &playerFireRate, 0.1f);
 
 		addFloat("borderAmplitude", &borderAmplitude, 4.0f);
 		addFloat("borderShakeRadius", &borderShakeRadius, 10.0f);
 		addFloat("bulletTrailDistance", &bulletTrailDistance, 20.0f);
 		addFloat("bulletVelocity", &bulletVelocity, 800.0f);
-		addFloat("playerFireRate", &playerFireRate, 0.1f);
+		
 		addFloat("warmUpTime", &warmUpTime, 3.0f);
 		addFloat("dyingTime", &dyingTime, 4.0f);
 		addFloat("getReadyAmplitude", &getReadyAmplitude, 4.0f);
