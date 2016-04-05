@@ -2,6 +2,8 @@
 #include "..\utils\util.h"
 #include "..\Constants.h"
 
+const float ANGLES[] = { DEGTORAD(90.0f), DEGTORAD(0.0f), DEGTORAD(270.0f), DEGTORAD(180.0f) };
+
 DeathBalls::DeathBalls(GameContext* context) : _context(context), _world(context->world) {
 }
 
@@ -13,13 +15,36 @@ void DeathBalls::start() {
 	v2 p = util::pickSpawnPoint(pp);
 	ds::SID sid = _world->create(p, "death_ball",OBJECT_LAYER);
 	_world->startBehavior(sid, "wiggle_death_ball");
-	float a = ds::math::random(0.0f, TWO_PI);
+
+	float a = 0.0f;
+
+	int side = 0;
+	float delta = 2000.0f;
+	if (640.0f - p.y < delta) {
+		delta = 640.0f - p.y;
+		side = 0;
+	}
+	if (1240.0f - p.x < delta) {
+		delta = 1240.0f - p.x;
+		side = 1;
+	}
+	if (p.y - 40.0f < delta) {
+		delta = p.y - 40.0f;
+		side = 2;
+	}
+	if (p.x - 40.0f < delta) {
+		delta = p.x - 40.0f;
+		side = 3;
+	}
+	a = ANGLES[side] + PI;
+
 	_world->setRotation(sid, a);
-	_world->rotateBy(sid, TWO_PI, 3.0f);
+	float angle = ds::math::randomRange(DEGTORAD(45.0f), DEGTORAD(45.0f));
+	_world->rotateBy(sid, angle, 3.0f);
 	ds::SID id = _world->create(p, "inner_death_ball", OBJECT_LAYER);
 	_world->startBehavior(id, "death_ball_flashing");
 	_world->setRotation(id, a);
-	_world->rotateBy(id, TWO_PI, 3.0f);
+	_world->rotateBy(id, angle, 3.0f);
 	DeathBall* data = (DeathBall*)_world->attach_data(sid, sizeof(DeathBall),OT_DEATHBALL);
 	data->innerID = id;
 }

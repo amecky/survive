@@ -116,12 +116,13 @@ void Player::fireBullet() {
 		}
 		if (_context->tripleShot) {
 			Vector2f p = _position;
-			p.y += 30.0f;
+			ds::vector::addRadial(p, 24.0f, _angle + DEGTORAD(25.0f));
 			fireBullet(p);
-			p.y -= 60.0f;
+			p = _position;
+			ds::vector::addRadial(p, 24.0f, _angle - DEGTORAD(25.0f));
 			fireBullet(p);
-			p.y += 30.0f;
-			p.x -= 20.0f;
+			p = _position;
+			ds::vector::addRadial(p, 24.0f, _angle);
 			fireBullet(p);
 		}
 	}

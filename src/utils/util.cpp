@@ -249,8 +249,8 @@ namespace util {
 		int gy = 0;
 		bool match = true;
 		while (match) {
-			gx = ds::math::random(0, 20);
-			gy = ds::math::random(0, 10);
+			gx = ds::math::random(1, 19);
+			gy = ds::math::random(1, 9);
 			if (gx != px || gy != py) {
 				match = false;
 			}

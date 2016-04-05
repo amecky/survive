@@ -87,6 +87,9 @@ bool Survive::loadContent() {
 	addShortcut("Start DB", '1', GE_START_DEATHBALL);
 	addShortcut("Straight Worm", '2', GE_START_STRAIGHT_WORM);
 	addShortcut("Bezier Worm", '3', GE_START_BEZIER_WORM);
+	addShortcut("Ring Worm", '4', GE_START_RING_WORM);
+	addShortcut("DF", '5', GE_TOGGLE_DOUBLE_FIRE);
+	addShortcut("TF", '6', GE_TOGGLE_TRIPLE_FIRE);
 	return true;
 }
 

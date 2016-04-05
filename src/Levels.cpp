@@ -41,19 +41,3 @@ void Levels::prepare(int level) {
 	}
 }
 
-// ---------------------------------------
-// tick
-// ---------------------------------------
-void Levels::tick(EventBuffer& buffer, float dt) {
-	_timer += dt;
-	ds::Array<LevelEntry>::iterator it = _current.begin();
-	while (it != _current.end()) {
-		if (it->spawn_delay <= _timer) {
-			// create event
-			it = _current.remove(it);
-		}
-		else {
-			++it;
-		}
-	}
-}

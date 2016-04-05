@@ -205,7 +205,6 @@ int MainGameState::update(float dt) {
 		if (handleCollisions()) {
 			_dying = true;
 		}
-		_levels.tick(_eventBuffer, dt);
 		moveStars(_context->world_pos, dt);
 	}
 	if (_dying) {
@@ -392,11 +391,24 @@ int MainGameState::processEvents(const ds::EventStream& events) {
 			v2 end = util::pickSpawnPoint(p, GE_RIGHT);
 			_lineSpawner->start(start, end, 20);
 		}
+		else if (type == GE_START_RING_WORM) {
+			v2 p = _world->getPosition(_context->playerID);
+			v2 start = util::pickSpawnPoint(p);
+			_spawner->start(start, 20, 36);
+		}
 		else if (type == GE_START_BEZIER_WORM) {
 			v2 p = _world->getPosition(_context->playerID);
 			v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
 			v2 end = util::pickSpawnPoint(p, GE_TOP);
 			_curveSpawner->start(start, end, 10);
+		}
+		else if (type == GE_TOGGLE_DOUBLE_FIRE) {
+			_context->doubleFire = !_context->doubleFire;
+			_context->tripleShot = false;
+		}
+		else if (type == GE_TOGGLE_TRIPLE_FIRE) {
+			_context->tripleShot = !_context->tripleShot;
+			_context->doubleFire = false;
 		}
 		/*
 		if (ascii == '4') {

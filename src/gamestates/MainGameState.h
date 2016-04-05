@@ -5,7 +5,6 @@
 #include "..\utils\GameContext.h"
 #include "..\Player.h"
 #include "..\enemies\Cubes.h"
-#include "..\EventBuffer.h"
 #include "..\Levels.h"
 #include "..\enemies\Worm.h"
 #include "..\enemies\DeathBalls.h"
@@ -43,7 +42,6 @@ private:
 	bool _dying;
 	float _dying_timer;
 	Levels _levels;
-	EventBuffer _eventBuffer;
 	Worm* _worm;
 	RingSpawner* _spawner;
 	LineSpawner* _lineSpawner;

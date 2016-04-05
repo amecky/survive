@@ -1,7 +1,6 @@
 #pragma once
 #include <io\DataFile.h>
 #include <io\json.h>
-#include "EventBuffer.h"
 
 struct LevelEntry {
 	float spawn_delay;
@@ -23,7 +22,6 @@ public:
 		return "resources\\waves.json";
 	}
 	void prepare(int level);
-	void tick(EventBuffer& buffer,float dt);
 private:
 	ds::Array<LevelEntry> _current;
 	ds::Array<LevelEntry> _entries;
