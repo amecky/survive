@@ -23,7 +23,7 @@ public:
 	void deactivate();
 	int onButtonDown(int button, int x, int y);
 	int onButtonUp(int button, int x, int y);
-	int onChar(int ascii);
+	int processEvents(const ds::EventStream& events);
 private:
 	bool handleCollisions();
 	void killEnemy(ds::SID bulletID, const v2& bulletPos, ds::SID enemyID, const v2& enemyPos, int enemyType);

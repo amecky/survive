@@ -22,7 +22,6 @@ public:
 	}
 	void update(float dt);
 	void draw();
-	void OnChar(char ascii, unsigned int keyState);
 private:
 	void onGUIButton( ds::DialogID dlgID,int button );
 	GameContext* _context;

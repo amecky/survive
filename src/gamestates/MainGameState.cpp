@@ -251,7 +251,7 @@ void MainGameState::render() {
 	//ds::sprites::flush();
 	ds::renderer::selectViewport(0);
 	ds::sprites::draw(_cursor_pos, ds::math::buildTexture(40, 160, 20, 20));
-
+	/*
 	v2 p(5, 720);
 	int state = 1;	
 	gui::start(1, &p);
@@ -275,6 +275,7 @@ void MainGameState::render() {
 		_context->doubleFire = true;
 	}
 	gui::end();
+	*/
 }
 
 // --------------------------------------------------------------------------
@@ -368,54 +369,60 @@ void MainGameState::addStar(const v2& pos, int count,float radius) {
 // -------------------------------------------------------
 // on char
 // -------------------------------------------------------
-int MainGameState::onChar(int ascii) {
-	if (ascii == 'e') {
-		return 1;
-	}
-	if (ascii == 'x') {
-		_cubes->killAll();
-	}
-	if (ascii == 'g') {
-		_effect->activate();
-	}
-	if (ascii == '1') {
-		//_cubes->emitt(0);
-		_deathBalls->start();
-	}
-	if (ascii == '2') {
-		v2 p = _world->getPosition(_context->playerID);
-		v2 start = util::pickSpawnPoint(p, GE_LEFT);
-		v2 end = util::pickSpawnPoint(p, GE_RIGHT);
-		_lineSpawner->start(start,end, 20);
-	}
-	if (ascii == '3') {
-		v2 p = _world->getPosition(_context->playerID);
-		v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
-		v2 end = util::pickSpawnPoint(p, GE_TOP);
-		_curveSpawner->start(start, end, 10);
-	}
-	if (ascii == '4') {
-		_cubes->emitt(3);
-	}
-	if (ascii == '5') {
-		_cubes->emitt(4);
-	}
-	if (ascii == '6') {
-		_context->particles->startGroup(1, v2(800, 450));
-	}
-	if (ascii == '7') {
-		_worm->start(v2(512, 384));
-	}
-	if (ascii == '8') {
-		_context->particles->start(14, v2(800, 450));
-	}
-	if (ascii == '9') {
-		v2 pp = _world->getPosition(_context->playerID);
-		v2 p = util::pickSpawnPoint(pp);
-		//_spawner->start(p);
-	}
-	if (ascii == 'r') {
-		_cubes->reload();
+int MainGameState::processEvents(const ds::EventStream& events) {
+	for (uint32_t i = 0; i < events.num(); ++i) {
+		uint32_t type = events.getType(i);
+		if (type == GE_END_GAME) {
+			return 1;
+		}
+		/*
+		if (ascii == 'x') {
+			_cubes->killAll();
+		}
+		if (ascii == 'g') {
+			_effect->activate();
+		}
+		*/
+		else if (type == GE_START_DEATHBALL) {
+			_deathBalls->start();
+		}
+		else if (type == GE_START_STRAIGHT_WORM) {
+			v2 p = _world->getPosition(_context->playerID);
+			v2 start = util::pickSpawnPoint(p, GE_LEFT);
+			v2 end = util::pickSpawnPoint(p, GE_RIGHT);
+			_lineSpawner->start(start, end, 20);
+		}
+		else if (type == GE_START_BEZIER_WORM) {
+			v2 p = _world->getPosition(_context->playerID);
+			v2 start = util::pickSpawnPoint(p, GE_BOTTOM);
+			v2 end = util::pickSpawnPoint(p, GE_TOP);
+			_curveSpawner->start(start, end, 10);
+		}
+		/*
+		if (ascii == '4') {
+			_cubes->emitt(3);
+		}
+		if (ascii == '5') {
+			_cubes->emitt(4);
+		}
+		if (ascii == '6') {
+			_context->particles->startGroup(1, v2(800, 450));
+		}
+		if (ascii == '7') {
+			_worm->start(v2(512, 384));
+		}
+		if (ascii == '8') {
+			_context->particles->start(14, v2(800, 450));
+		}
+		if (ascii == '9') {
+			v2 pp = _world->getPosition(_context->playerID);
+			v2 p = util::pickSpawnPoint(pp);
+			//_spawner->start(p);
+		}
+		if (ascii == 'r') {
+			_cubes->reload();
+		}
+		*/
 	}
 	return 0;
 }

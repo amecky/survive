@@ -70,3 +70,11 @@ enum GridEdge {
 	GE_LEFT,
 	GE_EOL
 };
+
+enum GameEvents {
+	GE_UNKNOWN,
+	GE_END_GAME,
+	GE_START_DEATHBALL,
+	GE_START_STRAIGHT_WORM,
+	GE_START_BEZIER_WORM
+};

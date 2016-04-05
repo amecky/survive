@@ -7,6 +7,7 @@
 #include "gamestates\MainGameState.h"
 #include <io\FileRepository.h>
 #include <renderer\Scenes.h>
+#include "Constants.h"
 
 ds::BaseApp *app = new Survive(); 
 
@@ -47,12 +48,45 @@ bool Survive::loadContent() {
 	connectGameStates("MainGameState", 1, "GameOverState");
 	connectGameStates("GameOverState", 1, "MainGameState");
 	connectGameStates("MainMenuState", 1, "MainGameState");
-
-	//ds::Scenes s;
-	//s.load();
-	//int* n = 0;
-	//*n = 100;
-	//XASSERT(n != 0, "n must be 0");
+	/*
+	if (ascii == 'x') {
+	_cubes->killAll();
+	}
+	if (ascii == 'g') {
+	_effect->activate();
+	}
+	if (ascii == '1') {
+	//_cubes->emitt(0);
+	_deathBalls->start();
+	}
+	if (ascii == '4') {
+	_cubes->emitt(3);
+	}
+	if (ascii == '5') {
+	_cubes->emitt(4);
+	}
+	if (ascii == '6') {
+	_context->particles->startGroup(1, v2(800, 450));
+	}
+	if (ascii == '7') {
+	_worm->start(v2(512, 384));
+	}
+	if (ascii == '8') {
+	_context->particles->start(14, v2(800, 450));
+	}
+	if (ascii == '9') {
+	v2 pp = _world->getPosition(_context->playerID);
+	v2 p = util::pickSpawnPoint(pp);
+	//_spawner->start(p);
+	}
+	if (ascii == 'r') {
+	_cubes->reload();
+	}
+	*/
+	addShortcut("End Game", 'e', GE_END_GAME);
+	addShortcut("Start DB", '1', GE_START_DEATHBALL);
+	addShortcut("Straight Worm", '2', GE_START_STRAIGHT_WORM);
+	addShortcut("Bezier Worm", '3', GE_START_BEZIER_WORM);
 	return true;
 }
 
@@ -70,12 +104,6 @@ void Survive::update(float dt) {
 // Draw
 // -------------------------------------------------------
 void Survive::draw() {	
-}
-
-// -------------------------------------------------------
-// OnChar
-// -------------------------------------------------------
-void Survive::OnChar( char ascii,unsigned int keyState ) {
 }
 
 // -------------------------------------------------------
