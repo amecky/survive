@@ -39,7 +39,11 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_buttons.push_back("Toggle running");
 	_buttons.push_back("DBS");
 	_checkCollision = true;
-	
+
+	GridItem item;
+	_hexGrid.resize(30, 17, item);
+	_hexGrid.setOrigin(v2(30, 60));
+	_hover = -1;
 }
 
 MainGameState::~MainGameState() {
@@ -213,6 +217,29 @@ int MainGameState::update(float dt) {
 			return 1;
 		}
 	}
+
+	for (int i = 0; i < _hexGrid.size(); ++i) {
+		GridItem& item = _hexGrid.get(i);
+		if (item.highlighted) {
+			item.timer -= dt;
+			if (item.timer <= 0.0f) {
+				item.highlighted = false;
+			}
+		}
+	}
+
+	Hex h = _hexGrid.convert(_context->playerPos);
+	if (_hexGrid.isValid(h)) {
+		int current = _hexGrid.getIndex(h);
+		//if (current != _hover) {
+			//_hover = current;
+		GridItem& here = _hexGrid.get(current);
+		here.highlighted = true;
+		here.timer = 0.5f;
+			//_hexGrid.set(h, 2);
+		//}
+	}
+
 	return 0;
 }
 
@@ -243,6 +270,17 @@ void MainGameState::startCubes(int type) {
 void MainGameState::render() {
 	_effect->start();
 	_context->world->renderSingleLayer(BG_LAYER);
+
+	for (int i = 0; i < _hexGrid.size(); ++i) {
+		const GridItem& item = _hexGrid.get(i);
+		if (item.highlighted) {
+			float alpha = 64.0f + (255.0f - 64.0f) * (item.timer / 0.5f);
+			ds::sprites::draw(_hexGrid.position(i), ds::math::buildTexture(ds::Rect(80, 480, 40, 44)), 0.0f, 1.0f, 1.0f, ds::Color(32, 32, 32, (int)alpha));
+		}
+		else {
+			ds::sprites::draw(_hexGrid.position(i), ds::math::buildTexture(ds::Rect(80, 480, 40, 44)), 0.0f, 1.0f, 1.0f, ds::Color(32, 32, 32, 64));
+		}
+	}
 	_context->world->renderSingleLayer(BORDER_LAYER);
 	_context->particles->render();
 	_context->world->renderSingleLayer(OBJECT_LAYER);
@@ -409,6 +447,10 @@ int MainGameState::processEvents(const ds::EventStream& events) {
 		else if (type == GE_TOGGLE_TRIPLE_FIRE) {
 			_context->tripleShot = !_context->tripleShot;
 			_context->doubleFire = false;
+		}
+		else if (type == GE_TOGGLE_COLLISION) {
+			_checkCollision = !_checkCollision;
+			LOG << "check collisions: " << _checkCollision;
 		}
 		/*
 		if (ascii == '4') {

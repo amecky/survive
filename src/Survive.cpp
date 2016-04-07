@@ -90,6 +90,7 @@ bool Survive::loadContent() {
 	addShortcut("Ring Worm", '4', GE_START_RING_WORM);
 	addShortcut("DF", '5', GE_TOGGLE_DOUBLE_FIRE);
 	addShortcut("TF", '6', GE_TOGGLE_TRIPLE_FIRE);
+	addShortcut("TC", '0', GE_TOGGLE_COLLISION);
 	return true;
 }
 

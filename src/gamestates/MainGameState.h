@@ -10,6 +10,17 @@
 #include "..\enemies\DeathBalls.h"
 #include "..\utils\BorderLines.h"
 #include <effects\ScreenShakeEffect.h>
+#include <lib\HexGrid.h>
+
+struct GridItem {
+
+	int type;
+	float timer;
+	bool highlighted;
+
+	GridItem() : type(1), timer(0.0f), highlighted(false) {}
+
+};
 
 class MainGameState : public ds::GameState {
 
@@ -57,5 +68,8 @@ private:
 	ds::ScreenShakeEffect* _effect;
 	ds::Array<const char*> _buttons;
 	bool _checkCollision;
+
+	ds::HexGrid<GridItem> _hexGrid;
+	int _hover;
 };
 
