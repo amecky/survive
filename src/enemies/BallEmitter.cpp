@@ -64,6 +64,7 @@ void LineSpawner::start(const v2& start,const v2& end,int pieces) {
 void LineSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 	if (_active) {
 		_position += _velocity * dt;
+		_context->grid->highlight(_position, ds::Color(64, 0, 0, 160));
 		float d = distance(_position, _prev);
 		if (distance(_position, _emittPos) > _emittDistance) {
 			EmitterEvent e;
@@ -104,6 +105,7 @@ void CurveSpawner::start(const v2& start, const v2& end, int pieces) {
 void CurveSpawner::tick(float dt, ds::Array<EmitterEvent>& buffer) {
 	if (_active) {
 		_path.get(_timer, &_position);
+		_context->grid->highlight(_position, ds::Color(64,0,0,160));
 		_timer += dt / _context->settings->curveEmitterTTL;
 		float d = distance(_position, _prev);
 		if (distance(_position, _emittPos) > _emittDistance) {

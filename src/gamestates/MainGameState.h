@@ -8,19 +8,7 @@
 #include "..\Levels.h"
 #include "..\enemies\Worm.h"
 #include "..\enemies\DeathBalls.h"
-#include "..\utils\BorderLines.h"
 #include <effects\ScreenShakeEffect.h>
-#include <lib\HexGrid.h>
-
-struct GridItem {
-
-	int type;
-	float timer;
-	bool highlighted;
-
-	GridItem() : type(1), timer(0.0f), highlighted(false) {}
-
-};
 
 class MainGameState : public ds::GameState {
 
@@ -58,7 +46,6 @@ private:
 	LineSpawner* _lineSpawner;
 	CurveSpawner* _curveSpawner;
 	DeathBalls* _deathBalls;
-	Border* _border;
 	ds::Array<EmitterEvent> _events;
 	float _spawnTimer;
 	int _counter;
@@ -69,7 +56,5 @@ private:
 	ds::Array<const char*> _buttons;
 	bool _checkCollision;
 
-	ds::HexGrid<GridItem> _hexGrid;
-	int _hover;
 };
 

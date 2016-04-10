@@ -5,7 +5,7 @@
 #include "..\Trail.h"
 #include <dialogs\DialogManager.h>
 #include <renderer\BitmapFont.h>
-
+#include "Grid.h"
 
 class GameRenderer;
 
@@ -18,6 +18,7 @@ struct GameContext {
 	ds::ParticleManager* particles;
 	Trail* trails;
 	ds::GUIDialog* hud;
+	Grid* grid;
 	v2 world_pos;
 	float playerSpeed;
 	bool doubleFire;

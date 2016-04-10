@@ -18,6 +18,7 @@ Survive::Survive() : ds::BaseApp() {
 Survive::~Survive() {
 	delete _context->settings;
 	delete _context->trails;
+	delete _context->grid;
 	delete _context;
 }
 // -------------------------------------------------------
@@ -37,6 +38,7 @@ bool Survive::loadContent() {
 	_context->tripleShot = false;
 	_context->world_pos = v2(960, 540);
 	_context->world->setBoundingRect(ds::Rect(0, 0, 1600, 1200));
+	_context->grid = new Grid();
 	_showSettings = false;
 	//activateMonitoring(12.0f);
 	_settingPos = v2(900, 710);

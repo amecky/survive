@@ -23,7 +23,6 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	
 	_levels.load();
 
-	_border = new Border(ctx);
 	_worm = new Worm(ctx);
 	_spawner = new RingSpawner(ctx);
 	_lineSpawner = new LineSpawner(ctx);
@@ -39,11 +38,6 @@ MainGameState::MainGameState(GameContext* ctx) : ds::GameState("MainGameState"),
 	_buttons.push_back("Toggle running");
 	_buttons.push_back("DBS");
 	_checkCollision = true;
-
-	GridItem item;
-	_hexGrid.resize(30, 17, item);
-	_hexGrid.setOrigin(v2(30, 60));
-	_hover = -1;
 }
 
 MainGameState::~MainGameState() {
@@ -54,7 +48,6 @@ MainGameState::~MainGameState() {
 	delete _spawner;
 	delete _worm;
 	delete _cubes;
-	delete _border;
 	delete _player;
 }
 
@@ -182,7 +175,6 @@ int MainGameState::update(float dt) {
 			if (buffer.events.size() > 0) {
 				for (int i = 0; i < buffer.events.size(); ++i) {
 					if (buffer.events[i].type == ds::AT_MOVE_BY && buffer.events[i].spriteType == OT_BULLET) {
-						_border->hitBorder(_world->getPosition(buffer.events[i].sid));
 						_context->particles->start(BULLET_EXPLOSION, _world->getPosition(buffer.events[i].sid));
 						_world->remove(buffer.events[i].sid);
 					}
@@ -218,27 +210,10 @@ int MainGameState::update(float dt) {
 		}
 	}
 
-	for (int i = 0; i < _hexGrid.size(); ++i) {
-		GridItem& item = _hexGrid.get(i);
-		if (item.highlighted) {
-			item.timer -= dt;
-			if (item.timer <= 0.0f) {
-				item.highlighted = false;
-			}
-		}
-	}
+	
 
-	Hex h = _hexGrid.convert(_context->playerPos);
-	if (_hexGrid.isValid(h)) {
-		int current = _hexGrid.getIndex(h);
-		//if (current != _hover) {
-			//_hover = current;
-		GridItem& here = _hexGrid.get(current);
-		here.highlighted = true;
-		here.timer = 0.5f;
-			//_hexGrid.set(h, 2);
-		//}
-	}
+	_context->grid->tick(dt);
+	_context->grid->highlight(_context->playerPos, ds::Color(32,32,32,255));
 
 	return 0;
 }
@@ -270,17 +245,7 @@ void MainGameState::startCubes(int type) {
 void MainGameState::render() {
 	_effect->start();
 	_context->world->renderSingleLayer(BG_LAYER);
-
-	for (int i = 0; i < _hexGrid.size(); ++i) {
-		const GridItem& item = _hexGrid.get(i);
-		if (item.highlighted) {
-			float alpha = 64.0f + (255.0f - 64.0f) * (item.timer / 0.5f);
-			ds::sprites::draw(_hexGrid.position(i), ds::math::buildTexture(ds::Rect(80, 480, 40, 44)), 0.0f, 1.0f, 1.0f, ds::Color(32, 32, 32, (int)alpha));
-		}
-		else {
-			ds::sprites::draw(_hexGrid.position(i), ds::math::buildTexture(ds::Rect(80, 480, 40, 44)), 0.0f, 1.0f, 1.0f, ds::Color(32, 32, 32, 64));
-		}
-	}
+	_context->grid->render();	
 	_context->world->renderSingleLayer(BORDER_LAYER);
 	_context->particles->render();
 	_context->world->renderSingleLayer(OBJECT_LAYER);
